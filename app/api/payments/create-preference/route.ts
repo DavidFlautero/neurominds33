@@ -1,5 +1,6 @@
 ﻿import { NextResponse } from "next/server";
-import mercadopago from "mercadopago";
+
+const mercadopago = require('mercadopago');
 
 export async function POST(req: Request) {
   const { title, amount, external_reference, return_url } = await req.json();

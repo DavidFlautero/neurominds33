@@ -295,31 +295,56 @@ body {
 }
 
 /* Círculo del logo con halo suave (sin “parche blanco”) */
+/* Logo redondo que se funde con el fondo, sin “parche blanco” */
 .brand-logo {
-  width: 2.1rem;
-  height: 2.1rem;
+  width: 2.3rem;
+  height: 2.3rem;
   border-radius: 999px;
   overflow: hidden;
-  /* halo que se difumina y se pierde en el fondo */
-  background: radial-gradient(
-    circle at 50% 50%,
-    rgba(15, 23, 42, 0.22) 0%,
-    rgba(15, 23, 42, 0.1) 32%,
-    transparent 70%
-  );
-  padding: 2px;
-  box-shadow: none;
-  border: none;
+  /* mismo color que la barra para que no se note el círculo */
+  background: var(--nm-bg);
+  position: relative;
   flex-shrink: 0;
 }
 
-/* Imagen interior del logo (cabeza/mujer) */
+/* Halo suave alrededor del logo */
+.brand-logo::before {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: inherit;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(15, 23, 42, 0.22),
+    transparent 70%
+  );
+  opacity: 0.85;
+}
+
+/* Imagen de la cabeza / mujer: bordes difuminados y sin blanco duro */
 .brand-logo-img {
+  position: relative;
   width: 100%;
   height: 100%;
-  border-radius: 999px;
   object-fit: cover;
+  border-radius: inherit;
+
+  /* recorta la imagen en círculo y desvanece los bordes */
+  -webkit-mask-image: radial-gradient(
+    circle at 50% 50%,
+    #000 68%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    circle at 50% 50%,
+    #000 68%,
+    transparent 100%
+  );
+
+  /* hace que el blanco de la imagen se mezcle con el fondo en vez de ser un parche */
+  mix-blend-mode: multiply;
 }
+
 
 /* Texto de marca NEUROMIND33 */
 .brand-text {

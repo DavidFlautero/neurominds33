@@ -50,10 +50,10 @@ export default function Hero() {
 
         {/* Columna derecha: mockup producto */}
         <div className="reveal">
-          <div className="mock" aria-label="Panel del cliente">
+          <div className="hero" aria-label="logo">
             {/* Cuando tengas tu propio diseño, reemplaza este src */}
             <img
-              src="/assets/mock-dashboard-neuromind33.png"
+              src="/brand/woman.png"
               alt="Panel de control NeuroMind33"
             />
           </div>

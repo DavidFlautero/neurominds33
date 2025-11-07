@@ -1047,3 +1047,10 @@ body {
     padding: 18px;
   }
 }
+.hero-img{
+  width: 100%;
+  height: auto;
+  border-radius: 18px;           /* bordes suaves premium */
+  object-fit: cover;
+  filter: saturate(105%) contrast(105%);
+}

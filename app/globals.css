@@ -417,3 +417,18 @@ footer{ border-top:1px solid var(--nm-line); padding:28px 0 48px; color:#6b6f78;
 body{ padding-bottom: env(safe-area-inset-bottom); }
 .wa{ bottom: calc(18px + env(safe-area-inset-bottom)); }
 .quick{ bottom: calc(88px + env(safe-area-inset-bottom)); }
+
+.nm-video {
+  width: 100% !important;
+  height: auto !important;
+  min-height: 300px !important;  /* Tamaño mínimo visible */
+  object-fit: cover !important;
+  display: block !important;
+  background: #000;  /* Fondo negro si no carga */
+}
+
+.nm-video-fallback {
+  width: 100% !important;
+  height: auto !important;
+  display: block !important;
+}

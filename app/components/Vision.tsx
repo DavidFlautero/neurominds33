@@ -1,4 +1,5 @@
 'use client';
+
 import { useEffect, useRef } from 'react';
 
 export default function Vision() {
@@ -8,39 +9,39 @@ export default function Vision() {
     const video = videoRef.current;
     if (!video) return;
 
-    // Intenta reproducir al cargar
-    const tryPlay = () => {
-      video.play().catch(() => {
-        // Si falla, esperamos interacción
-        const unlock = () => {
-          video.play();
-          document.removeEventListener('click', unlock);
-          document.removeEventListener('scroll', unlock);
-        };
-        document.addEventListener('click', unlock, { once: true });
-        document.addEventListener('scroll', unlock, { once: true });
-      });
+    // Event listener para errores de carga
+    const handleError = (e: Event) => {
+      console.error('Error cargando video:', e);
+      // Opcional: mostrar fallback aquí
+    };
+    video.addEventListener('error', handleError);
+
+    // Intenta reproducir
+    const playVideo = () => {
+      video.play().catch((err) => console.log('Autoplay bloqueado:', err));
     };
 
-    tryPlay();
+    playVideo();
 
-    // También al hacer scroll (mejora UX)
+    // Reproduce al scroll (para PC)
     const onScroll = () => {
       if (video.getBoundingClientRect().top < window.innerHeight * 0.8) {
-        tryPlay();
+        playVideo();
         window.removeEventListener('scroll', onScroll);
       }
     };
     window.addEventListener('scroll', onScroll);
 
     return () => {
-      document.removeEventListener('scroll', onScroll);
+      window.removeEventListener('scroll', onScroll);
+      video.removeEventListener('error', handleError);
     };
   }, []);
 
   return (
     <section id="vision">
       <div className="wrap grid2">
+        {/* Columna de texto */}
         <div className="surface reveal">
           <h2 className="h2">Nuestra visión</h2>
           <p className="p">
@@ -48,32 +49,48 @@ export default function Vision() {
             robusta y automatización inteligente. Trabajamos como socios estratégicos.
           </p>
           <ul className="p" style={{ marginTop: 6, lineHeight: 1.8 }}>
-            <li><b>Arquitectura</b> modular con integraciones seguras y rendimiento de clase mundial.</li>
-            <li><b>Experiencia</b> clara y estética premium que convierte.</li>
-            <li><b>Evolución</b> continua con métricas y roadmap compartido.</li>
+            <li>
+              <b>Arquitectura</b> modular con integraciones seguras y rendimiento de clase mundial.
+            </li>
+            <li>
+              <b>Experiencia</b> clara y estética premium que convierte.
+            </li>
+            <li>
+              <b>Evolución</b> continua con métricas y roadmap compartido.
+            </li>
           </ul>
         </div>
 
+        {/* Columna visual: ojo en video */}
         <div className="surface eye reveal" aria-label="Ojo neural">
           <video
             ref={videoRef}
             className="nm-video"
+            autoPlay
             muted
             loop
             playsInline
-            preload="metadata"
+            preload="auto"  // Cambiado a 'auto' para forzar carga
             poster="/images/vision/ojo-poster.jpg"
             aria-label="Ojo neural en movimiento"
+            onError={(e) => console.error('Video error:', e)}  // Debug
           >
-            <source src="/images/vision/ojo.webm" type="video/webm" />
+            {/* Solo MP4 por ahora - más compatible */}
             <source src="/images/vision/ojo.mp4" type="video/mp4" />
-            {/* Fallback visual */}
+            {/* Fallback: texto solo si TODO falla */}
+            Tu navegador no soporta video HTML5.
+          </video>
+
+          {/* Fallback imagen SIEMPRE visible si video falla */}
+          <noscript>
             <img
-              src="/images/vision/ojo.jpg"
+              className="nm-video-fallback"
+              src="/images/vision/ojo-poster.jpg"
               alt="Ojo neural conceptual"
+              loading="lazy"
               style={{ width: '100%', height: 'auto', display: 'block' }}
             />
-          </video>
+          </noscript>
         </div>
       </div>
     </section>

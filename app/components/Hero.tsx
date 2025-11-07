@@ -1,66 +1,60 @@
+// app/components/Hero.tsx
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
 export default function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [isHovered, setIsHovered] = useState(false);
-  const [hasPlayed, setHasPlayed] = useState(false);
 
-  const playVideo = () => {
+  useEffect(() => {
     const video = videoRef.current;
-    if (!video || hasPlayed) return;
+    if (!video) return;
 
-    video.currentTime = 0; // Reinicia
-    video.play().then(() => {
-      setHasPlayed(true);
-    }).catch(() => {});
-  };
-
-  const pauseAndReset = () => {
-    const video = videoRef.current;
-    if (video) {
-      video.pause();
-      video.currentTime = 0; // Vuelve al inicio (pero se ve poster)
+    // Reproduce automáticamente
+    const playPromise = video.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(() => {
+        // Autoplay bloqueado → intenta al hacer clic
+        const handleFirstInteraction = () => {
+          video.play();
+          document.removeEventListener('click', handleFirstInteraction);
+          document.removeEventListener('touchstart', handleFirstInteraction);
+        };
+        document.addEventListener('click', handleFirstInteraction);
+        document.addEventListener('touchstart', handleFirstInteraction);
+      });
     }
-    setIsHovered(false);
-  };
+
+    // Loop infinito
+    const handleEnded = () => {
+      video.currentTime = 0;
+      video.play();
+    };
+    video.addEventListener('ended', handleEnded);
+
+    return () => {
+      video.removeEventListener('ended', handleEnded);
+    };
+  }, []);
 
   return (
     <header className="hero">
-      {/* Imagen estática (siempre visible) */}
-      <img
-        src="/assets/hero-poster.jpg"
-        alt="Chica estática"
-        className="hero-poster"
-      />
-
-      {/* Video (solo se ve al hover) */}
-      <div className="hero-media" aria-hidden="true">
+      {/* Video de fondo – autoplay + loop */}
+      <div className="hero-media">
         <video
           ref={videoRef}
           className="hero-video"
           muted
           playsInline
-          preload="metadata"
-          onEnded={() => setHasPlayed(true)}
+          preload="auto"
+          loop={false} // Controlado por JS
         >
           <source src="/images/hero/woman1.mp4" type="video/mp4" />
         </video>
       </div>
 
-      {/* Zona de hover (35% derecha) */}
-      <div
-        className="hover-zone"
-        onMouseEnter={() => {
-          setIsHovered(true);
-          playVideo();
-        }}
-        onMouseLeave={pauseAndReset}
-      />
-
       {/* Degradado */}
-      <div className="hero-overlay" aria-hidden="true" />
+      <div className="hero-overlay" />
 
       {/* Texto */}
       <div className="hero-content">
@@ -83,23 +77,6 @@ export default function Hero() {
           </div>
         </div>
       </div>
-
-      {/* Indicador opcional */}
-      {isHovered && !hasPlayed && (
-        <div style={{
-          position: 'absolute',
-          bottom: '2rem',
-          right: '2rem',
-          background: 'rgba(0,0,0,0.6)',
-          color: 'white',
-          padding: '6px 12px',
-          borderRadius: '999px',
-          fontSize: '12px',
-          zIndex: 20
-        }}>
-          Reproduciendo...
-        </div>
-      )}
     </header>
   );
 }

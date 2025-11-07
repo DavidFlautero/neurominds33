@@ -40,7 +40,7 @@ export default function Hero() {
           preload="auto"
           poster="/assets/hero-poster.jpg"
         >
-          <source src="/images/woman.mp4" type="video/mp4" />
+          <source src="/images/hero/woman.mp4" type="video/mp4" />
           <source src="/images/woman.webm" type="video/webm" />
           <img src="/images/woman.jpg" alt="" className="hero-video-fallback" />
         </video>

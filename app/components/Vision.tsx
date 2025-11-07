@@ -12,7 +12,7 @@ export default function Vision(){
           </ul>
         </div>
         <div className="surface eye reveal" aria-label="Ojo neural">
-          <img src="/imagenes/vision/ojo.png" alt="Ojo neural conceptual" />
+          <img src="/images/vision/ojo.png" alt="Ojo neural conceptual" />
         </div>
       </div>
     </section>

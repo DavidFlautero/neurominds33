@@ -53,7 +53,7 @@ export default function Hero() {
           poster="/assets/hero-poster.jpg"
           onError={() => console.error("Video falló al cargar")}
         >
-          <source src="/assets/hero-video.mp4" type="video/mp4" />
+          <source src="/images/hero/woman.mp4" type="video/mp4" />
           {/* Fallback si MP4 falla */}
           <img src="/assets/hero-waves.jpg" alt="" />
         </video>

@@ -45,7 +45,7 @@ export default function Hero() {
           preload="metadata"
           onEnded={() => setHasPlayed(true)}
         >
-          <source src="/assets/hero-video.mp4" type="video/mp4" />
+          <source src="/images/hero/woman1.mp4" type="video/mp4" />
         </video>
       </div>
 

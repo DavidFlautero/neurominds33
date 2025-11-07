@@ -1,48 +1,74 @@
+'use client';
+
+import { useEffect, useRef } from 'react';
+
 export default function Hero() {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const playVideo = () => {
+      video.play().catch(() => {});
+    };
+
+    playVideo();
+
+    const onScroll = () => {
+      if (video.getBoundingClientRect().top < window.innerHeight) {
+        playVideo();
+        window.removeEventListener('scroll', onScroll);
+      }
+    };
+    window.addEventListener('scroll', onScroll);
+
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
   return (
     <header className="hero">
-      {/* Fondo con textura/ondas suaves */}
+      {/* Video de fondo */}
       <div className="hero-media" aria-hidden="true">
-        <img src="/assets/hero-waves.jpg" alt="" />
+        <video
+          ref={videoRef}
+          className="hero-video"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          poster="/assets/hero-poster.jpg"
+        >
+          <source src="/assets/hero-video.mp4" type="video/mp4" />
+          <source src="/assets/hero-video.webm" type="video/webm" />
+          <img src="/assets/hero-waves.jpg" alt="" className="hero-video-fallback" />
+        </video>
       </div>
 
-      {/* Degradado para legibilidad del texto */}
-      <div className="hero-overlay" aria-hidden={true} />
+      {/* Degradado */}
+      <div className="hero-overlay" aria-hidden="true" />
 
-      {/* Contenido */}
-      <div className="wrap hero-wrap">
-        {/* Columna izquierda: texto */}
+      {/* Contenido flotante */}
+      <div className="hero-floating">
         <div className="reveal hero-copy">
           <span className="eyebrow">Estrategia · Software · IA & Automatización</span>
-
           <h1 className="h1">
             Software claro.<br />Crecimiento real.
           </h1>
-
           <p className="lead">
             Diseñamos e integramos plataformas que mejoran ventas y eficiencia.
             Sin lista de precios: cotizamos por alcance e impacto.
           </p>
-
-          <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginTop: 18 }}>
+          <div className="hero-buttons">
             <a className="btn primary" href="#servicios">Explorar servicios</a>
             <a className="btn" href="#proceso">Cómo trabajamos</a>
           </div>
         </div>
-
-        {/* Columna derecha: imagen (sin marco + difuminada) */}
-        <figure className="hero-figure reveal" aria-label="Imagen conceptual NeuroMind33">
-          <img
-            className="hero-woman"
-            src="/brand/woman.png"     // <— coloca tu imagen en /public/brand/woman.png
-            alt="Perfil femenino, estética premium"
-          />
-        </figure>
       </div>
 
-      {/* Onda superior animada que cruza de lado a lado por encima del contenido */}
-      <div className="hero-wave" aria-hidden={true} />
+      {/* Onda animada */}
+      <div className="hero-wave" aria-hidden="true" />
     </header>
   );
 }
-

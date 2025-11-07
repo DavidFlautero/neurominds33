@@ -1,64 +1,10 @@
-/* ./app/globals.css */
-/* ==============================
-   1. TAILWIND BASE
-   ============================== */
+/* app/globals.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /* ==============================
-   2. DARK MODE (CLASE .dark)
-   ============================== */
-.dark {
-  --background: 222.2 84% 4.9%;
-  --foreground: 210 40% 98%;
-  --card: 222.2 84% 4.9%;
-  --card-foreground: 210 40% 98%;
-  --popover: 222.2 84% 4.9%;
-  --popover-foreground: 210 40% 98%;
-  --primary: 210 40% 98%;
-  --primary-foreground: 222.2 47.4% 11.2%;
-  --secondary: 217.2 32.6% 17.5%;
-  --secondary-foreground: 210 40% 98%;
-  --muted: 217.2 32.6% 17.5%;
-  --muted-foreground: 215 20.2% 65.1%;
-  --accent: 217.2 32.6% 17.5%;
-  --accent-foreground: 210 40% 98%;
-  --destructive: 0 62.8% 30.6%;
-  --destructive-foreground: 210 40% 98%;
-  --border: 217.2 32.6% 17.5%;
-  --input: 217.2 32.6% 17.5%;
-  --ring: 212.7 26.8% 83.9%;
-}
-
-/* ==============================
-   3. TOKENS GLOBALES
-   ============================== */
-:root {
-  --background: 0 0% 100%;
-  --foreground: 222.2 84% 4.9%;
-  --card: 0 0% 100%;
-  --card-foreground: 222.2 84% 4.9%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 222.2 84% 4.9%;
-  --primary: 222.2 47.4% 11.2%;
-  --primary-foreground: 210 40% 98%;
-  --secondary: 210 40% 96.1%;
-  --secondary-foreground: 222.2 47.4% 11.2%;
-  --muted: 210 40% 96.1%;
-  --muted-foreground: 215.4 16.3% 46.9%;
-  --accent: 210 40% 96.1%;
-  --accent-foreground: 222.2 47.4% 11.2%;
-  --destructive: 0 84.2% 60.2%;
-  --destructive-foreground: 210 40% 98%;
-  --border: 214.3 31.8% 91.4%;
-  --input: 214.3 31.8% 91.4%;
-  --ring: 222.2 84% 4.9%;
-  --radius: 0.5rem;
-}
-
-/* ==============================
-   4. BRAND NEUROMIND33
+   NEUROMIND33 – ESTILOS PERSONALIZADOS
    ============================== */
 :root {
   --nm-bg: #f7f6f4;
@@ -77,9 +23,9 @@ html, body {
   color: var(--nm-ink);
   -webkit-font-smoothing: antialiased;
   scroll-behavior: smooth;
+  font-family: inherit;
 }
 
-/* Contenedores */
 .wrap {
   width: min(100%, var(--nm-max));
   margin-inline: auto;
@@ -91,9 +37,7 @@ html, body {
   justify-content: space-between;
 }
 
-/* ==============================
-   5. NAVBAR
-   ============================== */
+/* NAVBAR */
 .nav {
   position: sticky;
   top: 0;
@@ -143,7 +87,6 @@ html, body {
   color: #020617;
 }
 
-/* Menú */
 .menu.desktop {
   display: flex;
   align-items: center;
@@ -159,7 +102,6 @@ html, body {
   transform: translateY(-1px);
 }
 
-/* Móvil */
 .burger {
   display: none;
   background: transparent;
@@ -174,14 +116,13 @@ html, body {
   background: #111827;
   border-radius: 99px;
 }
+
 @media (max-width: 1024px) {
   .menu.desktop { display: none; }
   .burger { display: block; }
 }
 
-/* ==============================
-   6. BOTONES
-   ============================== */
+/* BOTONES */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -207,9 +148,7 @@ html, body {
   border-color: rgba(56,189,248,.9);
 }
 
-/* ==============================
-   7. HERO – VIDEO + ZOOM OUT
-   ============================== */
+/* HERO */
 .hero {
   position: relative;
   width: 100vw;
@@ -268,9 +207,7 @@ html, body {
   .hero-buttons { justify-content: center; }
 }
 
-/* ==============================
-   8. SECCIONES GENERALES
-   ============================== */
+/* SECCIONES */
 section {
   padding: 80px 0;
   border-bottom: 1px solid var(--nm-line);
@@ -285,11 +222,6 @@ section {
   font-size: 14px;
   color: var(--nm-muted);
 }
-.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-@media (max-width: 900px) { .grid2 { grid-template-columns: 1fr; } }
-.grid3 { display: grid; gap: 18px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
-@media (max-width: 1100px) { .grid3 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (max-width: 680px) { .grid3 { grid-template-columns: 1fr; } }
 .surface {
   border-radius: var(--nm-radius);
   padding: 24px 22px;
@@ -298,13 +230,9 @@ section {
   box-shadow: var(--nm-shadow);
 }
 
-/* ==============================
-   9. FOOTER + SAFE AREA
-   ============================== */
 footer {
   border-top: 1px solid var(--nm-line);
   padding: 28px 0 48px;
   color: #6b6f78;
   background: var(--nm-bg);
 }
-body { padding-bottom: env(safe-area-inset-bottom); }

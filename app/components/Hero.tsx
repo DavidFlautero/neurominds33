@@ -1,28 +1,42 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
 export default function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [hasPlayed, setHasPlayed] = useState(false);
 
-  const playVideo = () => {
+  const playVideoOnce = () => {
     const video = videoRef.current;
-    if (video && !isPlaying) {
-      video.play().catch(() => {});
-      setIsPlaying(true);
+    if (!video || hasPlayed) return;
+
+    // Forzar carga
+    video.load();
+
+    // Reproducir
+    const playPromise = video.play();
+    if (playPromise !== undefined) {
+      playPromise
+        .then(() => {
+          setHasPlayed(true);
+        })
+        .catch((error) => {
+          console.error("Error al reproducir video:", error);
+        });
     }
   };
 
-  // Reproduce al hacer clic en cualquier botón del hero
-  const handleButtonClick = (e: React.MouseEvent) => {
-    playVideo();
-    // Opcional: si querés que el enlace funcione también
-    const href = (e.target as HTMLAnchorElement).getAttribute('href');
+  // Reproduce al hacer clic en cualquier botón
+  const handleButtonClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    playVideoOnce();
+
+    // Scroll suave al enlace
+    const href = e.currentTarget.getAttribute('href');
     if (href && href.startsWith('#')) {
+      e.preventDefault();
       setTimeout(() => {
         document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
-      }, 100);
+      }, 300);
     }
   };
 
@@ -33,14 +47,14 @@ export default function Hero() {
         <video
           ref={videoRef}
           className="hero-video"
-          loop
           muted
           playsInline
-          preload="metadata"
+          preload="auto"
           poster="/assets/hero-poster.jpg"
+          onError={() => console.error("Video falló al cargar")}
         >
-          <source src="/images/hero/woman.mp4" type="video/mp4" />
-          <source src="/assets/hero-video.webm" type="video/webm" />
+          <source src="/assets/hero-video.mp4" type="video/mp4" />
+          {/* Fallback si MP4 falla */}
           <img src="/assets/hero-waves.jpg" alt="" />
         </video>
       </div>
@@ -70,9 +84,22 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Botón de play opcional (puedes quitarlo si no querés) */}
-      {!isPlaying && (
-        <div className="play-button" onClick={playVideo} aria-label="Reproducir video">
+      {/* Indicador visual (opcional) */}
+      {!hasPlayed && (
+        <div className="play-hint" style={{
+          position: 'absolute',
+          bottom: '2rem',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          color: 'white',
+          fontSize: '14px',
+          zIndex: 12,
+          background: 'rgba(0,0,0,0.5)',
+          padding: '8px 16px',
+          borderRadius: '999px',
+          pointerEvents: 'none'
+        }}>
+          Haz clic en un botón para ver el video
         </div>
       )}
     </header>

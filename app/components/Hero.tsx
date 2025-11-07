@@ -1,30 +1,30 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export default function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
 
-  useEffect(() => {
+  const playVideo = () => {
     const video = videoRef.current;
-    if (!video) return;
-
-    const playVideo = () => {
+    if (video && !isPlaying) {
       video.play().catch(() => {});
-    };
+      setIsPlaying(true);
+    }
+  };
 
+  // Reproduce al hacer clic en cualquier botón del hero
+  const handleButtonClick = (e: React.MouseEvent) => {
     playVideo();
-
-    const onScroll = () => {
-      if (video.getBoundingClientRect().top < window.innerHeight) {
-        playVideo();
-        window.removeEventListener('scroll', onScroll);
-      }
-    };
-    window.addEventListener('scroll', onScroll);
-
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+    // Opcional: si querés que el enlace funcione también
+    const href = (e.target as HTMLAnchorElement).getAttribute('href');
+    if (href && href.startsWith('#')) {
+      setTimeout(() => {
+        document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    }
+  };
 
   return (
     <header className="hero">
@@ -33,25 +33,24 @@ export default function Hero() {
         <video
           ref={videoRef}
           className="hero-video"
-          autoPlay
-          muted
           loop
+          muted
           playsInline
-          preload="auto"
+          preload="metadata"
           poster="/assets/hero-poster.jpg"
         >
-          <source src="/images/hero/woman.mp4" type="video/mp4" />
-          <source src="/images/woman.webm" type="video/webm" />
-          <img src="/images/woman.jpg" alt="" className="hero-video-fallback" />
+          <source src="/assets/hero-video.mp4" type="video/mp4" />
+          <source src="/assets/hero-video.webm" type="video/webm" />
+          <img src="/assets/hero-waves.jpg" alt="" />
         </video>
       </div>
 
       {/* Degradado */}
       <div className="hero-overlay" aria-hidden="true" />
 
-      {/* Contenido flotante */}
-      <div className="hero-floating">
-        <div className="reveal hero-copy">
+      {/* Contenido a la izquierda */}
+      <div className="hero-content">
+        <div className="reveal">
           <span className="eyebrow">Estrategia · Software · IA & Automatización</span>
           <h1 className="h1">
             Software claro.<br />Crecimiento real.
@@ -61,14 +60,21 @@ export default function Hero() {
             Sin lista de precios: cotizamos por alcance e impacto.
           </p>
           <div className="hero-buttons">
-            <a className="btn primary" href="#servicios">Explorar servicios</a>
-            <a className="btn" href="#proceso">Cómo trabajamos</a>
+            <a className="btn primary" href="#servicios" onClick={handleButtonClick}>
+              Explorar servicios
+            </a>
+            <a className="btn" href="#proceso" onClick={handleButtonClick}>
+              Cómo trabajamos
+            </a>
           </div>
         </div>
       </div>
 
-      {/* Onda animada */}
-      <div className="hero-wave" aria-hidden="true" />
+      {/* Botón de play opcional (puedes quitarlo si no querés) */}
+      {!isPlaying && (
+        <div className="play-button" onClick={playVideo} aria-label="Reproducir video">
+        </div>
+      )}
     </header>
   );
 }

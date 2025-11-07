@@ -68,7 +68,7 @@ export default function Vision() {
             <source src="/images/vision/ojo.mp4" type="video/mp4" />
             {/* Fallback visual */}
             <img
-              src="/images/vision/ojo-poster.jpg"
+              src="/images/vision/ojo.jpg"
               alt="Ojo neural conceptual"
               style={{ width: '100%', height: 'auto', display: 'block' }}
             />

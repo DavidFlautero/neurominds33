@@ -168,16 +168,6 @@ html, body {
   overflow: hidden;
 }
 
-.hero-video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  /* ESCRITORIO: zoom suave */
-  object-position: center 30%;
-  transform: scale(1.18);
-}
-
 .hero-overlay {
   position: absolute;
   inset: 0;
@@ -195,11 +185,23 @@ html, body {
   max-width: 600px;
 }
 
-/* MÓVIL: ZOOM + CONTENIDO SUBIDO (arriba de WhatsApp) */
+/* HERO – VIDEO CON ZOOM OUT ADAPTATIVO */
+.hero-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+
+  /* ESCRITORIO: zoom suave */
+  object-position: center 30%;
+  transform: scale(1.18);
+}
+
+/* MÓVIL: ALEJAR MÁS (zoom out + centrado superior) */
 @media (max-width: 768px) {
   .hero-video {
-    object-position: center 25%;
-    transform: scale(1.35);
+    object-position: center 25%;   /* Sube más la cara */
+    transform: scale(1.35);        /* Zoom out más fuerte */
   }
 
   .hero-content {
@@ -207,12 +209,6 @@ html, body {
     right: 1.5rem;
     max-width: none;
     text-align: center;
-    /* SUBIR CONTENIDO */
-    top: auto;
-    bottom: 100px;                    /* Espacio para WhatsApp + Quick */
-    transform: none;
-    padding-bottom: env(safe-area-inset-bottom);
-    z-index: 20;                      /* Por encima de .wa y .quick */
   }
 
   .hero .h1 {
@@ -221,12 +217,6 @@ html, body {
 
   .hero-buttons {
     justify-content: center;
-    gap: 10px;
-  }
-
-  .btn {
-    font-size: 14px;
-    padding: 11px 18px;
   }
 }
 
@@ -242,6 +232,9 @@ html, body {
   gap: 12px;
   margin-top: 24px;
   flex-wrap: wrap;
+}
+@media (max-width: 768px) {
+  .hero-buttons { justify-content: center; }
 }
 
 /* SECCIONES */
@@ -267,45 +260,9 @@ section {
   box-shadow: var(--nm-shadow);
 }
 
-/* FOOTER */
 footer {
   border-top: 1px solid var(--nm-line);
   padding: 28px 0 48px;
   color: #6b6f78;
   background: var(--nm-bg);
-}
-
-/* BOTONES FLOTANTES – SAFE AREA + Z-INDEX */
-.wa {
-  position: fixed;
-  right: 18px;
-  bottom: calc(18px + env(safe-area-inset-bottom));
-  z-index: 60;
-  width: 56px;
-  height: 56px;
-  border-radius: 999px;
-  display: grid;
-  place-items: center;
-  background: #25D366;
-  color: #fff;
-  border: 1px solid #d5eadd;
-  box-shadow: 0 12px 30px rgba(0,0,0,.18);
-}
-
-.quick {
-  position: fixed;
-  right: 18px;
-  bottom: calc(88px + env(safe-area-inset-bottom));
-  z-index: 60;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 14px;
-  border-radius: 999px;
-  background: #0b0b10;
-  color: #f9fafb;
-  border: 1px solid rgba(255,255,255,.1);
-  box-shadow: 0 12px 30px rgba(0,0,0,.18);
-  font-weight: 600;
-  font-size: 13px;
 }

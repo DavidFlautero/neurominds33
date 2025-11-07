@@ -1,8 +1,45 @@
+import { useEffect, useRef } from 'react';
+
 export default function Vision() {
+  const videoRef = useRef(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    // Intenta reproducir al cargar
+    const tryPlay = () => {
+      video.play().catch(() => {
+        // Si falla, esperamos interacción
+        const unlock = () => {
+          video.play();
+          document.removeEventListener('click', unlock);
+          document.removeEventListener('scroll', unlock);
+        };
+        document.addEventListener('click', unlock, { once: true });
+        document.addEventListener('scroll', unlock, { once: true });
+      });
+    };
+
+    tryPlay();
+
+    // También al hacer scroll (mejora UX)
+    const onScroll = () => {
+      if (video.getBoundingClientRect().top < window.innerHeight * 0.8) {
+        tryPlay();
+        window.removeEventListener('scroll', onScroll);
+      }
+    };
+    window.addEventListener('scroll', onScroll);
+
+    return () => {
+      document.removeEventListener('scroll', onScroll);
+    };
+  }, []);
+
   return (
     <section id="vision">
       <div className="wrap grid2">
-        {/* Columna de texto */}
         <div className="surface reveal">
           <h2 className="h2">Nuestra visión</h2>
           <p className="p">
@@ -10,43 +47,32 @@ export default function Vision() {
             robusta y automatización inteligente. Trabajamos como socios estratégicos.
           </p>
           <ul className="p" style={{ marginTop: 6, lineHeight: 1.8 }}>
-            <li>
-              <b>Arquitectura</b> modular con integraciones seguras y rendimiento de clase mundial.
-            </li>
-            <li>
-              <b>Experiencia</b> clara y estética premium que convierte.
-            </li>
-            <li>
-              <b>Evolución</b> continua con métricas y roadmap compartido.
-            </li>
+            <li><b>Arquitectura</b> modular con integraciones seguras y rendimiento de clase mundial.</li>
+            <li><b>Experiencia</b> clara y estética premium que convierte.</li>
+            <li><b>Evolución</b> continua con métricas y roadmap compartido.</li>
           </ul>
         </div>
 
-        {/* Columna visual: ojo en video */}
         <div className="surface eye reveal" aria-label="Ojo neural">
           <video
+            ref={videoRef}
             className="nm-video"
-            autoPlay
             muted
             loop
             playsInline
             preload="metadata"
-            poster="/images/vision/ojo-poster.jpg"   // <- imagen de portada (opcional pero recomendable)
+            poster="/images/vision/ojo-poster.jpg"
             aria-label="Ojo neural en movimiento"
           >
-            {/* si tienes versión .webm, déjala primero por eficiencia */}
             <source src="/images/vision/ojo.webm" type="video/webm" />
             <source src="/images/vision/ojo.mp4" type="video/mp4" />
-            Tu navegador no soporta video HTML5.
+            {/* Fallback visual */}
+            <img
+              src="/images/vision/ojo-poster.jpg"
+              alt="Ojo neural conceptual"
+              style={{ width: '100%', height: 'auto', display: 'block' }}
+            />
           </video>
-
-          {/* Fallback para usuarios con “reducir movimiento” o navegadores sin video */}
-          <img
-            className="nm-video-fallback"
-            src="/images/vision/ojo-poster.jpg"
-            alt="Ojo neural conceptual"
-            loading="lazy"
-          />
         </div>
       </div>
     </section>

@@ -4,49 +4,41 @@
 
 @import "tailwindcss";
 
-/* Soporte dark mode usando la clase .dark en <html> */
+/* Dark mode por clase .dark en <html> */
 @custom-variant dark (&:is(.dark *));
 @variant dark (&:is(.dark *));
 
-/* Animaciones extra (del repo original) */
+/* Animaciones extra del repo (si las usabas) */
 @import "tw-animate-css";
 
-/* Mapeo de tokens de Tailwind -> CSS vars */
+/* ------------------------------
+   Mapeo de tokens Tailwind -> CSS vars
+   ------------------------------ */
 @theme {
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
-
   --color-card: hsl(var(--card));
   --color-card-foreground: hsl(var(--card-foreground));
-
   --color-popover: hsl(var(--popover));
   --color-popover-foreground: hsl(var(--popover-foreground));
-
   --color-primary: hsl(var(--primary));
   --color-primary-foreground: hsl(var(--primary-foreground));
-
   --color-secondary: hsl(var(--secondary));
   --color-secondary-foreground: hsl(var(--secondary-foreground));
-
   --color-muted: hsl(var(--muted));
   --color-muted-foreground: hsl(var(--muted-foreground));
-
   --color-accent: hsl(var(--accent));
   --color-accent-foreground: hsl(var(--accent-foreground));
-
   --color-destructive: hsl(var(--destructive));
   --color-destructive-foreground: hsl(var(--destructive-foreground));
-
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
   --color-ring: hsl(var(--ring));
-
   --color-chart-1: hsl(var(--chart-1));
   --color-chart-2: hsl(var(--chart-2));
   --color-chart-3: hsl(var(--chart-3));
   --color-chart-4: hsl(var(--chart-4));
   --color-chart-5: hsl(var(--chart-5));
-
   --color-sidebar: hsl(var(--sidebar-background));
   --color-sidebar-foreground: hsl(var(--sidebar-foreground));
   --color-sidebar-primary: hsl(var(--sidebar-primary));
@@ -55,73 +47,51 @@
   --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
   --color-sidebar-border: hsl(var(--sidebar-border));
   --color-sidebar-ring: hsl(var(--sidebar-ring));
-
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
 }
 
-/* Compatibilidad Tailwind v3/v4: border por defecto */
+/* Compat Tailwind v3 → v4: borde por defecto */
 @layer base {
-  *,
-  ::after,
-  ::before,
-  ::backdrop,
-  ::file-selector-button {
+  *, ::after, ::before, ::backdrop, ::file-selector-button {
     border-color: var(--color-gray-200, currentColor);
   }
 }
 
-/* Dejamos que Next/font (Manrope en layout.tsx) mande */
-@layer utilities {
-  body {
-    font-family: inherit;
-  }
-}
+/* Dejamos que Next/font gobierne (definido en layout.tsx) */
+@layer utilities { body { font-family: inherit; } }
 
-/* ==============================
-   Tokens de diseño globales
-   (shadcn / UI kit original)
-   ============================== */
-
+/* =================================
+   Tokens globales (light / dark)
+   ================================= */
 @layer base {
   :root {
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
-
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
-
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-
     --primary: 222.2 47.4% 11.2%;
     --primary-foreground: 210 40% 98%;
-
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
-
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
-
     --accent: 210 40% 96.1%;
     --accent-foreground: 222.2 47.4% 11.2%;
-
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
-
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
     --ring: 222.2 84% 4.9%;
-
     --chart-1: 12 76% 61%;
     --chart-2: 173 58% 39%;
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
-
     --radius: 0.5rem;
-
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
     --sidebar-primary: 240 5.9% 10%;
@@ -131,1004 +101,319 @@
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
-
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
-
     --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
-
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
-
     --primary: 210 40% 98%;
     --primary-foreground: 222.2 47.4% 11.2%;
-
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
-
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
-
     --accent: 217.2 32.6% 17.5%;
     --accent-foreground: 210 40% 98%;
-
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
-
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
-
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
-
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
 
-/* Mapeo inline para Tailwind (@apply bg-background, etc.) */
+/* Mapeo inline para @apply bg-background etc. */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
-
   --color-popover: var(--popover);
   --color-popover-foreground: var(--popover-foreground);
-
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
-
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
-
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
-
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
-
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
-
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
-
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 }
 
-/* Aplicación global de colores + focus ring */
+/* Aplicación global y focus ring */
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
+  * { @apply border-border outline-ring/50; }
+  body { @apply bg-background text-foreground; }
 }
 
 /* =======================================================
-   Brand / Landing NEUROMIND33 (todo lo visual premium)
+   Brand / Landing NEUROMIND33
    ======================================================= */
 
-/* Paleta específica de la landing (no rompe Tailwind) */
-:root {
-  --nm-bg: #f7f6f4;
-  --nm-paper: #ffffff;
-  --nm-ink: #0b0b0c;
-  --nm-muted: #5e5e63;
-  --nm-line: #e9e8e4;
-  --nm-accent: #00a3ff;
-  --nm-radius: 18px;
-  --nm-shadow: 0 18px 60px rgba(10, 18, 30, 0.08);
-  --nm-max: 1200px;
+/* Paleta específica de la landing */
+:root{
+  --nm-bg:#f7f6f4; --nm-paper:#fff; --nm-ink:#0b0b0c; --nm-muted:#5e5e63;
+  --nm-line:#e9e8e4; --nm-accent:#00a3ff; --nm-radius:18px;
+  --nm-shadow:0 18px 60px rgba(10,18,30,.08); --nm-max:1200px;
 }
 
-/* Base suave y scroll */
-html,
-body {
-  background: var(--nm-bg);
-  color: var(--nm-ink);
-  -webkit-font-smoothing: antialiased;
-  scroll-behavior: smooth;
-}
+/* Base y scroll suave */
+html,body{ background:var(--nm-bg); color:var(--nm-ink); -webkit-font-smoothing:antialiased; scroll-behavior:smooth; }
 
-/* Contenedor genérico */
-.wrap {
-  width: min(100%, var(--nm-max));
-  margin-inline: auto;
-  padding-inline: 24px;
-}
-
-.row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
+/* Contenedores */
+.wrap{ width:min(100%,var(--nm-max)); margin-inline:auto; padding-inline:24px; }
+.row{ display:flex; align-items:center; justify-content:space-between; }
 
 /* =======================
    NAVBAR + LOGO
    ======================= */
+.nav{
+  position:sticky; top:0; z-index:40;
+  border-bottom:1px solid var(--nm-line);
+  backdrop-filter:saturate(140%) blur(10px);
+  background:rgba(247,246,244,.88);
+}
+.nav .wrap{ height:72px; }
 
-.nav {
-  position: sticky;
-  top: 0;
-  z-index: 40;
-  border-bottom: 1px solid var(--nm-line);
-  backdrop-filter: saturate(140%) blur(10px);
-  background: rgba(247, 246, 244, 0.88);
+.brand{ display:inline-flex; align-items:center; gap:.55rem; text-decoration:none; }
+
+/* Logo redondo sin parche blanco */
+.brand-logo{
+  width:2.3rem; height:2.3rem; border-radius:999px; overflow:hidden;
+  background:var(--nm-bg); position:relative; flex-shrink:0;
+}
+.brand-logo::before{
+  content:""; position:absolute; inset:-6px; border-radius:inherit;
+  background:radial-gradient(circle at 50% 50%, rgba(15,23,42,.22), transparent 70%);
+  opacity:.85;
+}
+.brand-logo-img{
+  position:relative; width:100%; height:100%; object-fit:cover; border-radius:inherit;
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 68%, transparent 100%);
+          mask-image: radial-gradient(circle at 50% 50%, #000 68%, transparent 100%);
+  mix-blend-mode:multiply;
 }
 
-.nav .wrap {
-  height: 72px;
+.brand-text{
+  font-size:.8rem; letter-spacing:.22em; text-transform:uppercase; font-weight:600; color:#020617;
 }
 
-/* Marca: logo + texto */
-.brand {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.55rem;
-  text-decoration: none;
+.menu.desktop{ display:flex; align-items:center; gap:18px; font-size:14px; }
+.menu.desktop a{ opacity:.78; transition:opacity .18s, transform .18s; }
+.menu.desktop a:hover{ opacity:1; transform:translateY(-1px); }
+
+.burger{ display:none; background:transparent; border:0; width:38px; height:38px; border-radius:12px; }
+.burger span{ display:block; height:2px; margin:7px 7px; background:#111827; border-radius:99px; }
+
+.drawer{ position:fixed; inset:0; z-index:50; background:rgba(8,10,14,.45); backdrop-filter:blur(4px); opacity:0; pointer-events:none; transition:.2s; }
+.drawer.open{ opacity:1; pointer-events:auto; }
+.drawer-inner{
+  position:absolute; right:0; top:0; bottom:0; width:min(82vw,360px);
+  background:var(--nm-paper); border-left:1px solid var(--nm-line);
+  padding:18px; display:flex; flex-direction:column; gap:10px;
 }
+.drawer-inner a{ padding:10px 12px; border-radius:12px; border:1px solid #ecebe7; background:#fff; }
+.drawer-inner .btn{ justify-content:center; }
+@media (max-width:1024px){ .menu.desktop{display:none} .burger{display:block} }
 
-/* Círculo del logo con halo suave (sin “parche blanco”) */
-/* Logo redondo que se funde con el fondo, sin “parche blanco” */
-.brand-logo {
-  width: 2.3rem;
-  height: 2.3rem;
-  border-radius: 999px;
-  overflow: hidden;
-  /* mismo color que la barra para que no se note el círculo */
-  background: var(--nm-bg);
-  position: relative;
-  flex-shrink: 0;
+/* Botones */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:6px;
+  padding:10px 16px; border-radius:999px; border:1px solid var(--nm-line);
+  background:var(--nm-paper); font-size:13px; font-weight:500; cursor:pointer; text-decoration:none;
+  transition: transform .16s, box-shadow .16s, border-color .16s, background .16s;
 }
-
-/* Halo suave alrededor del logo */
-.brand-logo::before {
-  content: "";
-  position: absolute;
-  inset: -6px;
-  border-radius: inherit;
-  background: radial-gradient(
-    circle at 50% 50%,
-    rgba(15, 23, 42, 0.22),
-    transparent 70%
-  );
-  opacity: 0.85;
-}
-
-/* Imagen de la cabeza / mujer: bordes difuminados y sin blanco duro */
-.brand-logo-img {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: inherit;
-
-  /* recorta la imagen en círculo y desvanece los bordes */
-  -webkit-mask-image: radial-gradient(
-    circle at 50% 50%,
-    #000 68%,
-    transparent 100%
-  );
-  mask-image: radial-gradient(
-    circle at 50% 50%,
-    #000 68%,
-    transparent 100%
-  );
-
-  /* hace que el blanco de la imagen se mezcle con el fondo en vez de ser un parche */
-  mix-blend-mode: multiply;
-}
-
-
-/* Texto de marca NEUROMIND33 */
-.brand-text {
-  font-size: 0.8rem;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  font-weight: 600;
-  color: #020617;
-}
-
-/* Menú desktop */
-.menu.desktop {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  font-size: 14px;
-}
-
-.menu.desktop a {
-  opacity: 0.78;
-  transition: opacity 0.18s ease, transform 0.18s ease;
-}
-
-.menu.desktop a:hover {
-  opacity: 1;
-  transform: translateY(-1px);
-}
-
-/* Burger + drawer móvil */
-.burger {
-  display: none;
-  background: transparent;
-  border: 0;
-  width: 38px;
-  height: 38px;
-  border-radius: 12px;
-}
-
-.burger span {
-  display: block;
-  height: 2px;
-  margin: 7px 7px;
-  background: #111827;
-  border-radius: 99px;
-}
-
-.drawer {
-  position: fixed;
-  inset: 0;
-  z-index: 50;
-  background: rgba(8, 10, 14, 0.45);
-  backdrop-filter: blur(4px);
-  opacity: 0;
-  pointer-events: none;
-  transition: 0.2s ease;
-}
-
-.drawer.open {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.drawer-inner {
-  position: absolute;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  width: min(82vw, 360px);
-  background: var(--nm-paper);
-  border-left: 1px solid var(--nm-line);
-  padding: 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.drawer-inner a {
-  padding: 10px 12px;
-  border-radius: 12px;
-  border: 1px solid #ecebe7;
-  background: #fff;
-}
-
-.drawer-inner .btn {
-  justify-content: center;
-}
-
-@media (max-width: 1024px) {
-  .menu.desktop {
-    display: none;
-  }
-  .burger {
-    display: block;
-  }
-}
-
-/* Botones generales */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 10px 16px;
-  border-radius: 999px;
-  border: 1px solid var(--nm-line);
-  background: var(--nm-paper);
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  text-decoration: none;
-  transition: transform 0.16s ease, box-shadow 0.16s ease,
-    border-color 0.16s ease, background 0.16s ease;
-}
-
-.btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.14);
-}
-
-.btn.primary {
-  background: radial-gradient(
-    circle at 0% 0%,
-    #38bdf8,
-    #0ea5e9 40%,
-    #0f172a 100%
-  );
-  color: #f9fafb;
-  border-color: rgba(56, 189, 248, 0.9);
+.btn:hover{ transform:translateY(-1px); box-shadow:0 16px 40px rgba(15,23,42,.14); }
+.btn.primary{
+  background: radial-gradient(circle at 0% 0%, #38bdf8, #0ea5e9 40%, #0f172a 100%);
+  color:#f9fafb; border-color:rgba(56,189,248,.9);
 }
 
 /* =======================
-   HERO con video de fondo
+   HERO – ondas claras
    ======================= */
-/* ==========================================
-   HERO – Versión ondas claras, súper premium
-   ========================================== */
-
-/* Contenedor principal del hero */
-.hero {
-  position: relative;
-  isolation: isolate;
-  min-height: 72vh;
-  display: flex;
-  align-items: center;
-  overflow: hidden;
-
-  /* Base hueso, igual que el resto del sitio */
-  background: var(--nm-bg);
-  color: var(--nm-ink);
-  border-bottom: 1px solid var(--nm-line);
+.hero{
+  position:relative; isolation:isolate; min-height:72vh;
+  display:flex; align-items:center; overflow:hidden;
+  background:var(--nm-bg); color:var(--nm-ink);
+  border-bottom:1px solid var(--nm-line);
+}
+.hero-wrap{
+  width:min(100%,var(--nm-max)); margin-inline:auto; padding-inline:24px;
+  padding-block:80px 72px; display:grid; gap:32px;
+  grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);
+  position:relative; z-index:1;
+}
+@media (max-width:980px){
+  .hero-wrap{ grid-template-columns:1fr; padding-block:64px 56px; }
 }
 
-/* Si todavía tenés video/fondo anterior, lo apagamos */
-.hero-media,
-.hero-overlay {
-  display: none !important;
+/* Ondas base (decorativas) */
+.hero::before{
+  content:""; position:absolute; left:50%; transform:translateX(-50%);
+  bottom:-34%; width:150%; height:420px; background:#e4f0ff; border-radius:50% 50% 0 0; opacity:.9;
+}
+.hero::after{
+  content:""; position:absolute; left:50%; transform:translateX(-50%);
+  bottom:-26%; width:145%; height:360px; background:#f4f7fd; border-radius:50% 50% 0 0;
+  box-shadow:0 -18px 40px rgba(15,23,42,.04);
 }
 
-/* Layout interno del hero */
-.hero-wrap {
-  width: min(100%, var(--nm-max));
-  margin-inline: auto;
-  padding-inline: 24px;
-  padding-block: 80px 72px;
-  display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-  gap: 32px;
-  position: relative;
-  z-index: 1; /* por encima de las ondas */
+/* Onda superior animada (pasa por delante de todo) */
+.hero-wave{
+  position:absolute; left:0; right:0; bottom:-1px; height:120px; z-index:3; pointer-events:none;
+  --c1: rgba(14,165,233,.22); --c2: rgba(2,6,23,.10); --c3: rgba(2,6,23,0);
+  background: radial-gradient(120% 160% at 50% 0%, var(--c1), var(--c2) 60%, var(--c3) 80%);
+  filter: blur(1px);
+  animation: waveTint 10s ease-in-out infinite alternate;
+}
+@keyframes waveTint{
+  0%{ --c1: rgba(14,165,233,.22); }
+  50%{ --c1: rgba(56,189,248,.20); }
+  100%{ --c1: rgba(99,102,241,.18); }
 }
 
-@media (max-width: 980px) {
-  .hero-wrap {
-    grid-template-columns: minmax(0, 1fr);
-    padding-block: 64px 56px;
-  }
+/* Tipografía del hero */
+.hero .eyebrow{
+  display:inline-flex; align-items:center; gap:8px; padding:6px 10px;
+  border-radius:999px; border:1px solid rgba(148,163,184,.35);
+  background:rgba(248,250,252,.9); font-size:12px; text-transform:uppercase; letter-spacing:.14em; color:#4b5563;
 }
+.hero .h1{ font-size:clamp(38px,5.4vw,62px); line-height:1.05; letter-spacing:-.04em; margin:14px 0 10px; color:#020617; }
+.hero .lead{ font-size:15px; max-width:54ch; color:#4b5563; }
 
-/* ONDAS DE FONDO
-   Usamos pseudo-elementos grandes con bordes redondeados
-   para crear 3 capas suaves tipo Shutterstock.
-*/
-
-/* Capa más profunda (azul muy suave) */
-.hero::before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: -34%;
-  width: 150%;
-  height: 420px;
-  background: #e4f0ff;
-  border-radius: 50% 50% 0 0;
-  opacity: 0.9;
+/* Figura derecha (mujer) con borde difuminado */
+.hero-figure{ margin:0; position:relative; display:flex; justify-content:flex-end; }
+.hero-woman{
+  display:block; width:min(520px,42vw); height:auto; border:none; box-shadow:none; background:transparent;
+  border-radius:24px;
+  -webkit-mask-image: radial-gradient(140% 120% at 70% 15%, #000 70%, rgba(0,0,0,0) 100%);
+          mask-image: radial-gradient(140% 120% at 70% 15%, #000 70%, rgba(0,0,0,0) 100%);
+  transform: translateY(-18px);
+  image-rendering: -webkit-optimize-contrast;
 }
-
-/* Capa intermedia (hueso azulado) */
-.hero::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: -26%;
-  width: 145%;
-  height: 360px;
-  background: #f4f7fd;
-  border-radius: 50% 50% 0 0;
-  box-shadow: 0 -18px 40px rgba(15, 23, 42, 0.04);
-}
-
-/* Capa más cercana, casi blanca, simulando “card” gigante */
-.hero-wave-top {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: -18%;
-  width: 140%;
-  height: 320px;
-  background: #ffffff;
-  border-radius: 50% 50% 0 0;
-  border: 1px solid rgba(226, 232, 240, 0.9);
-  box-shadow: 0 -22px 60px rgba(15, 23, 42, 0.06);
-  z-index: 0;
-}
-
-/* Tip: crea el div en tu JSX:
-   <section className="hero">
-     <div className="hero-wave-top" aria-hidden="true" />
-     <div className="hero-wrap">...</div>
-   </section>
-*/
-
-/* Estilos de texto dentro del hero (modo claro) */
-
-.hero .eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 10px;
-  border-radius: 999px;
-  border: 1px solid rgba(148, 163, 184, 0.35);
-  background: rgba(248, 250, 252, 0.9);
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  color: #4b5563;
-}
-
-.hero .h1 {
-  font-size: clamp(38px, 5.4vw, 62px);
-  line-height: 1.05;
-  letter-spacing: -0.04em;
-  margin: 14px 0 10px;
-  color: #020617; /* casi negro */
-  text-shadow: none;
-}
-
-.hero .lead {
-  font-size: 15px;
-  max-width: 54ch;
-  color: #4b5563;
-  text-shadow: none;
-}
-
-/* El mockup de la derecha sigue, pero en modo “card” clara */
-.hero .mock {
-  border-radius: var(--nm-radius);
-  padding: 18px;
-  background: radial-gradient(circle at top left, #ffffff, #f5f7fb);
-  border: 1px solid var(--nm-line);
-  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.08);
-}
-.hero .mock img {
-  border-radius: 14px;
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
-
-/* Chips encima del título */
-.eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 10px;
-  border-radius: 999px;
-  border: 1px solid rgba(148, 163, 184, 0.7);
-  background: rgba(15, 23, 42, 0.7);
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  color: rgba(226, 232, 240, 0.9);
-}
-
-/* Título y subtítulo del hero */
-.h1 {
-  font-size: clamp(40px, 5.8vw, 64px);
-  line-height: 1.03;
-  letter-spacing: -0.04em;
-  margin: 12px 0 10px;
-}
-
-/* Texto del hero siempre blanco con sombra suave */
-.hero .h1,
-.hero .lead {
-  color: #f9fafb;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.55);
-}
-
-.lead {
-  font-size: 15px;
-  max-width: 54ch;
-  color: rgba(226, 232, 240, 0.92);
-}
-
-/* “Tarjeta” visual a la derecha del hero */
-.mock {
-  border-radius: var(--nm-radius);
-  padding: 18px;
-  background: radial-gradient(circle at top left, #111827, #020617);
-  border: 1px solid rgba(15, 23, 42, 0.8);
-  box-shadow: 0 28px 80px rgba(15, 23, 42, 0.9);
-}
-
-.mock img {
-  border-radius: 14px;
-}
+@media (max-width:980px){ .hero-woman{ width:min(520px,72vw); transform:none; } }
 
 /* =======================
    SECCIONES GENERALES
    ======================= */
+section{ padding:80px 0; border-bottom:1px solid var(--nm-line); background:var(--nm-bg); }
+.h2{ font-size:clamp(26px,4.3vw,36px); letter-spacing:-.03em; margin:0 0 8px; }
+.p{ font-size:14px; color:var(--nm-muted); }
+.grid2{ display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+@media (max-width:900px){ .grid2{ grid-template-columns:1fr; } }
+.grid3{ display:grid; gap:18px; grid-template-columns:repeat(3,minmax(0,1fr)); }
+@media (max-width:1100px){ .grid3{ grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media (max-width:680px){ .grid3{ grid-template-columns:1fr; } }
 
-section {
-  padding: 80px 0;
-  border-bottom: 1px solid var(--nm-line);
-  background: var(--nm-bg);
-}
-
-.h2 {
-  font-size: clamp(26px, 4.3vw, 36px);
-  letter-spacing: -0.03em;
-  margin: 0 0 8px;
-}
-
-.p {
-  font-size: 14px;
-  color: var(--nm-muted);
-}
-
-.grid2 {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
-}
-
-@media (max-width: 900px) {
-  .grid2 {
-    grid-template-columns: 1fr;
-  }
-}
-
-.grid3 {
-  display: grid;
-  gap: 18px;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-@media (max-width: 1100px) {
-  .grid3 {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 680px) {
-  .grid3 {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* Tarjetas / superficies blancas */
-.surface {
-  border-radius: var(--nm-radius);
-  padding: 24px 22px;
-  background: var(--nm-paper);
-  border: 1px solid var(--nm-line);
-  box-shadow: var(--nm-shadow);
-}
-
-/* Versión para la sección “Visión” con el ojo / mujer */
-.surface.eye img {
-  border-radius: 16px;
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
-/* Cards de servicios / proyectos */
-.card {
-  border-radius: 16px;
-  padding: 16px 15px 18px;
-  background: linear-gradient(145deg, #ffffff, #f9f8f6);
-  border: 1px solid var(--nm-line);
-  box-shadow: 0 14px 44px rgba(10, 18, 30, 0.08);
-  transition: transform 0.18s ease, box-shadow 0.18s ease,
-    border-color 0.18s ease;
-}
-
-.card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 22px 70px rgba(10, 18, 30, 0.16);
-  border-color: rgba(0, 163, 255, 0.7);
-}
-
-.card img {
-  border-radius: 12px;
-  margin-bottom: 10px;
-}
-
-.card h3 {
-  margin: 0 0 4px;
-  font-size: 16px;
-  letter-spacing: -0.01em;
-}
-
-.card p {
-  margin: 0;
-  font-size: 13px;
-}
-
-/* KPIs / numeritos de confianza */
-.kpi {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding: 16px 14px;
-  border-radius: 14px;
-  border: 1px dashed #e2e1de;
-  background: #fff;
-}
-
-.kpi b {
-  font-size: 22px;
-}
-
-/* “Ojo” / mujer con halo */
-.eye {
-  position: relative;
-  overflow: hidden;
-  border-radius: 16px;
-}
-
-.eye::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    600px 300px at 70% 10%,
-    rgba(0, 163, 255, 0.18),
-    transparent 60%
-  );
-  pointer-events: none;
+.surface{
+  border-radius:var(--nm-radius); padding:24px 22px; background:var(--nm-paper);
+  border:1px solid var(--nm-line); box-shadow:var(--nm-shadow);
 }
 
 /* =======================
-   BANNER OSCURO PREMIUM
+   VISIÓN – video del ojo
    ======================= */
-
-.nm-banner {
-  position: relative;
-  isolation: isolate;
-  min-height: 48vh;
-  display: grid;
-  place-items: center;
-  padding: 76px 0 68px;
-  margin: 12px 0 6px;
-  background: #0b0b10;
-  border-block: 1px solid var(--nm-line);
+.surface.eye{ position:relative; overflow:hidden; border-radius:16px; }
+.surface.eye .nm-video,
+.surface.eye .nm-video-fallback{
+  width:100%; height:100%; object-fit:cover; display:block; border-radius:16px;
+}
+@media (prefers-reduced-motion: reduce){
+  .surface.eye .nm-video{ display:none; }
+  .surface.eye .nm-video-fallback{ display:block; }
 }
 
-.nm-banner__media {
-  position: absolute;
-  inset: 0;
-  z-index: -2;
-  overflow: hidden;
+/* Cards */
+.card{
+  border-radius:16px; padding:16px 15px 18px;
+  background:linear-gradient(145deg,#ffffff,#f9f8f6);
+  border:1px solid var(--nm-line);
+  box-shadow:0 14px 44px rgba(10,18,30,.08);
+  transition: transform .18s, box-shadow .18s, border-color .18s;
 }
+.card:hover{ transform:translateY(-4px); box-shadow:0 22px 70px rgba(10,18,30,.16); border-color:rgba(0,163,255,.7); }
+.card img{ border-radius:12px; margin-bottom:10px; }
+.card h3{ margin:0 0 4px; font-size:16px; letter-spacing:-.01em; }
+.card p{ margin:0; font-size:13px; }
 
-.nm-banner__media img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: saturate(110%) contrast(108%) brightness(0.9);
-  transform: scale(1.02);
-}
+/* KPIs */
+.kpi{ display:flex; flex-direction:column; gap:6px; padding:16px 14px; border-radius:14px; border:1px dashed #e2e1de; background:#fff; }
+.kpi b{ font-size:22px; }
 
-.nm-banner::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
+/* =======================
+   BANNER oscuro premium
+   ======================= */
+.nm-banner{ position:relative; isolation:isolate; min-height:48vh; display:grid; place-items:center; padding:76px 0 68px; margin:12px 0 6px; background:#0b0b10; border-block:1px solid var(--nm-line); }
+.nm-banner__media{ position:absolute; inset:0; z-index:-2; overflow:hidden; }
+.nm-banner__media img{ width:100%; height:100%; object-fit:cover; filter:saturate(110%) contrast(108%) brightness(.9); transform:scale(1.02); }
+.nm-banner::before{
+  content:""; position:absolute; inset:0; z-index:-1;
   background:
-    radial-gradient(
-      1200px 600px at 80% -10%,
-      rgba(0, 163, 255, 0.2),
-      transparent 60%
-    ),
-    linear-gradient(
-      180deg,
-      rgba(5, 10, 16, 0.6),
-      rgba(5, 10, 16, 0.3) 55%,
-      rgba(247, 246, 244, 0.35) 85%,
-      var(--nm-bg) 100%
-    );
+    radial-gradient(1200px 600px at 80% -10%, rgba(0,163,255,.20), transparent 60%),
+    linear-gradient(180deg, rgba(5,10,16,.60), rgba(5,10,16,.30) 55%, rgba(247,246,244,.35) 85%, var(--nm-bg) 100%);
 }
-
-.nm-banner__content {
-  text-align: center;
-  color: #f9fafb;
-}
-
-.nm-banner__eyebrow {
-  display: inline-block;
-  padding: 6px 10px;
-  margin-bottom: 10px;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  font-size: 12px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  background: rgba(15, 23, 42, 0.72);
-}
-
-.nm-banner__title {
-  font-size: clamp(28px, 4.6vw, 40px);
-  letter-spacing: -0.04em;
-  margin: 6px 0 8px;
-}
-
-.nm-banner__lead {
-  max-width: 760px;
-  margin: 0 auto 18px;
-  font-size: 14px;
-  color: rgba(226, 232, 240, 0.94);
-}
-
-.nm-banner__cta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  justify-content: center;
-}
+.nm-banner__content{ text-align:center; color:#f9fafb; }
+.nm-banner__eyebrow{ display:inline-block; padding:6px 10px; margin-bottom:10px; border-radius:999px; border:1px solid rgba(255,255,255,.35); font-size:12px; letter-spacing:.18em; text-transform:uppercase; background:rgba(15,23,42,.72); }
+.nm-banner__title{ font-size:clamp(28px,4.6vw,40px); letter-spacing:-.04em; margin:6px 0 8px; }
+.nm-banner__lead{ max-width:760px; margin:0 auto 18px; font-size:14px; color:rgba(226,232,240,.94); }
+.nm-banner__cta{ display:flex; flex-wrap:wrap; gap:10px; justify-content:center; }
 
 /* =======================
-   WhatsApp flotante + CTA
+   Flotantes + Modal
    ======================= */
-
-.quick {
-  position: fixed;
-  right: 18px;
-  bottom: 88px;
-  z-index: 60;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 14px;
-  border-radius: 999px;
-  background: #0b0b10;
-  color: #f9fafb;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
-  font-weight: 600;
-  font-size: 13px;
+.quick{
+  position:fixed; right:18px; bottom:88px; z-index:60; display:inline-flex; align-items:center; gap:8px;
+  padding:10px 14px; border-radius:999px; background:#0b0b10; color:#f9fafb;
+  border:1px solid rgba(255,255,255,.1); box-shadow:0 12px 30px rgba(0,0,0,.18); font-weight:600; font-size:13px;
+}
+.wa{
+  position:fixed; right:18px; bottom:18px; z-index:60; width:56px; height:56px; border-radius:999px;
+  display:grid; place-items:center; background:#25D366; color:#fff; border:1px solid #d5eadd; box-shadow:0 12px 30px rgba(0,0,0,.18);
 }
 
-.wa {
-  position: fixed;
-  right: 18px;
-  bottom: 18px;
-  z-index: 60;
-  width: 56px;
-  height: 56px;
-  border-radius: 999px;
-  display: grid;
-  place-items: center;
-  background: #25d366;
-  color: #fff;
-  border: 1px solid #d5eadd;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+.modal{ position:fixed; inset:0; background:rgba(8,10,14,.66); display:none; align-items:center; justify-content:center; z-index:70; padding:20px; }
+.modal.show{ display:flex; }
+.modal-card{
+  width:min(540px,100%); background:#fff; color:#0b0b0c; border-radius:16px;
+  box-shadow:0 24px 100px rgba(0,0,0,.28); padding:24px; border:1px solid #ecebea;
 }
+.form{ display:grid; gap:12px; margin-top:8px; }
+.form .row{ display:grid; gap:12px; grid-template-columns:1fr 1fr; }
+@media (max-width:720px){ .form .row{ grid-template-columns:1fr; } }
+.input, textarea, select{ width:100%; padding:12px 14px; border:1px solid #e1e1de; border-radius:12px; background:#fff; font-size:13px; }
+textarea{ min-height:120px; }
+.modal-actions{ display:flex; gap:10px; justify-content:flex-end; margin-top:12px; }
 
 /* =======================
-   Modal de contacto
+   Footer + reveal + safe-area
    ======================= */
+footer{ border-top:1px solid var(--nm-line); padding:28px 0 48px; color:#6b6f78; background:var(--nm-bg); }
 
-.modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(8, 10, 14, 0.66);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 70;
-  padding: 20px;
-}
+.reveal{ opacity:0; transform:translateY(14px); transition:opacity .7s ease, transform .7s ease; }
+.reveal.in{ opacity:1; transform:none; }
 
-.modal.show {
-  display: flex;
-}
-
-.modal-card {
-  width: min(540px, 100%);
-  background: #fff;
-  color: #0b0b0c;
-  border-radius: 16px;
-  box-shadow: 0 24px 100px rgba(0, 0, 0, 0.28);
-  padding: 24px;
-  border: 1px solid #ecebea;
-}
-
-.form {
-  display: grid;
-  gap: 12px;
-  margin-top: 8px;
-}
-
-.form .row {
-  display: grid;
-  gap: 12px;
-  grid-template-columns: 1fr 1fr;
-}
-
-@media (max-width: 720px) {
-  .form .row {
-    grid-template-columns: 1fr;
-  }
-}
-
-.input,
-textarea,
-select {
-  width: 100%;
-  padding: 12px 14px;
-  border: 1px solid #e1e1de;
-  border-radius: 12px;
-  background: #fff;
-  font-size: 13px;
-}
-
-textarea {
-  min-height: 120px;
-}
-
-.modal-actions {
-  display: flex;
-  gap: 10px;
-  justify-content: flex-end;
-  margin-top: 12px;
-}
-
-/* =======================
-   Footer + animaciones reveal
-   ======================= */
-
-footer {
-  border-top: 1px solid var(--nm-line);
-  padding: 28px 0 48px;
-  color: #6b6f78;
-  background: var(--nm-bg);
-}
-
-/* Aparición suave al hacer scroll */
-.reveal {
-  opacity: 0;
-  transform: translateY(14px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
-}
-
-.reveal.in {
-  opacity: 1;
-  transform: none;
-}
-
-/* Safe area en móviles con notch */
-body {
-  padding-bottom: env(safe-area-inset-bottom);
-}
-
-.wa {
-  bottom: calc(18px + env(safe-area-inset-bottom));
-}
-
-.quick {
-  bottom: calc(88px + env(safe-area-inset-bottom));
-}
-
-@media (max-width: 420px) {
-  .modal-card {
-    border-radius: 12px;
-    padding: 18px;
-  }
-}
-.hero-img{
-  width: 100%;
-  height: auto;
-  border-radius: 18px;           /* bordes suaves premium */
-  object-fit: cover;
-  filter: saturate(105%) contrast(105%);
-}
-
-/* --- Layout general del hero --- */
-.hero{
-  position: relative;
-  isolation: isolate;
-  /* más arriba y con menos fondo vacío */
-  padding-block: 56px 0;
-  border-bottom: 1px solid var(--nm-line, #e9e8e4);
-}
-.hero-media{ position:absolute; inset:0; z-index:-2; overflow:hidden; }
-.hero-media img{ width:100%; height:100%; object-fit:cover; }
-.hero-overlay{
-  position:absolute; inset:0; z-index:-1;
-  background:
-    radial-gradient(900px 600px at 12% -10%, rgba(0,163,255,.18), transparent 60%),
-    linear-gradient(180deg, rgba(5,10,16,.95) 0%, rgba(5,10,16,.85) 48%, rgba(247,246,244,.28) 86%, var(--nm-bg, #f7f6f4) 100%);
-}
-
-/* --- Grid del hero --- */
-.hero-wrap{
-  display:grid; gap:32px;
-  grid-template-columns: minmax(0,1.05fr) minmax(0,.95fr);
-  align-items: end;               /* baja un poco el texto para que la ola lo cruce */
-  padding-block: 36px 0;
-}
-@media (max-width:980px){
-  .hero-wrap{ grid-template-columns:1fr; align-items: start; }
-}
-
-/* --- Columna derecha: imagen sin marco + difuminado --- */
-.hero-figure{ margin:0; position:relative; display:flex; justify-content:flex-end; }
-.hero-woman{
-  display:block;
-  width:min(520px, 42vw);         /* tamaño elegante y consistente */
-  height:auto;
-  /* sin bordes/recortes del antiguo .mock */
-  border:none; box-shadow:none; background:transparent;
-  border-radius: 24px;            /* leve suavidad del rectángulo */
-  /* Difuminado de bordes para que se funda con el fondo */
-  -webkit-mask-image: radial-gradient(140% 120% at 70% 15%, #000 70%, rgba(0,0,0,0) 100%);
-          mask-image: radial-gradient(140% 120% at 70% 15%, #000 70%, rgba(0,0,0,0) 100%);
-  /* sube visualmente para tocar la ola */
-  transform: translateY(-18px);
-  /* mejora antialiasing en algunos navegadores */
-  image-rendering: -webkit-optimize-contrast;
-}
-@media (max-width:980px){
-  .hero-woman{ width:min(520px, 72vw); transform:none; }
-}
-
-/* --- Columna izquierda: ligera prioridad visual por encima de la imagen --- */
-.hero-copy{ position:relative; z-index:2; }
-
-/* --- Onda animada por encima del contenido --- */
-.hero-wave{
-  position:absolute; left:0; right:0;
-  /* ubico la ola justo por encima de la parte inferior del hero */
-  bottom:-1px;
-  height:120px;
-  z-index:3;                      /* por encima de imagen y texto */
-  pointer-events:none;
-  /* forma básica */
-  --c1: rgba(14,165,233,.22);
-  --c2: rgba(2,6,23,.10);
-  --c3: rgba(2,6,23,0);
-  background:
-    radial-gradient(120% 160% at 50% 0%, var(--c1), var(--c2) 60%, var(--c3) 80%);
-  filter: blur(1px);
-  /* animación suave de color */
-  animation: waveTint 10s ease-in-out infinite alternate;
-}
-
-/* Transición lenta de color (azules → celestes suaves) */
-@keyframes waveTint{
-  0%   { --c1: rgba(14,165,233,.22); }
-  50%  { --c1: rgba(56,189,248,.20); }
-  100% { --c1: rgba(99,102,241,.18); }
-}
+body{ padding-bottom: env(safe-area-inset-bottom); }
+.wa{ bottom: calc(18px + env(safe-area-inset-bottom)); }
+.quick{ bottom: calc(88px + env(safe-area-inset-bottom)); }

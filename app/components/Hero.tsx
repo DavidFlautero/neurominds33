@@ -39,7 +39,7 @@ export default function Hero() {
           preload="metadata"
           poster="/assets/hero-poster.jpg"
         >
-          <source src="/assets/hero-video.mp4" type="video/mp4" />
+          <source src="/images/hero/woman.mp4" type="video/mp4" />
           <source src="/assets/hero-video.webm" type="video/webm" />
           <img src="/assets/hero-waves.jpg" alt="" />
         </video>

@@ -1,19 +1,15 @@
 export default function Hero() {
   return (
     <header className="hero">
-      {/* Fondo con ondas / textura suave */}
+      {/* Fondo: imagen con ondas claras */}
       <div className="hero-media" aria-hidden="true">
-        {/* Imagen de fondo con ondas claras */}
-        <img
-          src="/assets/hero-waves.jpg"
-          alt=""
-        />
+        <img src="/assets/hero-waves.jpg" alt="" />
       </div>
 
-      {/* Capa de degradado que oscurece arriba y se funde al blanco abajo */}
-      <div className="hero-overlay" aria-hidden="true"></div>
+      {/* Degradado para legibilidad del texto */}
+      <div className="hero-overlay" aria-hidden="true" />
 
-      {/* Contenido principal */}
+      {/* Contenido */}
       <div className="wrap hero-wrap">
         {/* Columna izquierda: texto */}
         <div className="reveal">
@@ -22,7 +18,8 @@ export default function Hero() {
           </span>
 
           <h1 className="h1">
-            Software claro.<br />
+            Software claro.
+            <br />
             Crecimiento real.
           </h1>
 
@@ -48,16 +45,55 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* Columna derecha: mockup producto */}
+        {/* Columna derecha: imagen mujer */}
         <div className="reveal">
-          <div className="hero" aria-label="logo">
-            {/* Cuando tengas tu propio diseño, reemplaza este src */}
+          <div className="mock" aria-label="Hero visual">
             <img
               src="/brand/woman.png"
-              alt="Panel de control NeuroMind33"
+              alt="Perfil femenino, estilo premium, NeuroMind33"
+              style={{ display: "block", width: "100%", height: "auto", borderRadius: 12 }}
             />
           </div>
         </div>
+      </div>
+
+      {/* Onda animada (cambia de color suave) */}
+      <div className="nm-wave" aria-hidden="true">
+        <svg viewBox="0 0 1440 400" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="nmGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#a5f3fc">
+                <animate
+                  attributeName="stop-color"
+                  values="#a5f3fc; #60a5fa; #22d3ee; #a5f3fc"
+                  dur="14s"
+                  repeatCount="indefinite"
+                />
+              </stop>
+              <stop offset="100%" stopColor="#93c5fd">
+                <animate
+                  attributeName="stop-color"
+                  values="#93c5fd; #38bdf8; #06b6d4; #93c5fd"
+                  dur="14s"
+                  repeatCount="indefinite"
+                />
+              </stop>
+            </linearGradient>
+          </defs>
+
+          {/* Capa base */}
+          <path
+            fill="url(#nmGradient)"
+            fillOpacity="0.35"
+            d="M0,260 C240,340 480,120 720,200 C960,280 1200,180 1440,240 L1440,400 L0,400 Z"
+          />
+          {/* Capa superior */}
+          <path
+            fill="url(#nmGradient)"
+            fillOpacity="0.22"
+            d="M0,300 C260,360 520,180 780,230 C1040,280 1300,220 1440,260 L1440,400 L0,400 Z"
+          />
+        </svg>
       </div>
     </header>
   );

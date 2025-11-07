@@ -7,6 +7,7 @@
 @variant dark (&:is(.dark *));
 /* Animaciones extra del repo (si las usabas) */
 @import "tw-animate-css";
+
 /* ------------------------------
    Mapeo de tokens Tailwind -> CSS vars
    ------------------------------ */
@@ -47,14 +48,17 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
 }
+
 /* Compat Tailwind v3 → v4: borde por defecto */
 @layer base {
   *, ::after, ::before, ::backdrop, ::file-selector-button {
     border-color: var(--color-gray-200, currentColor);
   }
 }
+
 /* Dejamos que Next/font gobierne (definido en layout.tsx) */
 @layer utilities { body { font-family: inherit; } }
+
 /* =================================
    Tokens globales (light / dark)
    ================================= */
@@ -121,6 +125,7 @@
     --chart-5: 340 75% 55%;
   }
 }
+
 /* Mapeo inline para @apply bg-background etc. */
 @theme inline {
   --color-background: var(--background);
@@ -152,25 +157,34 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 }
+
 /* Aplicación global y focus ring */
 @layer base {
   * { @apply border-border outline-ring/50; }
   body { @apply bg-background text-foreground; }
 }
+
 /* =======================================================
    Brand / Landing NEUROMIND33
    ======================================================= */
-/* Paleta específica de la landing */
 :root{
   --nm-bg:#f7f6f4; --nm-paper:#fff; --nm-ink:#0b0b0c; --nm-muted:#5e5e63;
   --nm-line:#e9e8e4; --nm-accent:#00a3ff; --nm-radius:18px;
   --nm-shadow:0 18px 60px rgba(10,18,30,.08); --nm-max:1200px;
 }
+
 /* Base y scroll suave */
-html,body{ background:var(--nm-bg); color:var(--nm-ink); -webkit-font-smoothing:antialiased; scroll-behavior:smooth; }
+html,body{
+  background:var(--nm-bg);
+  color:var(--nm-ink);
+  -webkit-font-smoothing:antialiased;
+  scroll-behavior:smooth;
+}
+
 /* Contenedores */
 .wrap{ width:min(100%,var(--nm-max)); margin-inline:auto; padding-inline:24px; }
 .row{ display:flex; align-items:center; justify-content:space-between; }
+
 /* =======================
    NAVBAR + LOGO
    ======================= */
@@ -182,7 +196,6 @@ html,body{ background:var(--nm-bg); color:var(--nm-ink); -webkit-font-smoothing:
 }
 .nav .wrap{ height:72px; }
 .brand{ display:inline-flex; align-items:center; gap:.55rem; text-decoration:none; }
-/* Logo redondo sin parche blanco */
 .brand-logo{
   width:2.3rem; height:2.3rem; border-radius:999px; overflow:hidden;
   background:var(--nm-bg); position:relative; flex-shrink:0;
@@ -216,6 +229,7 @@ html,body{ background:var(--nm-bg); color:var(--nm-ink); -webkit-font-smoothing:
 .drawer-inner a{ padding:10px 12px; border-radius:12px; border:1px solid #ecebe7; background:#fff; }
 .drawer-inner .btn{ justify-content:center; }
 @media (max-width:1024px){ .menu.desktop{display:none} .burger{display:block} }
+
 /* Botones */
 .btn{
   display:inline-flex; align-items:center; justify-content:center; gap:6px;
@@ -230,7 +244,7 @@ html,body{ background:var(--nm-bg); color:var(--nm-ink); -webkit-font-smoothing:
 }
 
 /* =======================
-   HERO – FULL WIDTH + IZQUIERDA + PLAY ON CLICK
+   HERO – FULL WIDTH
    ======================= */
 .hero {
   position: relative;
@@ -242,105 +256,23 @@ html,body{ background:var(--nm-bg); color:var(--nm-ink); -webkit-font-smoothing:
   background: #000;
   color: white;
 }
-
-/* Video de fondo */
-.hero-media {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-}
-
-.hero-video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-/* Degradado para legibilidad */
+.hero-media { position:absolute; inset:0; z-index:1; }
+.hero-video { width:100%; height:100%; object-fit:cover; display:block; }
 .hero-overlay {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  background: linear-gradient(
-    to right,
-    rgba(0, 0, 0, 0.8) 0%,
-    rgba(0, 0, 0, 0.4) 50%,
-    transparent 100%
-  );
-  pointer-events: none;
+  position:absolute; inset:0; z-index:2;
+  background: linear-gradient(to right, rgba(0,0,0,.8) 0%, rgba(0,0,0,.4) 50%, transparent 100%);
+  pointer-events:none;
 }
-
-/* Contenido a la izquierda */
 .hero-content {
-  position: absolute;
-  top: 50%;
-  left: 5vw;
-  transform: translateY(-50%);
-  z-index: 10;
-  max-width: 600px;
-  padding: 0;
+  position:absolute; top:50%; left:5vw; transform:translateY(-50%);
+  z-index:10; max-width:600px; padding:0;
 }
-
 @media (max-width: 768px) {
-  .hero-content {
-    left: 1.5rem;
-    right: 1.5rem;
-    max-width: none;
-    text-align: center;
-  }
-  .hero .h1 {
-    font-size: clamp(2.5rem, 8vw, 3.5rem);
-  }
+  .hero-content { left:1.5rem; right:1.5rem; max-width:none; text-align:center; }
+  .hero .h1 { font-size: clamp(2.5rem, 8vw, 3.5rem); }
 }
-
-/* Botones */
-.hero-buttons {
-  display: flex;
-  gap: 12px;
-  margin-top: 24px;
-  flex-wrap: wrap;
-}
-
-@media (max-width: 768px) {
-  .hero-buttons {
-    justify-content: center;
-  }
-}
-
-/* Botón de play opcional */
-.play-button {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 11;
-  width: 80px;
-  height: 80px;
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
-  transition: all 0.3s;
-}
-
-.play-button:hover {
-  background: white;
-  transform: translate(-50%, -50%) scale(1.1);
-}
-
-.play-button::after {
-  content: "";
-  width: 0;
-  height: 0;
-  border-left: 20px solid #000;
-  border-top: 12px solid transparent;
-  border-bottom: 12px solid transparent;
-  margin-left: 4px;
-}
+.hero-buttons { display:flex; gap:12px; margin-top:24px; flex-wrap:wrap; }
+@media (max-width:768px){ .hero-buttons{ justify-content:center; } }
 
 /* =======================
    SECCIONES GENERALES
@@ -357,6 +289,7 @@ section{ padding:80px 0; border-bottom:1px solid var(--nm-line); background:var(
   border-radius:var(--nm-radius); padding:24px 22px; background:var(--nm-paper);
   border:1px solid var(--nm-line); box-shadow:var(--nm-shadow);
 }
+
 /* =======================
    VISIÓN – video del ojo
    ======================= */
@@ -369,7 +302,10 @@ section{ padding:80px 0; border-bottom:1px solid var(--nm-line); background:var(
   .surface.eye .nm-video{ display:none; }
   .surface.eye .nm-video-fallback{ display:block; }
 }
-/* Cards */
+
+/* =======================
+   Cards & KPIs
+   ======================= */
 .card{
   border-radius:16px; padding:16px 15px 18px;
   background:linear-gradient(145deg,#ffffff,#f9f8f6);
@@ -381,9 +317,10 @@ section{ padding:80px 0; border-bottom:1px solid var(--nm-line); background:var(
 .card img{ border-radius:12px; margin-bottom:10px; }
 .card h3{ margin:0 0 4px; font-size:16px; letter-spacing:-.01em; }
 .card p{ margin:0; font-size:13px; }
-/* KPIs */
+
 .kpi{ display:flex; flex-direction:column; gap:6px; padding:16px 14px; border-radius:14px; border:1px dashed #e2e1de; background:#fff; }
 .kpi b{ font-size:22px; }
+
 /* =======================
    BANNER oscuro premium
    ======================= */
@@ -401,6 +338,7 @@ section{ padding:80px 0; border-bottom:1px solid var(--nm-line); background:var(
 .nm-banner__title{ font-size:clamp(28px,4.6vw,40px); letter-spacing:-.04em; margin:6px 0 8px; }
 .nm-banner__lead{ max-width:760px; margin:0 auto 18px; font-size:14px; color:rgba(226,232,240,.94); }
 .nm-banner__cta{ display:flex; flex-wrap:wrap; gap:10px; justify-content:center; }
+
 /* =======================
    Flotantes + Modal
    ======================= */
@@ -425,6 +363,7 @@ section{ padding:80px 0; border-bottom:1px solid var(--nm-line); background:var(
 .input, textarea, select{ width:100%; padding:12px 14px; border:1px solid #e1e1de; border-radius:12px; background:#fff; font-size:13px; }
 textarea{ min-height:120px; }
 .modal-actions{ display:flex; gap:10px; justify-content:flex-end; margin-top:12px; }
+
 /* =======================
    Footer + reveal + safe-area
    ======================= */
@@ -434,115 +373,44 @@ footer{ border-top:1px solid var(--nm-line); padding:28px 0 48px; color:#6b6f78;
 body{ padding-bottom: env(safe-area-inset-bottom); }
 .wa{ bottom: calc(18px + env(safe-area-inset-bottom)); }
 .quick{ bottom: calc(88px + env(safe-area-inset-bottom)); }
-.nm-video {
-  width: 100% !important;
-  height: auto !important;
-  min-height: 300px !important;
-  object-fit: cover !important;
-  display: block !important;
-  background: #000;
-}
-.nm-video-fallback {
-  width: 100% !important;
-  height: auto !important;
-  display: block !important;
-}
+
 /* =======================
-   HERO – REPRODUCE AL HOVER EN CARA (35% DERECHA)
+   SECCIÓN #vision con video FULL-BLEED detrás
    ======================= */
-.hero {
+#vision {
   position: relative;
-  width: 100vw;
-  height: 100vh;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  background: #000;
-  color: white;
+  isolation: isolate;        /* nuevo stacking context para z- */
+  padding: 80px 0;
+  background: transparent;
 }
-
-.hero-media {
+#vision .fullbg {
   position: absolute;
-  inset: 0;
-  z-index: 1;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  height: 100%;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
 }
-
-.hero-video {
+#vision .fullbg video {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
+  filter: saturate(105%) contrast(102%);
 }
-
-.hero-poster {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  position: absolute;
-  top: 0; left: 0;
-  z-index: 2;
-  pointer-events: none;
-}
-
-/* ZONA DE HOVER: 35% DERECHA (cara de la chica) */
-.hover-zone {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 35%;           /* 35% derecho */
-  height: 100%;
-  z-index: 3;
-  cursor: pointer;
-}
-
-/* Degradado */
-.hero-overlay {
+#vision .fullbg::after {
+  content: "";
   position: absolute;
   inset: 0;
-  z-index: 4;
   background: linear-gradient(
-    to right,
-    rgba(0, 0, 0, 0.8) 0%,
-    rgba(0, 0, 0, 0.4) 50%,
-    transparent 100%
+    180deg,
+    rgba(0,0,0,0.15) 0%,
+    rgba(0,0,0,0.15) 40%,
+    rgba(0,0,0,0.25) 100%
   );
-  pointer-events: none;
 }
-
-/* Contenido a la izquierda */
-.hero-content {
-  position: absolute;
-  top: 50%;
-  left: 5vw;
-  transform: translateY(-50%);
-  z-index: 10;
-  max-width: 600px;
-}
-
-@media (max-width: 768px) {
-  .hero-content {
-    left: 1.5rem;
-    right: 1.5rem;
-    max-width: none;
-    text-align: center;
-  }
-  .hero .h1 {
-    font-size: clamp(2.5rem, 8vw, 3.5rem);
-  }
-  .hover-zone {
-    width: 50%; /* En móvil, más área */
-  }
-}
-
-.hero-buttons {
-  display: flex;
-  gap: 12px;
-  margin-top: 24px;
-  flex-wrap: wrap;
-}
-
-@media (max-width: 768px) {
-  .hero-buttons {
-    justify-content: center;
-  }
-}
+/* mantener tu grid centrado */
+#vision .wrap { width: min(100%, var(--nm-max)); margin-inline: auto; padding-inline: 24px; }

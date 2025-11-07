@@ -9,21 +9,16 @@ export default function Vision() {
     const video = videoRef.current;
     if (!video) return;
 
-    // Event listener para errores de carga
     const handleError = (e: Event) => {
       console.error('Error cargando video:', e);
-      // Opcional: mostrar fallback aquí
     };
     video.addEventListener('error', handleError);
 
-    // Intenta reproducir
     const playVideo = () => {
-      video.play().catch((err) => console.log('Autoplay bloqueado:', err));
+      video.play().catch(() => {});
     };
-
     playVideo();
 
-    // Reproduce al scroll (para PC)
     const onScroll = () => {
       if (video.getBoundingClientRect().top < window.innerHeight * 0.8) {
         playVideo();
@@ -39,14 +34,35 @@ export default function Vision() {
   }, []);
 
   return (
-    <section id="vision">
+    {/* ⬇️ IMPORTANTE: relative para poder poner el fondo absoluto */}
+    <section id="vision" className="relative isolate py-20">
+      {/* === FONDO A TODO EL ANCHO (FULL-BLEED) === */}
+      <div className="pointer-events-none absolute left-1/2 top-0 -z-10 h-full w-screen -translate-x-1/2 overflow-hidden">
+        <video
+          className="h-full w-full object-cover"
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="metadata"
+          poster="/videos/energia-neuro33-poster.jpg"
+        >
+          {/* Si tenés .webm, ponelo primero */}
+          {/* <source src="/videos/energia-neuro33.webm" type="video/webm" /> */}
+          <source src="/videos/fondovision.mp4" type="video/mp4" />
+        </video>
+        {/* Oscurecer un poco para legibilidad del texto/cards */}
+        <div className="absolute inset-0 bg-black/18" />
+      </div>
+
+      {/* === CONTENIDO (tu grid) === */}
       <div className="wrap grid2">
         {/* Columna de texto */}
         <div className="surface reveal">
           <h2 className="h2">Nuestra visión</h2>
           <p className="p">
-            Construimos sistemas que amplifican el negocio: diseño impecable, arquitectura
-            robusta y automatización inteligente. Trabajamos como socios estratégicos.
+            Construimos sistemas que amplifican el negocio: diseño impecable, arquitectura robusta
+            y automatización inteligente. Trabajamos como socios estratégicos.
           </p>
           <ul className="p" style={{ marginTop: 6, lineHeight: 1.8 }}>
             <li>
@@ -61,7 +77,7 @@ export default function Vision() {
           </ul>
         </div>
 
-        {/* Columna visual: ojo en video */}
+        {/* Columna visual: ojo encima del fondo */}
         <div className="surface eye reveal" aria-label="Ojo neural">
           <video
             ref={videoRef}
@@ -70,18 +86,14 @@ export default function Vision() {
             muted
             loop
             playsInline
-            preload="auto"  // Cambiado a 'auto' para forzar carga
+            preload="auto"
             poster="/images/vision/ojo-poster.jpg"
             aria-label="Ojo neural en movimiento"
-            onError={(e) => console.error('Video error:', e)}  // Debug
+            onError={(e) => console.error('Video error:', e)}
           >
-            {/* Solo MP4 por ahora - más compatible */}
             <source src="/images/vision/ojo.mp4" type="video/mp4" />
-            {/* Fallback: texto solo si TODO falla */}
             Tu navegador no soporta video HTML5.
           </video>
-
-          {/* Fallback imagen SIEMPRE visible si video falla */}
           <noscript>
             <img
               className="nm-video-fallback"

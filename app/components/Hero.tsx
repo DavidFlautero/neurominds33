@@ -1,109 +1,375 @@
-'use client';
+/* ==============================
+   1. TAILWIND BASE (Next.js + Tailwind v3)
+   ============================== */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-import { useRef, useState } from 'react';
+/* ==============================
+   2. DARK MODE (clase .dark en <html>)
+   ============================== */
+.dark {
+  --background: 222.2 84% 4.9%;
+  --foreground: 210 40% 98%;
+  --card: 222.2 84% 4.9%;
+  --card-foreground: 210 40% 98%;
+  --popover: 222.2 84% 4.9%;
+  --popover-foreground: 210 40% 98%;
+  --primary: 210 40% 98%;
+  --primary-foreground: 222.2 47.4% 11.2%;
+  --secondary: 217.2 32.6% 17.5%;
+  --secondary-foreground: 210 40% 98%;
+  --muted: 217.2 32.6% 17.5%;
+  --muted-foreground: 215 20.2% 65.1%;
+  --accent: 217.2 32.6% 17.5%;
+  --accent-foreground: 210 40% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 217.2 32.6% 17.5%;
+  --input: 217.2 32.6% 17.5%;
+  --ring: 212.7 26.8% 83.9%;
+}
 
-export default function Hero() {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [hasPlayed, setHasPlayed] = useState(false);
+/* ==============================
+   3. TOKENS GLOBALES (LIGHT)
+   ============================== */
+:root {
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 84% 4.9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222.2 84% 4.9%;
+  --primary: 222.2 47.4% 11.2%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 210 40% 96.1%;
+  --secondary-foreground: 222.2 47.4% 11.2%;
+  --muted: 210 40% 96.1%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+  --accent: 210 40% 96.1%;
+  --accent-foreground: 222.2 47.4% 11.2%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+  --ring: 222.2 84% 4.9%;
+  --radius: 0.5rem;
+}
 
-  const playVideoOnce = () => {
-    const video = videoRef.current;
-    if (!video || hasPlayed) return;
+/* ==============================
+   4. NEUROMIND33 – PALETA PERSONALIZADA
+   ============================== */
+:root {
+  --nm-bg: #f7f6f4;        /* Fondo general */
+  --nm-paper: #fff;        /* Tarjetas */
+  --nm-ink: #0b0b0c;       /* Texto principal */
+  --nm-muted: #5e5e63;     /* Texto secundario */
+  --nm-line: #e9e8e4;      /* Bordes */
+  --nm-accent: #00a3ff;    /* Azul marca */
+  --nm-radius: 18px;
+  --nm-shadow: 0 18px 60px rgba(10,18,30,.08);
+  --nm-max: 1200px;
+}
 
-    // Forzar carga del video
-    video.load();
+/* Base global */
+html, body {
+  background: var(--nm-bg);
+  color: var(--nm-ink);
+  -webkit-font-smoothing: antialiased;
+  scroll-behavior: smooth;
+}
 
-    // Reproducir
-    const playPromise = video.play();
-    if (playPromise !== undefined) {
-      playPromise
-        .then(() => {
-          setHasPlayed(true);
-        })
-        .catch((error) => {
-          console.error("Error al reproducir video:", error);
-        });
-    }
-  };
+/* Contenedores */
+.wrap {
+  width: min(100%, var(--nm-max));
+  margin-inline: auto;
+  padding-inline: 24px;
+}
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
-  // Reproduce al hacer clic en cualquier botón
-  const handleButtonClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    playVideoOnce();
+/* ==============================
+   5. NAVBAR + LOGO
+   ============================== */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  border-bottom: 1px solid var(--nm-line);
+  backdrop-filter: saturate(140%) blur(10px);
+  background: rgba(247,246,244,.88);
+}
+.nav .wrap { height: 72px; }
 
-    // Scroll suave al enlace
-    const href = e.currentTarget.getAttribute('href');
-    if (href && href.startsWith('#')) {
-      e.preventDefault();
-      setTimeout(() => {
-        document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
-      }, 300);
-    }
-  };
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: .55rem;
+  text-decoration: none;
+}
 
-  return (
-    <header className="hero">
-      {/* Video de fondo */}
-      <div className="hero-media" aria-hidden="true">
-        <video
-          ref={videoRef}
-          className="hero-video"
-          muted
-          playsInline
-          preload="auto"
-          poster="/assets/hero-poster.jpg"
-          onError={() => console.error("Video falló al cargar")}
-        >
-          <source src="/images/hero/woman.mp4" type="video/mp4" />
-          {/* Fallback si MP4 falla */}
-          <img src="/assets/hero-waves.jpg" alt="" />
-        </video>
-      </div>
+/* Logo con efecto profundidad */
+.brand-logo {
+  width: 2.3rem; height: 2.3rem;
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--nm-bg);
+  position: relative;
+  flex-shrink: 0;
+}
+.brand-logo::before {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: inherit;
+  background: radial-gradient(circle at 50% 50%, rgba(15,23,42,.22), transparent 70%);
+  opacity: .85;
+}
+.brand-logo-img {
+  position: relative;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 68%, transparent 100%);
+  mask-image: radial-gradient(circle at 50% 50%, #000 68%, transparent 100%);
+  mix-blend-mode: multiply;
+}
+.brand-text {
+  font-size: .8rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: #020617;
+}
 
-      {/* Degradado */}
-      <div className="hero-overlay" aria-hidden="true" />
+/* Menú desktop */
+.menu.desktop {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  font-size: 14px;
+}
+.menu.desktop a {
+  opacity: .78;
+  transition: opacity .18s, transform .18s;
+}
+.menu.desktop a:hover {
+  opacity: 1;
+  transform: translateY(-1px);
+}
 
-      {/* Contenido a la izquierda */}
-      <div className="hero-content">
-        <div className="reveal">
-          <span className="eyebrow">Estrategia · Software · IA & Automatización</span>
-          <h1 className="h1">
-            Software claro.<br />Crecimiento real.
-          </h1>
-          <p className="lead">
-            Diseñamos e integramos plataformas que mejoran ventas y eficiencia.
-            Sin lista de precios: cotizamos por alcance e impacto.
-          </p>
-          <div className="hero-buttons">
-            <a className="btn primary" href="#servicios" onClick={handleButtonClick}>
-              Explorar servicios
-            </a>
-            <a className="btn" href="#proceso" onClick={handleButtonClick}>
-              Cómo trabajamos
-            </a>
-          </div>
-        </div>
-      </div>
+/* Burger móvil */
+.burger {
+  display: none;
+  background: transparent;
+  border: 0;
+  width: 38px; height: 38px;
+  border-radius: 12px;
+}
+.burger span {
+  display: block;
+  height: 2px;
+  margin: 7px 7px;
+  background: #111827;
+  border-radius: 99px;
+}
 
-      {/* Indicador visual (opcional) */}
-      {!hasPlayed && (
-        <div
-          style={{
-            position: 'absolute',
-            bottom: '2rem',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            color: 'white',
-            fontSize: '14px',
-            zIndex: 12,
-            background: 'rgba(0,0,0,0.5)',
-            padding: '8px 16px',
-            borderRadius: '999px',
-            pointerEvents: 'none',
-          }}
-        >
-          Haz clic en un botón para ver el video
-        </div>
-      )}
-    </header>
-  );
+/* Drawer móvil */
+.drawer {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: rgba(8,10,14,.45);
+  backdrop-filter: blur(4px);
+  opacity: 0;
+  pointer-events: none;
+  transition: .2s;
+}
+.drawer.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+.drawer-inner {
+  position: absolute;
+  right: 0; top: 0; bottom: 0;
+  width: min(82vw, 360px);
+  background: var(--nm-paper);
+  border-left: 1px solid var(--nm-line);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.drawer-inner a {
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid #ecebe7;
+  background: #fff;
+}
+.drawer-inner .btn {
+  justify-content: center;
+}
+
+@media (max-width: 1024px) {
+  .menu.desktop { display: none; }
+  .burger { display: block; }
+}
+
+/* ==============================
+   6. BOTONES
+   ============================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--nm-line);
+  background: var(--nm-paper);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform .16s, box-shadow .16s;
+}
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 16px 40px rgba(15,23,42,.14);
+}
+.btn.primary {
+  background: radial-gradient(circle at 0% 0%, #38bdf8, #0ea5e9 40%, #0f172a 100%);
+  color: #f9fafb;
+  border-color: rgba(56,189,248,.9);
+}
+
+/* ==============================
+   7. HERO – VIDEO + ZOOM OUT
+   ============================== */
+.hero {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: #000;
+  color: white;
+}
+.hero-media {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+}
+.hero-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;   /* Aleja la cara */
+  transform: scale(1.15);        /* Zoom out */
+  display: block;
+}
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: linear-gradient(to right, rgba(0,0,0,0.8), rgba(0,0,0,0.4) 50%, transparent);
+  pointer-events: none;
+}
+.hero-content {
+  position: absolute;
+  top: 50%;
+  left: 5vw;
+  transform: translateY(-50%);
+  z-index: 10;
+  max-width: 600px;
+}
+@media (max-width: 768px) {
+  .hero-content {
+    left: 1.5rem;
+    right: 1.5rem;
+    max-width: none;
+    text-align: center;
+  }
+  .hero .h1 { font-size: clamp(2.5rem, 8vw, 3.5rem); }
+}
+.hero-buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
+@media (max-width: 768px) {
+  .hero-buttons { justify-content: center; }
+}
+
+/* ==============================
+   8. SECCIONES GENERALES
+   ============================== */
+section {
+  padding: 80px 0;
+  border-bottom: 1px solid var(--nm-line);
+  background: var(--nm-bg);
+}
+.h2 {
+  font-size: clamp(26px, 4.3vw, 36px);
+  letter-spacing: -0.03em;
+  margin: 0 0 8px;
+}
+.p {
+  font-size: 14px;
+  color: var(--nm-muted);
+}
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+@media (max-width: 900px) { .grid2 { grid-template-columns: 1fr; } }
+.grid3 { display: grid; gap: 18px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 1100px) { .grid3 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 680px) { .grid3 { grid-template-columns: 1fr; } }
+.surface {
+  border-radius: var(--nm-radius);
+  padding: 24px 22px;
+  background: var(--nm-paper);
+  border: 1px solid var(--nm-line);
+  box-shadow: var(--nm-shadow);
+}
+
+/* ==============================
+   9. FOOTER + SAFE AREA
+   ============================== */
+footer {
+  border-top: 1px solid var(--nm-line);
+  padding: 28px 0 48px;
+  color: #6b6f78;
+  background: var(--nm-bg);
+}
+.reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity .7s ease, transform .7s ease;
+}
+.reveal.in {
+  opacity: 1;
+  transform: none;
+}
+body { padding-bottom: env(safe-area-inset-bottom); }
+.wa { bottom: calc(18px + env(safe-area-inset-bottom)); }
+.quick { bottom: calc(88px + env(safe-area-inset-bottom)); }
+
+/* Video genérico */
+.nm-video {
+  width: 100% !important;
+  height: auto !important;
+  min-height: 300px !important;
+  object-fit: cover !important;
+  display: block !important;
+  background: #000;
+}
+.nm-video-fallback {
+  width: 100% !important;
+  height: auto !important;
+  display: block !important;
 }

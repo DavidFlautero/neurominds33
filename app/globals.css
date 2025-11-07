@@ -1054,3 +1054,81 @@ body {
   object-fit: cover;
   filter: saturate(105%) contrast(105%);
 }
+
+/* --- Layout general del hero --- */
+.hero{
+  position: relative;
+  isolation: isolate;
+  /* más arriba y con menos fondo vacío */
+  padding-block: 56px 0;
+  border-bottom: 1px solid var(--nm-line, #e9e8e4);
+}
+.hero-media{ position:absolute; inset:0; z-index:-2; overflow:hidden; }
+.hero-media img{ width:100%; height:100%; object-fit:cover; }
+.hero-overlay{
+  position:absolute; inset:0; z-index:-1;
+  background:
+    radial-gradient(900px 600px at 12% -10%, rgba(0,163,255,.18), transparent 60%),
+    linear-gradient(180deg, rgba(5,10,16,.95) 0%, rgba(5,10,16,.85) 48%, rgba(247,246,244,.28) 86%, var(--nm-bg, #f7f6f4) 100%);
+}
+
+/* --- Grid del hero --- */
+.hero-wrap{
+  display:grid; gap:32px;
+  grid-template-columns: minmax(0,1.05fr) minmax(0,.95fr);
+  align-items: end;               /* baja un poco el texto para que la ola lo cruce */
+  padding-block: 36px 0;
+}
+@media (max-width:980px){
+  .hero-wrap{ grid-template-columns:1fr; align-items: start; }
+}
+
+/* --- Columna derecha: imagen sin marco + difuminado --- */
+.hero-figure{ margin:0; position:relative; display:flex; justify-content:flex-end; }
+.hero-woman{
+  display:block;
+  width:min(520px, 42vw);         /* tamaño elegante y consistente */
+  height:auto;
+  /* sin bordes/recortes del antiguo .mock */
+  border:none; box-shadow:none; background:transparent;
+  border-radius: 24px;            /* leve suavidad del rectángulo */
+  /* Difuminado de bordes para que se funda con el fondo */
+  -webkit-mask-image: radial-gradient(140% 120% at 70% 15%, #000 70%, rgba(0,0,0,0) 100%);
+          mask-image: radial-gradient(140% 120% at 70% 15%, #000 70%, rgba(0,0,0,0) 100%);
+  /* sube visualmente para tocar la ola */
+  transform: translateY(-18px);
+  /* mejora antialiasing en algunos navegadores */
+  image-rendering: -webkit-optimize-contrast;
+}
+@media (max-width:980px){
+  .hero-woman{ width:min(520px, 72vw); transform:none; }
+}
+
+/* --- Columna izquierda: ligera prioridad visual por encima de la imagen --- */
+.hero-copy{ position:relative; z-index:2; }
+
+/* --- Onda animada por encima del contenido --- */
+.hero-wave{
+  position:absolute; left:0; right:0;
+  /* ubico la ola justo por encima de la parte inferior del hero */
+  bottom:-1px;
+  height:120px;
+  z-index:3;                      /* por encima de imagen y texto */
+  pointer-events:none;
+  /* forma básica */
+  --c1: rgba(14,165,233,.22);
+  --c2: rgba(2,6,23,.10);
+  --c3: rgba(2,6,23,0);
+  background:
+    radial-gradient(120% 160% at 50% 0%, var(--c1), var(--c2) 60%, var(--c3) 80%);
+  filter: blur(1px);
+  /* animación suave de color */
+  animation: waveTint 10s ease-in-out infinite alternate;
+}
+
+/* Transición lenta de color (azules → celestes suaves) */
+@keyframes waveTint{
+  0%   { --c1: rgba(14,165,233,.22); }
+  50%  { --c1: rgba(56,189,248,.20); }
+  100% { --c1: rgba(99,102,241,.18); }
+}

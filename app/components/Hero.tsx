@@ -4,65 +4,65 @@ import { useRef, useState } from 'react';
 
 export default function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [isHovered, setIsHovered] = useState(false);
   const [hasPlayed, setHasPlayed] = useState(false);
 
-  const playVideoOnce = () => {
+  const playVideo = () => {
     const video = videoRef.current;
     if (!video || hasPlayed) return;
 
-    // Forzar carga del video
-    video.load();
-
-    // Reproducir
-    const playPromise = video.play();
-    if (playPromise !== undefined) {
-      playPromise
-        .then(() => {
-          setHasPlayed(true);
-        })
-        .catch((error) => {
-          console.error("Error al reproducir video:", error);
-        });
-    }
+    video.currentTime = 0; // Reinicia
+    video.play().then(() => {
+      setHasPlayed(true);
+    }).catch(() => {});
   };
 
-  // Reproduce al hacer clic en cualquier botón
-  const handleButtonClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    playVideoOnce();
-
-    // Scroll suave al enlace
-    const href = e.currentTarget.getAttribute('href');
-    if (href && href.startsWith('#')) {
-      e.preventDefault();
-      setTimeout(() => {
-        document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
-      }, 300);
+  const pauseAndReset = () => {
+    const video = videoRef.current;
+    if (video) {
+      video.pause();
+      video.currentTime = 0; // Vuelve al inicio (pero se ve poster)
     }
+    setIsHovered(false);
   };
 
   return (
     <header className="hero">
-      {/* Video de fondo */}
+      {/* Imagen estática (siempre visible) */}
+      <img
+        src="/assets/hero-poster.jpg"
+        alt="Chica estática"
+        className="hero-poster"
+      />
+
+      {/* Video (solo se ve al hover) */}
       <div className="hero-media" aria-hidden="true">
         <video
           ref={videoRef}
           className="hero-video"
           muted
           playsInline
-          preload="auto"
-          poster="/assets/hero-poster.jpg"
-          onError={() => console.error("Video falló al cargar")}
+          preload="metadata"
+          onEnded={() => setHasPlayed(true)}
         >
-          <source src="/images/hero/woman.mp4" type="video/mp4" />
-          {/* Fallback si MP4 falla */}
-          <img src="/assets/hero-waves.jpg" alt="" />
+          <source src="/assets/hero-video.mp4" type="video/mp4" />
         </video>
       </div>
+
+      {/* Zona de hover (35% derecha) */}
+      <div
+        className="hover-zone"
+        onMouseEnter={() => {
+          setIsHovered(true);
+          playVideo();
+        }}
+        onMouseLeave={pauseAndReset}
+      />
 
       {/* Degradado */}
       <div className="hero-overlay" aria-hidden="true" />
 
-      {/* Contenido a la izquierda */}
+      {/* Texto */}
       <div className="hero-content">
         <div className="reveal">
           <span className="eyebrow">Estrategia · Software · IA & Automatización</span>
@@ -74,34 +74,30 @@ export default function Hero() {
             Sin lista de precios: cotizamos por alcance e impacto.
           </p>
           <div className="hero-buttons">
-            <a className="btn primary" href="#servicios" onClick={handleButtonClick}>
+            <a className="btn primary" href="#servicios">
               Explorar servicios
             </a>
-            <a className="btn" href="#proceso" onClick={handleButtonClick}>
+            <a className="btn" href="#proceso">
               Cómo trabajamos
             </a>
           </div>
         </div>
       </div>
 
-      {/* Indicador visual (opcional) */}
-      {!hasPlayed && (
-        <div
-          style={{
-            position: 'absolute',
-            bottom: '2rem',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            color: 'white',
-            fontSize: '14px',
-            zIndex: 12,
-            background: 'rgba(0,0,0,0.5)',
-            padding: '8px 16px',
-            borderRadius: '999px',
-            pointerEvents: 'none',
-          }}
-        >
-          Haz clic en un botón para ver el video
+      {/* Indicador opcional */}
+      {isHovered && !hasPlayed && (
+        <div style={{
+          position: 'absolute',
+          bottom: '2rem',
+          right: '2rem',
+          background: 'rgba(0,0,0,0.6)',
+          color: 'white',
+          padding: '6px 12px',
+          borderRadius: '999px',
+          fontSize: '12px',
+          zIndex: 20
+        }}>
+          Reproduciendo...
         </div>
       )}
     </header>

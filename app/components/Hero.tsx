@@ -10,7 +10,7 @@ export default function Hero() {
     const video = videoRef.current;
     if (!video || hasPlayed) return;
 
-    // Forzar carga
+    // Forzar carga del video
     video.load();
 
     // Reproducir
@@ -86,19 +86,21 @@ export default function Hero() {
 
       {/* Indicador visual (opcional) */}
       {!hasPlayed && (
-        <div className="play-hint" style={{
-          position: 'absolute',
-          bottom: '2rem',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          color: 'white',
-          fontSize: '14px',
-          zIndex: 12,
-          background: 'rgba(0,0,0,0.5)',
-          padding: '8px 16px',
-          borderRadius: '999px',
-          pointerEvents: 'none'
-        }}>
+        <div
+          style={{
+            position: 'absolute',
+            bottom: '2rem',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            color: 'white',
+            fontSize: '14px',
+            zIndex: 12,
+            background: 'rgba(0,0,0,0.5)',
+            padding: '8px 16px',
+            borderRadius: '999px',
+            pointerEvents: 'none',
+          }}
+        >
           Haz clic en un botón para ver el video
         </div>
       )}

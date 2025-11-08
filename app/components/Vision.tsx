@@ -9,13 +9,11 @@ export default function Vision() {
     const video = videoRef.current;
     if (!video) return;
 
-    const handleError = (e: Event) => {
-      console.error('Error cargando video:', e);
-    };
+    const handleError = (e: Event) => console.error('Error cargando video:', e);
     video.addEventListener('error', handleError);
 
     const playVideo = () => {
-      video.play().catch(() => {});
+      video.play().catch(() => {/* autoplay bloqueado, ignorar */});
     };
     playVideo();
 
@@ -34,28 +32,24 @@ export default function Vision() {
   }, []);
 
   return (
-    {/* ⬇️ IMPORTANTE: relative para poder poner el fondo absoluto */}
     <section id="vision" className="relative isolate py-20">
-      {/* === FONDO A TODO EL ANCHO (FULL-BLEED) === */}
-      <div className="pointer-events-none absolute left-1/2 top-0 -z-10 h-full w-screen -translate-x-1/2 overflow-hidden">
+      {/* FONDO DE VIDEO FULL-BLEED DETRÁS */}
+      <div className="fullbg" aria-hidden="true">
         <video
-          className="h-full w-full object-cover"
           autoPlay
           loop
           muted
           playsInline
           preload="metadata"
+          className="h-full w-full object-cover"
           poster="/videos/energia-neuro33-poster.jpg"
         >
-          {/* Si tenés .webm, ponelo primero */}
           {/* <source src="/videos/energia-neuro33.webm" type="video/webm" /> */}
-          <source src="/videos/fondovision.mp4" type="video/mp4" />
+          <source src="/videos/energia-neuro33.mp4" type="video/mp4" />
         </video>
-        {/* Oscurecer un poco para legibilidad del texto/cards */}
-        <div className="absolute inset-0 bg-black/18" />
       </div>
 
-      {/* === CONTENIDO (tu grid) === */}
+      {/* CONTENIDO */}
       <div className="wrap grid2">
         {/* Columna de texto */}
         <div className="surface reveal">
@@ -65,15 +59,9 @@ export default function Vision() {
             y automatización inteligente. Trabajamos como socios estratégicos.
           </p>
           <ul className="p" style={{ marginTop: 6, lineHeight: 1.8 }}>
-            <li>
-              <b>Arquitectura</b> modular con integraciones seguras y rendimiento de clase mundial.
-            </li>
-            <li>
-              <b>Experiencia</b> clara y estética premium que convierte.
-            </li>
-            <li>
-              <b>Evolución</b> continua con métricas y roadmap compartido.
-            </li>
+            <li><b>Arquitectura</b> modular con integraciones seguras y rendimiento de clase mundial.</li>
+            <li><b>Experiencia</b> clara y estética premium que convierte.</li>
+            <li><b>Evolución</b> continua con métricas y roadmap compartido.</li>
           </ul>
         </div>
 

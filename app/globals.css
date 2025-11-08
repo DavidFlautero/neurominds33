@@ -547,19 +547,20 @@ body{ padding-bottom: env(safe-area-inset-bottom); }
   }
 }
 /* Sección con video detrás */
+/* Sección con video detrás (sin imagen) */
 .nm-section{
   position: relative;
-  isolation: isolate;       /* permite z-index negativos seguros */
+  isolation: isolate;
   padding: 80px 0;
   background: transparent;
-  overflow: clip;           /* corta desbordes del video */
+  overflow: clip;
 }
 
 .nm-fullbg{
   position: absolute;
   inset: 0;
-  z-index: -1;              /* queda detrás del contenido */
-  pointer-events: none;     /* no bloquea clics */
+  z-index: -1;
+  pointer-events: none;
 }
 
 .nm-fullbg-video{
@@ -575,23 +576,54 @@ body{ padding-bottom: env(safe-area-inset-bottom); }
   filter: saturate(110%) contrast(105%);
 }
 
-/* capa para legibilidad sobre el video */
+/* Degradado para legibilidad */
+/* Sección con video detrás (sin imagen) */
+.nm-section{
+  position: relative;
+  isolation: isolate;
+  padding: 80px 0;
+  background: transparent;
+  overflow: clip;
+}
+
+.nm-fullbg{
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.nm-fullbg-video{
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  transform: translate(-50%, -50%);
+  object-fit: cover;
+  filter: saturate(110%) contrast(105%);
+}
+
+/* Degradado para legibilidad */
 .nm-fullbg-overlay{
   position: absolute;
   inset: 0;
-  background: radial-gradient(80% 60% at 20% 20%, rgba(0,0,0,.35), transparent 60%),
-              linear-gradient(180deg, rgba(0,0,0,.45), rgba(0,0,0,.2) 40%, rgba(0,0,0,.45));
+  background:
+    radial-gradient(80% 60% at 20% 20%, rgba(0,0,0,.35), transparent 60%),
+    linear-gradient(180deg, rgba(0,0,0,.45), rgba(0,0,0,.2) 40%, rgba(0,0,0,.45));
 }
 
-/* stack de textos */
-.nm-stack{ color:#e8eef5; max-width: 760px; display: grid; gap: 10px; }
+/* Texto */
+.nm-stack{ color:#e8eef5; max-width:760px; display:grid; gap:10px; }
 .eyebrow{
   display:inline-block; font-size:12px; letter-spacing:.18em; text-transform:uppercase;
   padding:6px 10px; border:1px solid rgba(255,255,255,.25); border-radius:999px;
   background: rgba(15,23,42,.55);
 }
 
-/* Accesibilidad: si el usuario prefiere menos movimiento, escondemos el video */
+/* Accesibilidad: si el usuario prefiere menos movimiento, ocultamos el video */
 @media (prefers-reduced-motion: reduce){
   .nm-fullbg-video{ display:none; }
   .nm-fullbg{ background: linear-gradient(180deg,#0a1320,#1a1340); }

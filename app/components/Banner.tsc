@@ -3,7 +3,7 @@
 export default function SeccionAutomatizacion() {
   return (
     <section id="automatizacion" className="nm-section">
-      {/* Fondo full-bleed */}
+      {/* Fondo: SOLO el video */}
       <div className="nm-fullbg">
         <video
           className="nm-fullbg-video"
@@ -13,13 +13,11 @@ export default function SeccionAutomatizacion() {
           loop
           playsInline
           preload="auto"
-          poster="/videos/fondobanner.jpg"
         />
-        {/* Degradado para legibilidad (editá opacidad si querés) */}
         <div className="nm-fullbg-overlay" />
       </div>
 
-      {/* Contenido encima */}
+      {/* Texto arriba */}
       <div className="wrap">
         <div className="nm-stack">
           <span className="eyebrow">IA + Automatización</span>
@@ -27,8 +25,8 @@ export default function SeccionAutomatizacion() {
           <p className="p">
             Conectamos sistemas, automatizamos procesos y diseñamos flujos que aprenden de tus datos.
           </p>
-          {/* Botones opcionales */}
-          {/* <div className="hero-buttons"><a className="btn primary">Ver demo</a></div> */}
+          {/* Si querés CTA, descomentá: */}
+          {/* <div className="hero-buttons"><a className="btn primary" href="#contacto">Ver demo</a></div> */}
         </div>
       </div>
     </section>

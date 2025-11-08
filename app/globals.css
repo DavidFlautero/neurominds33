@@ -623,3 +623,19 @@ body{ padding-bottom: env(safe-area-inset-bottom); }
     background: linear-gradient(180deg, #0a1320, #141440);
   }
 }
+/* Card media con video */
+.card{ overflow:hidden; }
+.card-media{
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  margin-bottom: 10px;
+  background: #0b0f1a;
+  border: 1px solid rgba(255,255,255,.06);
+}
+.card-media .card-video,
+.card-media img{
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+}

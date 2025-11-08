@@ -3,11 +3,11 @@
 export default function SeccionAutomatizacion() {
   return (
     <section id="automatizacion" className="nm-section">
-      {/* Fondo: SOLO el video */}
+      {/* 🎥 Fondo: solo el video */}
       <div className="nm-fullbg">
         <video
           className="nm-fullbg-video"
-          src="/videos/fondobanner.mp4"
+          src="/videos/fondobanner.mp4?v=4"
           autoPlay
           muted
           loop
@@ -17,16 +17,15 @@ export default function SeccionAutomatizacion() {
         <div className="nm-fullbg-overlay" />
       </div>
 
-      {/* Texto arriba */}
+      {/* 💡 Texto encima del video */}
       <div className="wrap">
         <div className="nm-stack">
-          <span className="eyebrow">IA + Automatización</span>
-          <h2 className="h2">Inteligencia en acción</h2>
+          <span className="eyebrow">Tecnología Inteligente</span>
+          <h2 className="h2">Automatización que transforma</h2>
           <p className="p">
-            Conectamos sistemas, automatizamos procesos y diseñamos flujos que aprenden de tus datos.
+            Fusionamos inteligencia artificial y desarrollo avanzado para crear procesos autónomos,
+            precisos y escalables. Tu empresa evoluciona, nosotros hacemos que el sistema piense.
           </p>
-          {/* Si querés CTA, descomentá: */}
-          {/* <div className="hero-buttons"><a className="btn primary" href="#contacto">Ver demo</a></div> */}
         </div>
       </div>
     </section>

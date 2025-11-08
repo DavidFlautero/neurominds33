@@ -3,23 +3,27 @@
 import { useEffect, useRef } from 'react';
 
 export default function Vision() {
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const eyeRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
+    const v = eyeRef.current;
+    if (!v) return;
 
-    const handleError = (e: Event) => console.error('Error cargando video:', e);
-    video.addEventListener('error', handleError);
+    // Fix Safari/iOS autoplay
+    v.muted = true;
+    (v as any).playsInline = true;
+    (v as any).webkitPlaysinline = true;
 
-    const playVideo = () => {
-      video.play().catch(() => {/* autoplay bloqueado, ignorar */});
-    };
-    playVideo();
+    const handleError = (e: Event) => console.error('Error cargando video OJO:', e);
+    v.addEventListener('error', handleError);
+
+    const tryPlay = () => v.play().catch(() => {/* ignorar autoplay bloqueado */});
+    tryPlay();
 
     const onScroll = () => {
-      if (video.getBoundingClientRect().top < window.innerHeight * 0.8) {
-        playVideo();
+      const top = v.getBoundingClientRect().top;
+      if (top < window.innerHeight * 0.85) {
+        tryPlay();
         window.removeEventListener('scroll', onScroll);
       }
     };
@@ -27,13 +31,13 @@ export default function Vision() {
 
     return () => {
       window.removeEventListener('scroll', onScroll);
-      video.removeEventListener('error', handleError);
+      v.removeEventListener('error', handleError);
     };
   }, []);
 
   return (
     <section id="vision" className="relative isolate py-20">
-      {/* FONDO DE VIDEO FULL-BLEED DETRÁS */}
+      {/* === FONDO FULL-BLEED DETRÁS === */}
       <div className="fullbg" aria-hidden="true">
         <video
           autoPlay
@@ -41,18 +45,17 @@ export default function Vision() {
           muted
           playsInline
           preload="metadata"
-          className="h-full w-full object-cover"
           poster="/videos/energia-neuro33-poster.jpg"
+          className="w-full h-full object-cover"
         >
-          {/* <source src="/videos/energia-neuro33.webm" type="video/webm" /> */}
           <source src="/videos/energia-neuro33.mp4" type="video/mp4" />
         </video>
       </div>
 
-      {/* CONTENIDO */}
-      <div className="wrap grid2">
-        {/* Columna de texto */}
-        <div className="surface reveal">
+      {/* === CONTENIDO === */}
+      <div className="wrap grid2 relative z-10">
+        {/* Texto */}
+        <div className="surface reveal backdrop-blur-[2px] bg-white/60 dark:bg-black/40">
           <h2 className="h2">Nuestra visión</h2>
           <p className="p">
             Construimos sistemas que amplifican el negocio: diseño impecable, arquitectura robusta
@@ -65,22 +68,20 @@ export default function Vision() {
           </ul>
         </div>
 
-        {/* Columna visual: ojo encima del fondo */}
-        <div className="surface eye reveal" aria-label="Ojo neural">
+        {/* Video del ojo */}
+        <div className="surface eye reveal eye-box" aria-label="Ojo neural">
           <video
-            ref={videoRef}
+            ref={eyeRef}
             className="nm-video"
             autoPlay
             muted
             loop
             playsInline
-            preload="auto"
+            preload="metadata"
             poster="/images/vision/ojo-poster.jpg"
-            aria-label="Ojo neural en movimiento"
-            onError={(e) => console.error('Video error:', e)}
+            onError={(e) => console.error('Video OJO error:', e)}
           >
             <source src="/images/vision/ojo.mp4" type="video/mp4" />
-            Tu navegador no soporta video HTML5.
           </video>
           <noscript>
             <img

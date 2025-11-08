@@ -414,3 +414,80 @@ body{ padding-bottom: env(safe-area-inset-bottom); }
 }
 /* mantener tu grid centrado */
 #vision .wrap { width: min(100%, var(--nm-max)); margin-inline: auto; padding-inline: 24px; }
+/* =======================
+   SECCIÓN #vision CON VIDEO FULL-BLEED DETRÁS
+   ======================= */
+#vision {
+  position: relative;
+  isolation: isolate;
+  padding: 80px 0;
+  background: transparent;
+  overflow: hidden;
+}
+
+#vision .fullbg {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  height: 100%;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+#vision .fullbg video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: saturate(105%) contrast(103%) brightness(0.9);
+}
+
+/* Degradado suave para legibilidad */
+#vision .fullbg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.15) 0%,
+    rgba(0, 0, 0, 0.15) 40%,
+    rgba(0, 0, 0, 0.3) 100%
+  );
+}
+
+/* Caja del ojo visible con altura definida */
+.eye-box {
+  aspect-ratio: 16 / 9;
+  min-height: 360px;
+  position: relative;
+  display: block;
+}
+@media (max-width: 640px) {
+  .eye-box {
+    min-height: 260px;
+  }
+}
+
+.surface.eye .nm-video,
+.surface.eye .nm-video-fallback {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 16px;
+  background: #000;
+}
+
+/* Transición suave del ojo al cargar */
+.surface.eye video {
+  opacity: 0;
+  animation: fadeIn 1.8s ease forwards;
+}
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}

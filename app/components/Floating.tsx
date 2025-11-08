@@ -49,7 +49,7 @@ Email: ${data['email']} · WhatsApp: ${data['whatsapp']}`
   return (
     <>
       <a className="quick" id="openModalFloat" href="#contacto" aria-label="Abrir formulario rápido">📩 Hablar ahora</a>
-      <a className="wa" href="https://wa.me/54911XXXXXXXX?text=Hola%20NeuroMind33" aria-label="WhatsApp">
+      <a className="wa" href="https://wa.me/5491168322437?text=Hola%20NeuroMind33" aria-label="WhatsApp">
         <svg width="26" height="26" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M20.52 3.48A11.84 11.84 0 0012.14 0C6.3 0 1.89 4.41 1.89 9.84c0 1.76.45 3.45 1.3 4.97l-1.37 5.02 5.16-1.35a11.84 11.84 0 004.94 1.16c5.43 0 9.84-4.41 9.84-9.84 0-3.09-1.34-6-3.48-8.32z"/></svg>
       </a>
 

@@ -1,16 +1,34 @@
-export default function Banner(){
+'use client';
+
+export default function SeccionAutomatizacion() {
   return (
-    <section className="nm-banner" aria-label="Propuesta destacada">
-      <div className="nm-banner__media" aria-hidden="true">
-        <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=1920&auto=format&fit=crop" alt="" />
+    <section id="automatizacion" className="nm-section">
+      {/* Fondo full-bleed */}
+      <div className="nm-fullbg">
+        <video
+          className="nm-fullbg-video"
+          src="/videos/fondobanner.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          poster="/videos/fondobanner.jpg"
+        />
+        {/* Degradado para legibilidad (editá opacidad si querés) */}
+        <div className="nm-fullbg-overlay" />
       </div>
-      <div className="wrap nm-banner__content">
-        <p className="nm-banner__eyebrow">Estrategia · Diseño · Tecnología</p>
-        <h2 className="nm-banner__title">Diseñamos el futuro digital de tu empresa.</h2>
-        <p className="nm-banner__lead">Software, IA y automatización que impactan ventas y eficiencia. Equipo senior, proceso claro y ejecución impecable.</p>
-        <div className="nm-banner__cta">
-          <a href="#contacto" className="btn primary" id="openModalBanner">Agendar reunión</a>
-          <a href="#servicios" className="btn">Ver servicios</a>
+
+      {/* Contenido encima */}
+      <div className="wrap">
+        <div className="nm-stack">
+          <span className="eyebrow">IA + Automatización</span>
+          <h2 className="h2">Inteligencia en acción</h2>
+          <p className="p">
+            Conectamos sistemas, automatizamos procesos y diseñamos flujos que aprenden de tus datos.
+          </p>
+          {/* Botones opcionales */}
+          {/* <div className="hero-buttons"><a className="btn primary">Ver demo</a></div> */}
         </div>
       </div>
     </section>

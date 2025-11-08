@@ -48,7 +48,7 @@ export default function Vision() {
           poster="/videos/energia-neuro33-poster.jpg"
           className="w-full h-full object-cover"
         >
-          <source src="/videos/energia-neuro33.mp4" type="video/mp4" />
+          <source src="/videos/fondovision.mp4.mp4" type="video/mp4" />
         </video>
       </div>
 

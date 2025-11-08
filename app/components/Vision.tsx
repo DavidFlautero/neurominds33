@@ -41,7 +41,7 @@ export default function Vision() {
     preload="auto"
     className="absolute inset-0 w-full h-full object-cover -z-10"
   >
-    <source src="/videos/energia-neuro33.mp4" type="video/mp4" />
+    <source src="/videos/fondovision.mp4" type="video/mp4" />
   </video>
   {/* Degradado sutil para legibilidad */}
   <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70 -z-10" />

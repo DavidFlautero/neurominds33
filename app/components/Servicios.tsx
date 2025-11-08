@@ -3,15 +3,25 @@
 
 import { useEffect, useRef } from 'react';
 
-function useSlowPlayback(ref: React.RefObject<HTMLVideoElement>, rate = 0.8) {
+// Actualizar el tipo del ref para aceptar null
+function useSlowPlayback(ref: React.RefObject<HTMLVideoElement | null>, rate = 0.8) {
   useEffect(() => {
     const v = ref.current;
     if (!v) return;
-    const setRate = () => (v.playbackRate = rate);
+    
+    const setRate = () => {
+      if (v) {
+        v.playbackRate = rate;
+      }
+    };
+
     v.addEventListener('loadedmetadata', setRate);
     v.addEventListener('canplay', setRate);
     v.addEventListener('playing', setRate);
+    
+    // Manejar el error de autoplay silenciosamente
     v.play().catch(() => {});
+
     return () => {
       v.removeEventListener('loadedmetadata', setRate);
       v.removeEventListener('canplay', setRate);
@@ -20,6 +30,7 @@ function useSlowPlayback(ref: React.RefObject<HTMLVideoElement>, rate = 0.8) {
   }, [ref, rate]);
 }
 
+// El resto del código permanece igual...
 function CardVideo({
   webm,
   mp4,

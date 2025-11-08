@@ -31,55 +31,53 @@ export default function Vision() {
   }, []);
 
   return (
-    <section id="vision" className="relative isolate py-20 overflow-hidden">
-      {/* === VIDEO DE FONDO FULL WIDTH === */}
-      <div className="absolute inset-0 -z-10">
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="auto"
-          poster="/videos/energia-neuro33-poster.jpg"
-          className="w-full h-full object-cover"
-        >
-          <source src="/videos/fondovision.mp4" type="video/mp4" />
-        </video>
-        <div className="absolute inset-0 bg-black/40" /> {/* degradado sutil */}
-      </div>
+    <section id="vision" className="relative isolate py-28 overflow-hidden">
+  {/* VIDEO DE FONDO */}
+  <video
+    autoPlay
+    loop
+    muted
+    playsInline
+    preload="auto"
+    className="absolute inset-0 w-full h-full object-cover -z-10"
+  >
+    <source src="/videos/energia-neuro33.mp4" type="video/mp4" />
+  </video>
+  {/* Degradado sutil para legibilidad */}
+  <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70 -z-10" />
 
-      {/* === CONTENIDO === */}
-      <div className="wrap grid2 relative z-10">
-        <div className="surface reveal bg-white/60 backdrop-blur-md border border-white/40 dark:bg-black/40">
-          <h2 className="h2 text-black dark:text-white">Nuestra visión</h2>
-          <p className="p text-black/80 dark:text-gray-200">
-            Construimos sistemas que amplifican el negocio: diseño impecable, arquitectura robusta
-            y automatización inteligente. Trabajamos como socios estratégicos.
-          </p>
-          <ul className="p text-black/80 dark:text-gray-300 mt-3 leading-relaxed">
-            <li><b>Arquitectura</b> modular con integraciones seguras y rendimiento de clase mundial.</li>
-            <li><b>Experiencia</b> clara y estética premium que convierte.</li>
-            <li><b>Evolución</b> continua con métricas y roadmap compartido.</li>
-          </ul>
-        </div>
+  {/* CONTENIDO */}
+  <div className="wrap grid2 relative z-10 text-white">
+    <div className="space-y-3">
+      <h2 className="h2 font-semibold text-white">Nuestra visión</h2>
+      <p className="text-sm md:text-base text-gray-200 max-w-[500px]">
+        Construimos sistemas que amplifican el negocio: diseño impecable, arquitectura robusta y automatización inteligente.
+        Trabajamos como socios estratégicos.
+      </p>
+      <ul className="text-gray-300 space-y-1">
+        <li><b>Arquitectura</b> modular con integraciones seguras y rendimiento de clase mundial.</li>
+        <li><b>Experiencia</b> clara y estética premium que convierte.</li>
+        <li><b>Evolución</b> continua con métricas y roadmap compartido.</li>
+      </ul>
+    </div>
 
-        {/* VIDEO DEL OJO */}
-        <div className="relative rounded-2xl overflow-hidden border border-white/30 shadow-lg backdrop-blur-sm">
-          <video
-            ref={eyeRef}
-            className="w-full h-full object-cover rounded-2xl"
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="auto"
-            poster="/images/vision/ojo-poster.jpg"
-          >
-            <source src="/images/vision/ojo.mp4" type="video/mp4" />
-          </video>
-          <div className="absolute inset-0 bg-black/20 pointer-events-none" />
-        </div>
-      </div>
-    </section>
+    {/* Video del ojo */}
+    <div className="relative rounded-2xl overflow-hidden shadow-xl border border-white/20">
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        preload="auto"
+        className="w-full h-full object-cover"
+        poster="/images/vision/ojo-poster.jpg"
+      >
+        <source src="/images/vision/ojo.mp4" type="video/mp4" />
+      </video>
+      <div className="absolute inset-0 bg-black/10" />
+    </div>
+  </div>
+</section>
+
   );
 }

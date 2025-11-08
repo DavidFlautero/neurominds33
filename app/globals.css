@@ -526,3 +526,23 @@ body{ padding-bottom: env(safe-area-inset-bottom); }
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.4);
 }
+#vision video {
+  filter: saturate(110%) contrast(108%) brightness(0.9);
+}
+
+#vision .wrap {
+  width: min(100%, 1200px);
+  margin-inline: auto;
+  padding-inline: 24px;
+}
+
+.grid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+}
+@media (max-width: 900px) {
+  .grid2 {
+    grid-template-columns: 1fr;
+  }
+}

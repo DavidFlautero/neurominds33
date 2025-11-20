@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuroMinds IA</title>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <div id="header-container"></div>
+    <div id="hero-section"></div>
+    <div id="vision-section"></div>
+    <div id="features-section"></div>
+    <div id="agentes-section"></div>
+    <div id="footer-container"></div>
+
+    <script src="js/script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSection('header-container', 'sections/header.html');
+            loadSection('hero-section', 'sections/hero.html');
+            loadSection('vision-section', 'sections/vision.html');
+            loadSection('features-section', 'sections/features.html');
+            loadSection('agentes-section', 'sections/agentes.html');
+            loadSection('footer-container', 'sections/footer.html');
+        });
+
+        function loadSection(containerId, filePath) {
+            fetch(filePath)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById(containerId).innerHTML = data;
+                });
+        }
+    </script>
+</body>
+</html>

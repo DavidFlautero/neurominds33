@@ -115,7 +115,7 @@ export default function Servicios() {
           <article className="card reveal">
             <CardVideo
               webm="/videos/serv_auto_vp9.webm?v=1"
-              mp4="/videos/serv_auto_h264.mp4?v=1"
+              mp4="/videos/serv_ia_h266.mp4?v=1"
               poster="https://images.unsplash.com/photo-1551281044-8c5200d3d043?q=80&w=1600&auto=format&fit=crop"
               alt="Automatización"
             />

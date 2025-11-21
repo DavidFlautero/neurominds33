@@ -1,7 +1,7 @@
-export default function Segmentos() {
+export default function SoftwareMedida() {
   return (
     <section
-      id="segmentos"
+      id="software-medida"
       className="relative overflow-hidden"
     >
       {/* VIDEO DE FONDO */}
@@ -14,61 +14,42 @@ export default function Segmentos() {
         className="absolute inset-0 h-full w-full object-cover opacity-60"
       />
 
-      {/* CAPA SUAVE PARA MEJORAR LECTURA */}
+      {/* CAPA SUAVE PARA QUE SE LEA EL TEXTO */}
       <div className="absolute inset-0 bg-black/25" />
 
       {/* CONTENIDO ENCIMA DEL VIDEO */}
-      <div className="relative wrap py-16">
-        <div className="grid2 gap-8">
-          {/* CARD SOFTWARE A MEDIDA */}
-          <div className="surface reveal max-w-xl">
-            <img
-              src="/images/softwaremedida/empresas2.png"
-              alt="Interfaz de software a medida con dashboards avanzados"
-              className="mb-4 w-full rounded-3xl"
-            />
-
-            <h2 className="h2">Software a Medida</h2>
-            <p className="p">
-              Diseñamos y desarrollamos sistemas personalizados: paneles internos, automatizaciones,
-              integraciones y dashboards que se ajustan exactamente a cómo funciona tu negocio.
-            </p>
-            <p className="p">
-              Ideal para empresas que necesitan procesos propios, más control y una base tecnológica
-              lista para escalar, sin depender de soluciones genéricas.
-            </p>
-
-            <a href="/empresas" className="btn mt-4">
-              Ver soluciones Enterprise →
-            </a>
-          </div>
-
-          {/* CARD PYMES */}
-          <div className="surface reveal max-w-xl" id="pymes">
-            <h2 className="h2">Para PYMES</h2>
-            <p className="p">
-              Implementación veloz, costos claros y foco en vender más. Paquetes listos para
-              digitalizar tu operación sin volverte loco.
-            </p>
-
-            <div className="grid3 mt-4">
-              <div className="card">
-                <h3>Pack Tienda</h3>
-                <p>Bagisto + pagos + logística en 4–6 semanas.</p>
-              </div>
-              <div className="card">
-                <h3>Automatización Lite</h3>
-                <p>Flujos repetitivos, alertas y conciliación básica.</p>
-              </div>
-              <div className="card">
-                <h3>Agente IA Básico</h3>
-                <p>WhatsApp + FAQs + derivación a humano.</p>
-              </div>
+      <div className="relative wrap py-20">
+        <div className="surface">
+          <div className="grid2 items-center gap-10">
+            {/* IZQUIERDA: IMAGEN (como el ojo pero del otro lado) */}
+            <div className="reveal">
+              <img
+                src="/images/softwaremedida/empresas2.png"
+                alt="Dashboard de software a medida para empresas"
+                className="w-full max-w-xl rounded-3xl shadow-xl"
+              />
             </div>
 
-            <a href="/tiendas" className="btn mt-4">
-              Ver opciones PYMES →
-            </a>
+            {/* DERECHA: TEXTO (estilo 'Nuestra visión', pero hablando de software a medida) */}
+            <div className="reveal">
+              <p className="eyebrow">Software a medida</p>
+              <h2 className="h2">Sistemas diseñados para tu negocio</h2>
+
+              <p className="p">
+                Construimos plataformas a medida con enfoque en escalabilidad, seguridad e
+                integración. Paneles internos, automatizaciones y dashboards que se adaptan
+                a cómo realmente trabaja tu equipo.
+              </p>
+
+              <p className="p">
+                Sin plantillas genéricas ni soluciones forzadas: partimos de tus procesos y
+                objetivos para definir una arquitectura clara y lista para crecer.
+              </p>
+
+              <a href="/empresas" className="btn mt-4">
+                Hablar sobre un proyecto →
+              </a>
+            </div>
           </div>
         </div>
       </div>

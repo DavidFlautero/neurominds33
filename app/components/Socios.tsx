@@ -1,25 +1,23 @@
 export default function Socios() {
   return (
     <section id="socios" className="py-24 relative overflow-hidden">
-      {/* Video de fondo forzado – igual que hero y otras secciones */}
+      {/* Video de fondo – igual que en el hero */}
       <div className="absolute inset-0 -z-10">
         <video
           autoPlay
           muted
           loop
           playsInline
-          preload="auto"          {/* ← fuerza la carga inmediata */}
+          preload="auto"
           className="w-full h-full object-cover"
           style={{ minHeight: '100%', minWidth: '100%' }}
         >
           <source src="/videos/fondo2.mp4" type="video/mp4" />
-          {/* Fallback por si el video no carga */}
-          <div className="bg-black/70 absolute inset-0"></div>
         </video>
       </div>
 
-      {/* Overlay oscuro para que el texto siempre se lea perfecto */}
-      <div className="absolute inset-0 bg-black/50 -z-10"></div>
+      {/* Overlay oscuro para que el texto se lea bien */}
+      <div className="absolute inset-0 bg-black/50 -z-10" />
 
       <div className="wrap surface reveal relative z-10">
         <h2 className="h2 text-center max-w-5xl mx-auto">
@@ -36,7 +34,6 @@ export default function Socios() {
         </p>
 
         <div className="grid3 mt-16 gap-10">
-
           <div className="card bg-white/95 backdrop-blur p-8 rounded-2xl shadow-lg hover:shadow-2xl transition">
             <h3 className="text-2xl font-bold mb-4">Qué entregamos</h3>
             <p className="p text-gray-700 leading-relaxed">
@@ -62,7 +59,6 @@ export default function Socios() {
               • Métricas 100 % transparentes
             </p>
           </div>
-
         </div>
 
         <div className="text-center mt-12">

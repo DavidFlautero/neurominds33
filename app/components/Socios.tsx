@@ -12,7 +12,7 @@ export default function Socios() {
           className="w-full h-full object-cover"
           style={{ minHeight: '100%', minWidth: '100%' }}
         >
-          <source src="/video-bg.mp4" type="video/mp4" />
+          <source src="/videos/fondo2.mp4" type="video/mp4" />
           {/* Fallback por si el video no carga */}
           <div className="bg-black/70 absolute inset-0"></div>
         </video>

@@ -10,7 +10,7 @@ export default function CTAContacto() {
         preload="auto"
         className="absolute inset-0 w-full h-full object-cover -z-10 opacity-25"
       >
-        <source src="/video-bg.mp4" type="video/mp4" />
+        <source src="/videos/fondo3.mp4" type="video/mp4" />
       </video>
       <div className="absolute inset-0 bg-black/50 -z-10"></div>
 

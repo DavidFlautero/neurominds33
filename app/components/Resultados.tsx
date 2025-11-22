@@ -9,7 +9,7 @@ export default function Resultados() {
         playsInline
         className="absolute inset-0 w-full h-full object-cover -z-10 opacity-30"
       >
-        <source src="/video-bg.mp4" type="video/mp4" />  {/* Cambiá por tu video real */}
+        <source src="/videos/fondo1.mp4" type="video/mp4" />  {/* Cambiá por tu video real */}
       </video>
 
       {/* Overlay oscuro para que se lea bien el texto */}

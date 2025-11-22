@@ -1,62 +1,19 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-
 export default function Socios() {
-  const videoRef = useRef<HTMLVideoElement>(null);
-
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-
-    // Intentar reproducir automáticamente
-    const play = () => {
-      const playPromise = video.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(() => {
-          // Autoplay bloqueado → reproducir en la primera interacción
-          const handleFirstInteraction = () => {
-            video.play();
-            document.removeEventListener('click', handleFirstInteraction);
-            document.removeEventListener('touchstart', handleFirstInteraction);
-          };
-
-          document.addEventListener('click', handleFirstInteraction);
-          document.addEventListener('touchstart', handleFirstInteraction);
-        });
-      }
-    };
-
-    play();
-
-    // Loop infinito controlado por JS
-    const handleEnded = () => {
-      video.currentTime = 0;
-      video.play();
-    };
-
-    video.addEventListener('ended', handleEnded);
-
-    return () => {
-      video.removeEventListener('ended', handleEnded);
-    };
-  }, []);
-
   return (
     <section id="socios" className="py-24 relative overflow-hidden">
-      {/* Video de fondo – autoplay + loop controlado por JS */}
-      <div className="absolute inset-0 -z-10">
-        <video
-          ref={videoRef}
-          className="w-full h-full object-cover"
-          muted
-          playsInline
-          preload="auto"
-          loop={false} // lo controlamos a mano
-        >
-          <source src="/videos/fondo2.mp4" type="video/mp4" />
-        </video>
-      </div>
+      {/* Video de fondo – mismo patrón que Vision */}
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        preload="auto"
+        className="absolute inset-0 w-full h-full object-cover -z-10"
+      >
+        <source src="/videos/fondo2.mp4" type="video/mp4" />
+      </video>
 
       {/* Overlay oscuro para que el texto se lea bien */}
       <div className="absolute inset-0 bg-black/50 -z-10" />

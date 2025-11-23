@@ -33,8 +33,8 @@ export default function CTAContacto() {
   }, []);
 
   return (
-    <section id="contacto" className="relative py-32 lg:py-40 overflow-hidden">
-      {/* VIDEO DE FONDO – ahora SÍ se ve perfecto */}
+    <section id="contacto" className="relative h-screen overflow-hidden">
+      {/* VIDEO DE FONDO – 100% visible */}
       <video
         ref={videoRef}
         autoPlay
@@ -42,16 +42,19 @@ export default function CTAContacto() {
         muted
         playsInline
         preload="auto"
-        className="absolute inset-0 w-full h-full object-cover -z-10"
+        className="absolute inset-0 w-full h-full object-cover"
       >
         <source src="/videos/fondo3.mp4" type="video/mp4" />
       </video>
 
-      {/* Overlay sutil – deja ver el video pero hace que el texto destaque */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/60 -z-10" />
+      {/* SIN overlay negro → el video se ve perfecto */}
+      {/* Solo un backdrop-blur muy leve detrás del texto para que resalte */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute inset-0 bg-black/20 backdrop-blur-[2px]" />
+      </div>
 
-      {/* CONTENIDO – letras y botones */}
-      <div className="relative z-10 text-center px-6">
+      {/* CONTENIDO – letras y botones encima del video */}
+      <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-6">
         <div className="max-w-5xl mx-auto">
           <h2 className="text-5xl md:text-6xl lg:text-7xl font-black text-white leading-tight drop-shadow-2xl">
             Llevá tu empresa al siguiente nivel

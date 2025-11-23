@@ -1,4 +1,5 @@
 'use client';
+
 import { useEffect, useRef } from 'react';
 
 export default function Socios() {
@@ -9,27 +10,25 @@ export default function Socios() {
     if (!video) return;
 
     video.muted = true;
-    video.playsInline = true;
+    (video as any).playsInline = true;
 
-    const play = () => video.play().catch(() => {});
+    const play = () => {
+      const p = video.play();
+      if (p !== undefined) {
+        p.catch(() => {
+          const handleFirstInteraction = () => {
+            video.play();
+            document.removeEventListener('scroll', handleFirstInteraction);
+            document.removeEventListener('touchstart', handleFirstInteraction);
+          };
 
-    play();
-
-    const onInteract = () => {
-      if (video.getBoundingClientRect().top < window.innerHeight * 0.9) {
-        play();
-        window.removeEventListener('scroll', onInteract);
-        window.removeEventListener('touchstart', onInteract);
+          document.addEventListener('scroll', handleFirstInteraction);
+          document.addEventListener('touchstart', handleFirstInteraction);
+        });
       }
     };
 
-    window.addEventListener('scroll', onInteract);
-    window.addEventListener('touchstart', onInteract);
-
-    return () => {
-      window.removeEventListener('scroll', onInteract);
-      window.removeEventListener('touchstart', onInteract);
-    };
+    play();
   }, []);
 
   return (
@@ -42,73 +41,96 @@ export default function Socios() {
         muted
         playsInline
         preload="auto"
-        className="absolute inset-0 w-full h-full object-cover -z-10"
+        className="absolute inset-0 w-full h-full object-cover -z-20"
       >
         <source src="/videos/fondo2.mp4" type="video/mp4" />
       </video>
-      {/* ↑↑↑ Aquí estaba el error: faltaba cerrar </video> */}
 
-      {/* Degradado sutil solo en la izquierda – exactamente como Vision */}
-      <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent -z-10" />
+      {/* DEGRADADO PARA LECTURA */}
+      <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-black/20 -z-10" />
 
-      {/* CONTENIDO */}
-      <div className="wrap grid2 relative z-10 text-white max-w-7xl mx-auto px-6">
-        {/* Texto a la izquierda */}
-        <div className="space-y-8">
-          <h2 className="h2 font-semibold leading-tight">
-            ¿Tu negocio ya factura pero la tecnología te está frenando el crecimiento?
-          </h2>
+      {/* CONTENEDOR PRINCIPAL */}
+      <div className="relative z-10 max-w-6xl mx-auto px-6 lg:px-8">
+        <div className="grid gap-12 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] items-start text-white">
+          
+          {/* COLUMNA IZQUIERDA – MENSAJE PRINCIPAL */}
+          <div className="space-y-8">
+            <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-gray-200">
+              Socios · Revenue share · Equity
+            </span>
 
-          <p className="text-2xl md:text-3xl font-medium">
-            Nosotros ponemos todo el equipo técnico.<br />
-            Vos seguís poniendo las ventas.
-          </p>
+            <div className="space-y-4">
+              <h2 className="h2 font-semibold leading-tight">
+                ¿Tu negocio ya factura pero la tecnología te está frenando el crecimiento?
+              </h2>
 
-          <p className="text-lg text-gray-300 max-w-xl">
-            Modelo revenue share o equity + fee reducido · Solo proyectos con tracción real
-          </p>
+              <p className="text-2xl md:text-3xl font-medium text-gray-50">
+                Nosotros ponemos todo el equipo técnico.<br />
+                Vos seguís poniendo las ventas.
+              </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
-            <div className="bg-white/10 backdrop-blur-sm p-6 rounded-2xl border border-white/20">
-              <h3 className="text-xl font-bold mb-3">Qué entregamos</h3>
+              <p className="text-lg text-gray-300 max-w-xl">
+                Nos sumamos como brazo de producto y tecnología en proyectos que ya tienen tracción real:
+                vos liderás el negocio, nosotros construimos y escalamos la plataforma.
+              </p>
+            </div>
+
+            <div className="space-y-3 text-sm text-gray-300">
+              <p>
+                Modelo <b>revenue share</b> o <b>equity + fee reducido</b>, según el estadio del proyecto.
+              </p>
+              <p className="text-xs text-gray-400">
+                Cupo limitado: máximo 3 proyectos activos por trimestre.
+              </p>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-4 pt-4">
+              <a
+                href="#contacto"
+                className="btn primary text-base md:text-lg px-10 md:px-12 py-4"
+              >
+                Postular mi proyecto
+              </a>
+              <span className="text-xs md:text-sm text-gray-300">
+                Respuesta con propuesta técnica en menos de 48 h.
+              </span>
+            </div>
+          </div>
+
+          {/* COLUMNA DERECHA – CARDS / DETALLE */}
+          <div className="space-y-4">
+            <div className="bg-white/10 backdrop-blur-sm p-6 rounded-2xl border border-white/15">
+              <h3 className="text-xl font-semibold mb-3">Qué entregamos</h3>
               <ul className="text-gray-200 space-y-2 text-sm leading-relaxed">
                 <li>• Sitio web a medida (e-commerce, dashboard, landing)</li>
                 <li>• Apps nativas iOS y Android</li>
-                <li>• Automatizaciones completas</li>
+                <li>• Automatizaciones completas (stock, pagos, WhatsApp, CRM)</li>
+                <li>• Integraciones con pagos, logística y analítica</li>
                 <li>• IA, growth y soporte continuo</li>
               </ul>
             </div>
 
-            <div className="bg-white/10 backdrop-blur-sm p-6 rounded-2xl border border-white/20">
-              <h3 className="text-xl font-bold mb-3">Proceso</h3>
+            <div className="bg-white/10 backdrop-blur-sm p-6 rounded-2xl border border-white/15">
+              <h3 className="text-xl font-semibold mb-3">Proceso</h3>
               <p className="text-gray-200 text-sm leading-relaxed">
-                Llamada de 40 minutos → propuesta en 48 h → inicio en menos de 7 días
+                1. Videollamada de 40’ para entender negocio, métricas y riesgos. <br />
+                2. Propuesta técnica + modelo económico en 48 h. <br />
+                3. Kickoff en menos de 7 días con roadmap claro y tableros compartidos.
               </p>
             </div>
 
-            <div className="bg-white/10 backdrop-blur-sm p-6 rounded-2xl border border-white/20">
-              <h3 className="text-xl font-bold mb-3">Requisitos</h3>
+            <div className="bg-white/10 backdrop-blur-sm p-6 rounded-2xl border border-white/15">
+              <h3 className="text-xl font-semibold mb-3">Requisitos mínimos</h3>
               <ul className="text-gray-200 space-y-2 text-sm leading-relaxed">
-                <li>• Ventas recurrentes o tracción comprobable</li>
-                <li>• Compromiso full-time del fundador</li>
-                <li>• Métricas 100 % transparentes</li>
+                <li>• Ventas recurrentes o tracción comprobable.</li>
+                <li>• Fundador involucrado full-time en el proyecto.</li>
+                <li>• Métricas compartidas (ventas, funnels, unit economics).</li>
+                <li>• Decisión rápida: trabajamos con equipos que ejecutan.</li>
               </ul>
             </div>
           </div>
 
-          <a
-            href="#contacto"
-            className="btn primary text-xl px-14 py-6 inline-block mt-10"
-          >
-            Postular mi proyecto
-          </a>
-          <p className="text-gray-400 text-sm mt-4">
-            Cupo limitado: máximo 3 proyectos por trimestre
-          </p>
         </div>
-
-        {/* Video del ojo a la derecha (el mismo que usás en Vision) */}
-       
       </div>
     </section>
   );

@@ -9,12 +9,13 @@ export default function CTAContacto() {
     const video = videoRef.current;
     if (!video) return;
 
-    // Intentar reproducir automáticamente
+    video.muted = true;
+    video.playsInline = true as any;
+
     const play = () => {
-      const playPromise = video.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(() => {
-          // Autoplay bloqueado → reproducir en la primera interacción
+      const p = video.play();
+      if (p !== undefined) {
+        p.catch(() => {
           const handleFirstInteraction = () => {
             video.play();
             document.removeEventListener('click', handleFirstInteraction);
@@ -29,7 +30,6 @@ export default function CTAContacto() {
 
     play();
 
-    // Loop infinito controlado por JS
     const handleEnded = () => {
       video.currentTime = 0;
       video.play();
@@ -43,34 +43,42 @@ export default function CTAContacto() {
   }, []);
 
   return (
-    <section id="contacto" aria-label="Contacto y CTA final" className="py-24 relative overflow-hidden">
-
-      {/* Video de fondo controlado por JS */}
+    <section
+      id="contacto"
+      aria-label="Contacto y CTA final"
+      className="py-24 relative overflow-hidden"
+    >
+      {/* VIDEO DE FONDO */}
       <video
         ref={videoRef}
         muted
         playsInline
         preload="auto"
-        loop={false}
-        className="absolute inset-0 w-full h-full object-cover -z-10 opacity-25"
+        autoPlay
+        loop
+        className="absolute inset-0 w-full h-full object-cover -z-20 opacity-30"
       >
         <source src="/videos/fondo3.mp4" type="video/mp4" />
       </video>
 
-      {/* Overlay oscuro */}
-      <div className="absolute inset-0 bg-black/50 -z-10" />
+      {/* Overlay suave para contraste */}
+      <div className="absolute inset-0 bg-black/40 -z-10" />
 
-      <div className="wrap surface reveal text-center">
-        <h2 className="h2 max-w-4xl mx-auto">
+      {/* CONTENIDO */}
+      <div className="wrap surface reveal text-center relative z-10">
+        <h2 className="h2 max-w-4xl mx-auto text-white">
           Llevá tu empresa al siguiente nivel
         </h2>
 
-        <p className="p mt-6 max-w-xl mx-auto text-xl">
+        <p className="p mt-6 max-w-xl mx-auto text-xl text-gray-100">
           Contanos tu objetivo real y te enviamos propuesta técnica + presupuesto exacto en 48 h.
         </p>
 
         <div className="flex gap-4 justify-center flex-wrap mt-10">
-          <button className="btn primary text-lg px-12 py-5" id="openModalBottom">
+          <button
+            className="btn primary text-lg px-12 py-5"
+            id="openModalBottom"
+          >
             Hablar ahora
           </button>
 

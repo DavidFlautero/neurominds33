@@ -44,7 +44,7 @@ export default function CTAContacto() {
         preload="auto"
         className="absolute inset-0 w-full h-full object-cover"
       >
-        <source src="/videos/fondo3.mp4" type="video/mp4" />
+        <source src="/videos/fondo1.mp4" type="video/mp4" />
       </video>
 
       {/* SIN overlay negro → el video se ve perfecto */}

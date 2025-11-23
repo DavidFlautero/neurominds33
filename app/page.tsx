@@ -22,7 +22,7 @@ export default function Home() {
       <Segmentos />
       <Resultados />
       <Socios />
-      <Proceso />
+       {/* <Proceso /> */}
       <CTAContacto />
       <Floating />
       <Footer />

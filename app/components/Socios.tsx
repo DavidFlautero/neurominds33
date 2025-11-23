@@ -1,23 +1,67 @@
 'use client';
 
+import { useEffect, useRef } from 'react';
+
 export default function Socios() {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    // Imprescindible para iOS y Android
+    video.muted = true;
+    video.playsInline = true;
+
+    const playVideo = () => {
+      video.play().catch(() => {
+        // Silenciamos errores de autoplay (es normal en algunos móviles)
+      });
+    };
+
+    // Intento inmediato
+    playVideo();
+
+    // Si no pudo al montar, lo intentamos cuando entre en pantalla
+    const handleInteraction = () => {
+      if (video.getBoundingClientRect().top < window.innerHeight * 1.2) {
+        playVideo();
+        window.removeEventListener('scroll', handleInteraction);
+        window.removeEventListener('touchstart', handleInteraction);
+      }
+    };
+
+    window.addEventListener('scroll', handleInteraction);
+    window.addEventListener('touchstart', handleInteraction);
+
+    return () => {
+      window.removeEventListener('scroll', handleInteraction);
+      window.removeEventListener('touchstart', handleInteraction);
+    };
+  }, []);
+
   return (
     <section id="socios" className="py-24 relative overflow-hidden">
-      {/* Video de fondo – mismo patrón que Vision */}
+      {/* VIDEO DE FONDO – ahora sí funciona */}
       <video
+        ref={videoRef}
         autoPlay
         loop
         muted
         playsInline
         preload="auto"
         className="absolute inset-0 w-full h-full object-cover -z-10"
+        poster="/videos/fondo2-poster.jpg" // opcional: imagen de carga rápida
       >
         <source src="/videos/fondo2.mp4" type="video/mp4" />
+        {/* Fallback por si el navegador no soporta video */}
+        <div className="absolute inset-0 bg-black" />
       </video>
 
-      {/* Overlay oscuro para que el texto se lea bien */}
+      {/* Overlay oscuro para legibilidad */}
       <div className="absolute inset-0 bg-black/50 -z-10" />
 
+      {/* Contenido */}
       <div className="wrap surface reveal relative z-10">
         <h2 className="h2 text-center max-w-5xl mx-auto">
           ¿Tu negocio ya factura pero la tecnología te está frenando el crecimiento?

@@ -1,5 +1,4 @@
 'use client';
-
 import { useEffect, useRef } from 'react';
 
 export default function Socios() {
@@ -8,33 +7,27 @@ export default function Socios() {
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
-
     video.muted = true;
     video.playsInline = true;
-
     const play = () => video.play().catch(() => {});
-
     play();
-
-    const tryOnInteraction = () => {
-      if (video.getBoundingClientRect().top < window.innerHeight * 1.5) {
+    const onInteract = () => {
+      if (video.getBoundingClientRect().top < window.innerHeight * 0.9) {
         play();
-        window.removeEventListener('scroll', tryOnInteraction);
-        window.removeEventListener('touchstart', tryOnInteraction);
+        window.removeEventListener('scroll', onInteract);
+        window.removeEventListener('touchstart', onInteract);
       }
     };
-
-    window.addEventListener('scroll', tryOnInteraction);
-    window.addEventListener('touchstart', tryOnInteraction);
-
+    window.addEventListener('scroll', onInteract);
+    window.addEventListener('touchstart', onInteract);
     return () => {
-      window.removeEventListener('scroll', tryOnInteraction);
-      window.removeEventListener('touchstart', tryOnInteraction);
+      window.removeEventListener('scroll', onInteract);
+      window.removeEventListener('touchstart', onInteract);
     };
   }, []);
 
   return (
-    <section id="socios" className="relative py-24 overflow-hidden">
+    <section id="socios" className="relative isolate py-28 overflow-hidden">
       {/* VIDEO DE FONDO */}
       <video
         ref={videoRef}
@@ -48,67 +41,72 @@ export default function Socios() {
         <source src="/videos/fondo2.mp4" type="video/mp4" />
       </video>
 
-      {/* Overlay oscuro sutil – ajustado para que se vea el video pero el texto brille */}
-      <div className="absolute inset-0 bg-black/60 -z-10" />
+      {/* Degradado sutil solo en la parte izquierda – igual que Vision */}
+      <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent -z-10" />
 
-      {/* CONTENIDO */}
-      <div className="wrap surface reveal relative z-10 max-w-7xl mx-auto px-6">
-        <div className="text-center">
-          <h2 className="h2 text-white mb-6">
+      {/* CONTENIDO – igual layout que Vision */}
+      <div className="wrap grid2 relative z-10 text-white max-w-7xl mx-auto px-6">
+        {/* Texto a la izquierda */}
+        <div className="space-y-6">
+          <h2 className="h2 font-semibold">
             ¿Tu negocio ya factura pero la tecnología te está frenando el crecimiento?
           </h2>
 
-          <p className="text-2xl md:text-3xl font-medium text-white mb-6">
-            Nosotros ponemos todo el equipo técnico.<br className="hidden md:block" />
+          <p className="text-2xl font-medium">
+            Nosotros ponemos todo el equipo técnico.<br />
             Vos seguís poniendo las ventas.
           </p>
 
-          <p className="text-lg text-gray-300 max-w-3xl mx-auto mb-12">
+          <p className="text-lg text-gray-300 max-w-xl">
             Modelo revenue share o equity + fee reducido · Solo proyectos con tracción real
           </p>
 
-          {/* Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            <div className="card bg-white/95 backdrop-blur-sm p-8 rounded-2xl shadow-xl hover:shadow-2xl transition">
-              <h3 className="text-2xl font-bold mb-4 text-gray-800">Qué entregamos</h3>
-              <ul className="text-gray-700 space-y-2 leading-relaxed">
-                <li>• Sitio web a medida (e-commerce, dashboard, landing)</li>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
+            <div className="bg-white/10 backdrop-blur-sm p-6 rounded-2xl border border-white/20">
+              <h3 className="text-xl font-bold mb-3">Qué entregamos</h3>
+              <ul className="text-gray-200 space-y-2 text-sm">
+                <li>• Sitio web a medida</li>
                 <li>• Apps nativas iOS y Android</li>
-                <li>• Automatizaciones completas (stock, pagos, WhatsApp, CRM)</li>
+                <li>• Automatizaciones completas</li>
                 <li>• IA, growth y soporte continuo</li>
               </ul>
             </div>
-
-            <div className="card bg-white/95 backdrop-blur-sm p-8 rounded-2xl shadow-xl hover:shadow-2xl transition">
-              <h3 className="text-2xl font-bold mb-4 text-gray-800">Proceso</h3>
-              <p className="text-gray-700 leading-relaxed">
-                Llamada de 40 minutos → propuesta técnica y económica en 48 h → inicio en menos de 7 días.
+            <div className="bg-white/10 backdrop-blur-sm p-6 rounded-2xl border border-white/20">
+              <h3 className="text-xl font-bold mb-3">Proceso</h3>
+              <p className="text-gray-200 text-sm">
+                Llamada → propuesta en 48 h → inicio en menos de 7 días
               </p>
             </div>
-
-            <div className="card bg-white/95 backdrop-blur-sm p-8 rounded-2xl shadow-xl hover:shadow-2xl transition">
-              <h3 className="text-2xl font-bold mb-4 text-gray-800">Requisitos</h3>
-              <ul className="text-gray-700 space-y-2 leading-relaxed">
-                <li>• Ventas recurrentes o tracción comprobable</li>
-                <li>• Compromiso full-time del fundador</li>
-                <li>• Métricas 100 % transparentes</li>
+            <div className="bg-white/10 backdrop-blur-sm p-6 rounded-2xl border border-white/20">
+              <h3 className="text-xl font-bold mb-3">Requisitos</h3>
+              <ul className="text-gray-200 space-y-2 text-sm">
+                <li>• Ventas recurrentes</li>
+                <li>• Compromiso full-time</li>
+                <li>• Métricas transparentes</li>
               </ul>
             </div>
           </div>
 
-          {/* CTA */}
-          <div className="mt-16">
-            <a
-              href="#contacto"
-              id="openModalSocios"
-              className="btn primary text-xl px-16 py-6 inline-block"
-            >
-              Postular mi proyecto
-            </a>
-            <p className="text-gray-400 text-sm mt-4">
-              Cupo limitado: máximo 3 proyectos por trimestre
-            </p>
-          </div>
+          <a
+            href="#contacto"
+            className="btn primary text-xl px-12 py-5 inline-block mt-8"
+          >
+            Postular mi proyecto
+          </a>
+        </div>
+
+        {/* Aquí podés poner tu video del ojo o una imagen si querés */}
+        <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-white/30">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-full object-cover"
+          >
+            <source src="/images/vision/ojo.mp4" type="video/mp4" />
+          </video>
+          <div className="absolute inset-0 bg-black/20" />
         </div>
       </div>
     </section>

@@ -95,20 +95,7 @@ export default function Socios() {
           </a>
         </div>
 
-        {/* Aquí podés poner tu video del ojo o una imagen si querés */}
-        <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-white/30">
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="w-full h-full object-cover"
-          >
-            <source src="/images/vision/ojo.mp4" type="video/mp4" />
-          </video>
-          <div className="absolute inset-0 bg-black/20" />
-        </div>
-      </div>
+       
     </section>
   );
 }

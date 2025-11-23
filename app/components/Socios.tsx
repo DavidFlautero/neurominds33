@@ -1,82 +1,78 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-
-export default function Proceso() {
-  const videoRef = useRef<HTMLVideoElement>(null);
-
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-
-    const playPromise = video.play();
-    if (playPromise !== undefined) {
-      playPromise.catch(() => {
-        const handleFirstInteraction = () => {
-          video.play();
-          document.removeEventListener('click', handleFirstInteraction);
-          document.removeEventListener('touchstart', handleFirstInteraction);
-        };
-
-        document.addEventListener('click', handleFirstInteraction);
-        document.addEventListener('touchstart', handleFirstInteraction);
-      });
-    }
-  }, []);
-
+export default function Socios() {
   return (
-    <section
-      id="proceso"
-      className="relative overflow-hidden"
-      style={{ minHeight: '400px' }}
-    >
-      {/* VIDEO A LA VISTA, SIN OPACITY NI OVERLAY */}
+    <section id="socios" className="py-24 relative overflow-hidden">
+      {/* Video de fondo – mismo patrón que Vision */}
       <video
-        ref={videoRef}
+        autoPlay
+        loop
         muted
         playsInline
         preload="auto"
-        autoPlay
-        loop
-        className="absolute inset-0 w-full h-full object-cover"
-        style={{ zIndex: -1 }}
+        className="absolute inset-0 w-full h-full object-cover -z-10"
       >
         <source src="/videos/fondo2.mp4" type="video/mp4" />
       </video>
 
-      <div className="wrap grid2 relative" style={{ position: 'relative', zIndex: 1 }}>
-        <div className="surface reveal">
-          <h2 className="h2">Proceso de trabajo</h2>
-          <ol className="p" style={{ lineHeight: 1.8, margin: 0, paddingLeft: 18 }}>
-            <li><b>Videollamada 40’</b> — objetivos, alcance, riesgos.</li>
-            <li><b>Propuesta y contrato</b> — hitos, entregables, cronograma.</li>
-            <li><b>Pago</b> — link seguro (Mercado Pago) o transferencia.</li>
-            <li><b>Ejecución + Panel del cliente</b> — progreso, archivos y pruebas.</li>
-          </ol>
-          <p className="p" style={{ marginTop: 8 }}>
-            Sin lista de precios: estimamos por complejidad e impacto.
-          </p>
-        </div>
+      {/* Overlay oscuro para que el texto se lea bien */}
+      <div className="absolute inset-0 bg-black/50 -z-10" />
 
-        <div className="surface reveal" aria-label="Clientes y partners">
-          <h2 className="h2">Confían equipos que valoran diseño y ejecución</h2>
-          <div
-            style={{
-              display: 'flex',
-              gap: 28,
-              flexWrap: 'wrap',
-              alignItems: 'center',
-              opacity: 0.9,
-              marginTop: 6,
-            }}
-          >
-            <img src="https://dummyimage.com/120x28/ddd/555&text=Logo+1" alt="Cliente 1" height={28} />
-            <img src="https://dummyimage.com/120x28/ddd/555&text=Logo+2" alt="Cliente 2" height={28} />
-            <img src="https://dummyimage.com/120x28/ddd/555&text=Logo+3" alt="Cliente 3" height={28} />
-            <img src="https://dummyimage.com/120x28/ddd/555&text=Logo+4" alt="Cliente 4" height={28} />
-            <img src="https://dummyimage.com/120x28/ddd/555&text=Logo+5" alt="Cliente 5" height={28} />
+      <div className="wrap surface reveal relative z-10">
+        <h2 className="h2 text-center max-w-5xl mx-auto">
+          ¿Tu negocio ya factura pero la tecnología te está frenando el crecimiento?
+        </h2>
+
+        <p className="p text-center text-2xl mt-6 max-w-4xl mx-auto font-medium">
+          Nosotros ponemos todo el equipo técnico.<br />
+          Vos seguís poniendo las ventas.
+        </p>
+
+        <p className="text-center text-lg mt-4 text-gray-300 max-w-3xl mx-auto">
+          Modelo revenue share o equity + fee reducido · Solo proyectos con tracción real
+        </p>
+
+        <div className="grid3 mt-16 gap-10">
+          <div className="card bg-white/95 backdrop-blur p-8 rounded-2xl shadow-lg hover:shadow-2xl transition">
+            <h3 className="text-2xl font-bold mb-4">Qué entregamos</h3>
+            <p className="p text-gray-700 leading-relaxed">
+              • Sitio web a medida (e-commerce, dashboard, landing)<br />
+              • Apps nativas iOS y Android<br />
+              • Automatizaciones completas (stock, pagos, WhatsApp, CRM)<br />
+              • IA, growth y soporte continuo
+            </p>
+          </div>
+
+          <div className="card bg-white/95 backdrop-blur p-8 rounded-2xl shadow-lg hover:shadow-2xl transition">
+            <h3 className="text-2xl font-bold mb-4">Proceso</h3>
+            <p className="p text-gray-700">
+              Llamada de 40 minutos → propuesta técnica y económica en 48 h → inicio en menos de 7 días.
+            </p>
+          </div>
+
+          <div className="card bg-white/95 backdrop-blur p-8 rounded-2xl shadow-lg hover:shadow-2xl transition">
+            <h3 className="text-2xl font-bold mb-4">Requisitos</h3>
+            <p className="p text-gray-700">
+              • Ventas recurrentes o tracción comprobable<br />
+              • Compromiso full-time del fundador<br />
+              • Métricas 100 % transparentes
+            </p>
           </div>
         </div>
+
+        <div className="text-center mt-12">
+          <a
+            className="btn primary text-xl px-14 py-6"
+            href="#contacto"
+            id="openModalSocios"
+          >
+            Postular mi proyecto
+          </a>
+        </div>
+
+        <p className="text-center text-sm text-gray-400 mt-6">
+          Cupo limitado: máximo 3 proyectos por trimestre
+        </p>
       </div>
     </section>
   );

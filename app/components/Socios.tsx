@@ -53,7 +53,7 @@ export default function Socios() {
         className="absolute inset-0 w-full h-full object-cover -z-10"
         poster="/videos/fondo2-poster.jpg" // opcional: imagen de carga rápida
       >
-        <source src="/videos/fondo2.mp4" type="video/mp4" />
+        <source src="/videos/fondovision.mp4" type="video/mp4" />
         {/* Fallback por si el navegador no soporta video */}
         <div className="absolute inset-0 bg-black" />
       </video>

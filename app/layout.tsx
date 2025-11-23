@@ -99,7 +99,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
-  themeColor: "#0f172a", // ajustá a tu color de marca si cambia
+  themeColor: "#0f172a",
 };
 
 const font = Plus_Jakarta_Sans({
@@ -136,7 +136,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* JSON-LD estructurado para Google */}
         <script
           type="application/ld+json"
-          // @ts-expect-error: JSON-LD acepta este tipo
           dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
         />
       </head>

@@ -9,10 +9,13 @@ export default function Proceso() {
     const video = videoRef.current;
     if (!video) return;
 
+    video.muted = true;
+    video.playsInline = true as any;
+
     const play = () => {
-      const playPromise = video.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(() => {
+      const p = video.play();
+      if (p !== undefined) {
+        p.catch(() => {
           const handleFirstInteraction = () => {
             video.play();
             document.removeEventListener('click', handleFirstInteraction);
@@ -40,24 +43,27 @@ export default function Proceso() {
   }, []);
 
   return (
-    <section id="proceso" className="py-24 relative overflow-hidden">
-      {/* Video de fondo */}
-      <div className="absolute inset-0 -z-10">
-        <video
-          ref={videoRef}
-          muted
-          playsInline
-          preload="auto"
-          loop={false}
-          className="w-full h-full object-cover opacity-25"
-        >
-          <source src="/videos/fondo2.mp4" type="video/mp4" />
-        </video>
-      </div>
+    <section
+      id="proceso"
+      className="py-24 relative overflow-hidden"
+    >
+      {/* VIDEO DE FONDO */}
+      <video
+        ref={videoRef}
+        autoPlay
+        loop
+        muted
+        playsInline
+        preload="auto"
+        className="absolute inset-0 w-full h-full object-cover -z-20 opacity-30"
+      >
+        <source src="/videos/fondo2.mp4" type="video/mp4" />
+      </video>
 
-      {/* Overlay oscuro leve para contrastar el texto */}
-      <div className="absolute inset-0 bg-black/40 -z-10" />
+      {/* OVERLAY SUAVE PARA CONTRASTE */}
+      <div className="absolute inset-0 bg-black/35 -z-10" />
 
+      {/* CONTENIDO */}
       <div className="wrap grid2 relative z-10">
         <div className="surface reveal">
           <h2 className="h2">Proceso de trabajo</h2>

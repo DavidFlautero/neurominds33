@@ -13,25 +13,25 @@ export default function Resultados() {
     const play = () => video.play().catch(() => {});
     play();
 
-    const onInteract = () => {
+    const tryPlay = () => {
       if (video.getBoundingClientRect().top < window.innerHeight * 1.5) {
         play();
-        window.removeEventListener('scroll', onInteract);
-        window.removeEventListener('touchstart', onInteract);
+        window.removeEventListener('scroll', tryPlay);
+        window.removeEventListener('touchstart', tryPlay);
       }
     };
-    window.addEventListener('scroll', onInteract);
-    window.addEventListener('touchstart', onInteract);
+    window.addEventListener('scroll', tryPlay);
+    window.addEventListener('touchstart', tryPlay);
 
     return () => {
-      window.removeEventListener('scroll', onInteract);
-      window.removeEventListener('touchstart', onInteract);
+      window.removeEventListener('scroll', tryPlay);
+      window.removeEventListener('touchstart', tryPlay);
     };
   }, []);
 
   return (
     <section id="casos" className="relative py-32 overflow-hidden">
-      {/* VIDEO EN Z-INDEX 0 (no -z-10) + fixed para que NUNCA lo tape nada */}
+      {/* VIDEO DE FONDO – con z-index más alto que cualquier wrap/surface */}
       <video
         ref={videoRef}
         autoPlay
@@ -39,13 +39,16 @@ export default function Resultados() {
         muted
         playsInline
         preload="auto"
-        className="fixed inset-0 w-full h-full object-cover z-0"
+        className="absolute inset-0 w-full h-full object-cover z-10 pointer-events-none"
       >
         <source src="/videos/fondo1.mp4" type="video/mp4" />
       </video>
 
-      {/* Contenido encima con z-10 */}
-      <div className="relative z-10 max-w-7xl mx-auto px-6 text-center">
+      {/* Overlay muy suave solo para esta sección */}
+      <div className="absolute inset-0 bg-black/30 z-20 pointer-events-none" />
+
+      {/* CONTENIDO – z-index más alto que el overlay */}
+      <div className="relative z-30 max-w-7xl mx-auto px-6 text-center">
         <h2 className="h2 text-white mb-8 drop-shadow-2xl">
           Herramientas para empresas
         </h2>
@@ -55,15 +58,15 @@ export default function Resultados() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           <a href="/herramientas" className="bg-white/95 backdrop-blur p-10 rounded-3xl shadow-2xl hover:shadow-3xl hover:-translate-y-3 transition-all">
-            <b className="text-3xl block mb-4">Tips de marketing digital</b>
+            <b className="text-3xl block mb-4 text-gray-900">Tips de marketing digital</b>
             <p className="text-gray-700">Estrategias que sí funcionan en 2025</p>
           </a>
           <a href="/herramientas" className="bg-white/95 backdrop-blur p-10 rounded-3xl shadow-2xl hover:shadow-3xl hover:-translate-y-3 transition-all">
-            <b className="text-3xl block mb-4">Preguntas frecuentes</b>
+            <b className="text-3xl block mb-4 text-gray-900">Preguntas frecuentes</b>
             <p className="text-gray-700">Todo lo que necesitás saber después de lanzar tu web</p>
           </a>
           <a href="/herramientas" className="bg-white/95 backdrop-blur p-10 rounded-3xl shadow-2xl hover:shadow-3xl hover:-translate-y-3 transition-all">
-            <b className="text-3xl block mb-4">Recursos para empresas</b>
+            <b className="text-3xl block mb-4 text-gray-900">Recursos para empresas</b>
             <p className="text-gray-700">Guías y herramientas prácticas que usamos con clientes</p>
           </a>
         </div>

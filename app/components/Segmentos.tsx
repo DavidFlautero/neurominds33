@@ -23,7 +23,7 @@ export default function SoftwareMedida() {
           {/* IZQUIERDA: IMAGEN (empresas2) */}
           <div className="reveal">
             <img
-              src="/images/softwaremedida/empresas2.png"
+              src="/images/softwareMedida/empresas2.png"
               alt="Dashboard de software a medida para empresas"
               className="w-full max-w-xl rounded-3xl shadow-xl"
             />

@@ -20,6 +20,7 @@ export default function Resultados() {
         window.removeEventListener('touchstart', tryPlay);
       }
     };
+
     window.addEventListener('scroll', tryPlay);
     window.addEventListener('touchstart', tryPlay);
 
@@ -31,7 +32,7 @@ export default function Resultados() {
 
   return (
     <section id="casos" className="relative py-32 overflow-hidden">
-      {/* VIDEO DE FONDO – con z-index más alto que cualquier wrap/surface */}
+      {/* VIDEO DE FONDO */}
       <video
         ref={videoRef}
         autoPlay
@@ -47,7 +48,7 @@ export default function Resultados() {
       {/* Overlay muy suave solo para esta sección */}
       <div className="absolute inset-0 bg-black/30 z-20 pointer-events-none" />
 
-      {/* CONTENIDO – z-index más alto que el overlay */}
+      {/* CONTENIDO */}
       <div className="relative z-30 max-w-7xl mx-auto px-6 text-center">
         <h2 className="h2 text-white mb-8 drop-shadow-2xl">
           Herramientas para empresas
@@ -59,26 +60,38 @@ export default function Resultados() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           <a
             href="/herramientas"
-            className="bg-slate-100/95 backdrop-blur p-10 rounded-3xl shadow-2xl hover:shadow-3xl hover:-translate-y-3 transition-all"
+            className="bg-[#E2E3E7] backdrop-blur-sm p-10 rounded-3xl shadow-2xl hover:shadow-3xl hover:-translate-y-3 transition-all duration-300"
           >
-            <b className="text-3xl block mb-4 text-gray-900">Tips de marketing digital</b>
-            <p className="text-gray-700">Estrategias que sí funcionan en 2025</p>
+            <b className="text-3xl block mb-4 text-gray-900">
+              Tips de marketing digital
+            </b>
+            <p className="text-gray-700">
+              Estrategias que sí funcionan en 2025
+            </p>
           </a>
 
           <a
             href="/herramientas"
-            className="bg-slate-100/95 backdrop-blur p-10 rounded-3xl shadow-2xl hover:shadow-3xl hover:-translate-y-3 transition-all"
+            className="bg-[#E2E3E7] backdrop-blur-sm p-10 rounded-3xl shadow-2xl hover:shadow-3xl hover:-translate-y-3 transition-all duration-300"
           >
-            <b className="text-3xl block mb-4 text-gray-900">Preguntas frecuentes</b>
-            <p className="text-gray-700">Todo lo que necesitás saber después de lanzar tu web</p>
+            <b className="text-3xl block mb-4 text-gray-900">
+              Preguntas frecuentes
+            </b>
+            <p className="text-gray-700">
+              Todo lo que necesitás saber después de lanzar tu web
+            </p>
           </a>
 
           <a
             href="/herramientas"
-            className="bg-slate-100/95 backdrop-blur p-10 rounded-3xl shadow-2xl hover:shadow-3xl hover:-translate-y-3 transition-all"
+            className="bg-[#E2E3E7] backdrop-blur-sm p-10 rounded-3xl shadow-2xl hover:shadow-3xl hover:-translate-y-3 transition-all duration-300"
           >
-            <b className="text-3xl block mb-4 text-gray-900">Recursos para empresas</b>
-            <p className="text-gray-700">Guías y herramientas prácticas que usamos con clientes</p>
+            <b className="text-3xl block mb-4 text-gray-900">
+              Recursos para empresas
+            </b>
+            <p className="text-gray-700">
+              Guías y herramientas prácticas que usamos con clientes
+            </p>
           </a>
         </div>
 

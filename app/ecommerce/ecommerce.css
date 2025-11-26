@@ -1,37 +1,59 @@
 :root {
   --primary: #4f46e5;
   --primary-dark: #312e81;
+  --secondary: #7c3aed;
   --dark: #020617;
-  --gold: #d4af37;        /* dorado elegante real */
-  --gold-light: #e8c56e;
-  --gold-dark: #b8931a;
+  --light: #f8fafc;
+  --gray: #64748b;
+  --success: #10b981;
+  --danger: #ef4444;
+  --accent: #f59e0b;
+  --accent-dark: #d97706;
+
+  /* tonos metálicos sobrios */
+  --silver: #f9fafb;
+  --silver-mid: #e2e8f0;
+  --silver-dark: #cbd5f5;
 }
 
-* { margin:0; padding:0; box-sizing:border-box; }
-html, body { height:100%; margin:0; padding:0; }
-body { 
-  font-family: 'Inter', sans-serif; 
-  background: #020617; 
-  color: #e2e8f0; 
-  line-height: 1.6; 
-}
-h1,h2,h3,h4 { 
-  font-family: 'Satoshi', sans-serif; 
-  font-weight: 900; 
-}
-.container { 
-  max-width: 1280px; 
-  margin: 0 auto; 
-  padding: 0 1.5rem; 
+/* Reset simple para esta landing */
+* {
+  box-sizing: border-box;
 }
 
-/* ==================== HERO PEGADO ARRIBA ==================== */
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
+  background: #020617;
+  color: #e2e8f0;
+}
+
+.ecommerce-page,
+.hero,
+.design-section,
+.problem-section,
+.vs-section,
+.planes-section,
+.tech-section,
+.testimonials-section,
+.guarantees-section,
+.cta-section {
+  box-sizing: border-box;
+}
+
+.container {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* =============== HERO ================== */
+
 .hero {
   position: relative;
   min-height: 100vh;
   padding: 0;
   margin: 0;
-  text-align: center;
   background: #020617;
   display: flex;
   align-items: center;
@@ -39,163 +61,540 @@ h1,h2,h3,h4 {
   overflow: hidden;
 }
 
-/* IMAGEN DE FONDO – MÁS PROTAGÓNICA */
+/* Fondo: imagen + destellos también a la izquierda */
 .hero::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: url("/images/ecommerce/heroEcommerce.png") center/cover no-repeat;
+  background:
+    radial-gradient(circle at 15% 20%, rgba(248, 250, 252, 0.18), transparent 55%),
+    url("/images/ecommerce/heroEcommerce.png") center 40% / 135% auto no-repeat;
   z-index: 1;
-  opacity: 1;                         /* la mostramos completa */
-  filter: brightness(1.08) contrast(1.05) saturate(1.1); /* un toque más viva */
 }
 
-/* OVERLAY – OSCURO SOLO EN BORDES, CENTRO MÁS CLARO */
+/* Overlay más suave para no matar los brillos */
 .hero::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(
-    circle at center,
-    rgba(2, 6, 23, 0.10) 0%,   /* casi transparente en el centro → se ven los destellos */
-    rgba(2, 6, 23, 0.45) 55%,  /* medio */
-    rgba(2, 6, 23, 0.80) 100%  /* bordes más oscuros */
-  );
+  background:
+    radial-gradient(circle at 50% 30%, rgba(15, 23, 42, 0.25), rgba(15, 23, 42, 0.9));
   z-index: 2;
-  pointer-events: none;
 }
 
-/* Contenido encima */
 .hero-inner {
   position: relative;
   z-index: 3;
   width: 100%;
   padding: 120px 1.5rem 160px;
+  text-align: center;
 }
 
-/* TAG SUPERIOR */
+/* TAG SUPERIOR, discreto y serio */
 .hero-tag span {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  padding: 10px 28px;
+  padding: 8px 26px;
   border-radius: 999px;
-  background: rgba(212, 175, 55, 0.18);
-  border: 1px solid rgba(212, 175, 55, 0.5);
-  color: var(--gold);
-  font-size: 0.85rem;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(148, 163, 184, 0.7);
+  color: #e5e7eb;
+  font-size: 0.78rem;
   text-transform: uppercase;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.18em;
   font-weight: 600;
   margin-bottom: 20px;
 }
 
-/* TÍTULO DORADO ELEGANTE */
+/* TÍTULO: gris metálico, cero dorado barato */
 .hero-title {
-  font-size: clamp(3.2rem, 9vw, 7rem);
-  line-height: 1.02;
-  margin: 0 0 24px 0;
-  color: var(--gold);
+  font-size: clamp(3rem, 6vw, 4.4rem);
+  line-height: 1.06;
+  margin: 0 0 24px;
+  font-weight: 800;
+  letter-spacing: 0.01em;
 
-  /* brillo controlado, no “barato” */
+  background: linear-gradient(120deg, var(--silver), var(--silver-mid), var(--silver-dark));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+
   text-shadow:
-    0 0 18px rgba(0, 0, 0, 0.9),
-    0 0 26px rgba(212, 175, 55, 0.35);
+    0 12px 35px rgba(15, 23, 42, 0.95),
+    0 0 26px rgba(15, 23, 42, 0.9);
 }
 
-/* Subtítulo */
+/* Subtítulo bien legible */
 .hero-subtitle {
-  font-size: clamp(1.15rem, 3.5vw, 1.5rem);
-  max-width: 900px;
-  margin: 0 auto 40px;
-  color: #f9fafb;
-  line-height: 1.55;
-  text-shadow: 0 0 10px rgba(2, 6, 23, 0.9);
+  font-size: 1.05rem;
+  max-width: 720px;
+  margin: 0 auto 32px;
+  color: #e5e7eb;
+  text-shadow: 0 0 14px rgba(2, 6, 23, 0.95);
 }
 
 /* Badges */
 .hero-badges {
   display: flex;
   flex-wrap: wrap;
-  gap: 18px;
   justify-content: center;
-  margin: 40px 0;
+  gap: 14px;
+  margin-bottom: 30px;
 }
 
 .payment-badge,
 .local-badge {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
-  padding: 14px 32px;
+  gap: 10px;
+  padding: 12px 24px;
   border-radius: 999px;
-  font-size: 1rem;
-  font-weight: 600;
-  background: rgba(15, 23, 42, 0.6);
-  border: 1px solid rgba(148, 163, 184, 0.5);
+  font-size: 0.9rem;
+  font-weight: 500;
+  backdrop-filter: blur(20px);
+  background: rgba(15, 23, 42, 0.82);
+  border: 1px solid rgba(148, 163, 184, 0.75);
   color: #f9fafb;
-  backdrop-filter: blur(16px);
 }
 
-.payment-badge {
-  background: rgba(34, 197, 94, 0.22);
-  border-color: rgba(34, 197, 94, 0.6);
+.payment-badge i,
+.local-badge i {
+  opacity: 0.9;
 }
 
-.local-badge {
-  background: rgba(79, 70, 229, 0.22);
-  border-color: rgba(79, 70, 229, 0.6);
-}
-
-/* Botones */
+/* Botones hero */
 .hero-buttons {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
   justify-content: center;
-  margin-top: 50px;
+  gap: 16px;
 }
 
 .cta-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  padding: 18px 44px;
+  padding: 14px 32px;
   border-radius: 999px;
-  font-weight: 700;
-  font-size: 1.1rem;
   text-decoration: none;
-  transition: all 0.3s ease;
+  font-weight: 600;
+  font-size: 0.98rem;
+  cursor: pointer;
+  border: none;
+  transition: all 0.25s ease;
 }
 
+/* Botón principal bien presente */
 .btn-primary {
   background: linear-gradient(135deg, #6366f1, #8b5cf6);
-  color: white;
+  color: #ffffff;
   box-shadow:
-    0 10px 30px rgba(99, 102, 241, 0.4),
-    0 0 18px rgba(59, 130, 246, 0.5);
+    0 14px 36px rgba(79, 70, 229, 0.7),
+    0 0 22px rgba(129, 140, 248, 0.9);
 }
+
 .btn-primary:hover {
-  transform: translateY(-4px);
+  transform: translateY(-2px);
   box-shadow:
-    0 20px 50px rgba(99, 102, 241, 0.6),
-    0 0 24px rgba(59, 130, 246, 0.9);
+    0 20px 52px rgba(79, 70, 229, 0.85),
+    0 0 28px rgba(129, 140, 248, 1);
 }
 
+/* Botón secundario sobrio */
 .btn-secondary {
-  background: transparent;
+  background: rgba(15, 23, 42, 0.9);
   color: #e5e7eb;
-  border: 2px solid rgba(255, 255, 255, 0.5);
-}
-.btn-secondary:hover {
-  background: rgba(15, 23, 42, 0.8);
-  border-color: #ffffff;
+  border: 1px solid rgba(148, 163, 184, 0.9);
 }
 
-/* Responsive */
+.btn-secondary:hover {
+  background: rgba(15, 23, 42, 1);
+}
+
+/* =============== SECCIONES BÁSICAS =============== */
+
+section {
+  padding: 90px 0;
+}
+
+.design-section {
+  background: #ffffff;
+}
+
+.problem-section {
+  background: #f8fafc;
+}
+
+.vs-section {
+  background: #ffffff;
+}
+
+.planes-section {
+  background: #f9fafb;
+}
+
+.tech-section {
+  background: #020617;
+  color: white;
+  text-align: center;
+}
+
+.testimonials-section {
+  background: #ffffff;
+}
+
+.guarantees-section {
+  background: #f8fafc;
+}
+
+.section-header {
+  text-align: center;
+  max-width: 760px;
+  margin: 0 auto 50px;
+}
+
+.section-header h2 {
+  font-size: 2.1rem;
+  margin-bottom: 14px;
+  color: #0f172a;
+}
+
+.section-header p {
+  font-size: 1.02rem;
+  color: #64748b;
+}
+
+/* =============== TABLA VS =============== */
+
+.vs-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 30px 0 0;
+  background: white;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.12);
+  font-size: 0.95rem;
+}
+
+.vs-table th {
+  background: #0f172a;
+  color: white;
+  text-align: left;
+  padding: 18px 20px;
+}
+
+.vs-table td {
+  padding: 14px 20px;
+  border-bottom: 1px solid #e2e8f0;
+  color: #1e293b;
+}
+
+.vs-table tr:last-child td {
+  border-bottom: none;
+}
+
+.vs-table .good {
+  color: var(--success);
+  font-weight: 600;
+}
+
+.vs-table .bad {
+  color: var(--danger);
+}
+
+/* =============== PLANES =============== */
+
+.plans-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 26px;
+  margin-top: 30px;
+}
+
+.plan-card {
+  background: white;
+  border-radius: 18px;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.12);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+}
+
+.plan-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.16);
+}
+
+.plan-header {
+  padding: 24px 26px 16px;
+  background: linear-gradient(135deg, #0f172a, #020617);
+  color: white;
+}
+
+.plan-header h3 {
+  font-size: 1.35rem;
+  margin-bottom: 6px;
+}
+
+.plan-header p {
+  font-size: 0.95rem;
+  color: #e5e7eb;
+}
+
+.fullservice-header {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+.plan-body {
+  padding: 24px 26px 22px;
+}
+
+.plan-features {
+  list-style: none;
+  margin: 0 0 20px;
+  padding: 0;
+}
+
+.plan-features li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 0.95rem;
+  color: #111827;
+  margin-bottom: 10px;
+}
+
+.plan-features i {
+  color: var(--success);
+  margin-top: 3px;
+}
+
+.plan-badge {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  background: var(--success);
+  color: white;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.ai-badge {
+  background: #059669;
+  color: white;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  margin-left: 6px;
+}
+
+.plan-btn {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.fullservice-btn {
+  background: linear-gradient(90deg, #f59e0b, #f97316);
+}
+
+.plan-credit-note {
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--gray);
+}
+
+/* =============== TECNOLOGÍAS =============== */
+
+.tech-text {
+  font-size: 1.05rem;
+  margin-bottom: 30px;
+  opacity: 0.9;
+}
+
+.tech-logos {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 40px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.tech-footnote {
+  margin-top: 28px;
+  font-size: 0.95rem;
+  opacity: 0.7;
+}
+
+/* =============== TESTIMONIOS =============== */
+
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 22px;
+}
+
+.testimonial-card {
+  background: #f8fafc;
+  padding: 24px 22px;
+  border-radius: 14px;
+  box-shadow: 0 10px 25px rgba(148, 163, 184, 0.25);
+}
+
+.testimonial-card blockquote {
+  font-style: italic;
+  font-size: 0.97rem;
+  color: #475569;
+  margin-bottom: 14px;
+}
+
+.testimonial-card cite {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+/* =============== GARANTÍAS =============== */
+
+.guarantee-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 22px;
+  margin-top: 32px;
+}
+
+.guarantee-item {
+  background: #ffffff;
+  padding: 26px 22px;
+  border-radius: 14px;
+  text-align: center;
+  box-shadow: 0 12px 30px rgba(148, 163, 184, 0.25);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.guarantee-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 40px rgba(148, 163, 184, 0.35);
+}
+
+.guarantee-item i {
+  font-size: 2.4rem;
+  color: var(--primary);
+  margin-bottom: 12px;
+}
+
+.guarantee-item h3 {
+  margin-bottom: 8px;
+  font-size: 1.05rem;
+  color: #0f172a;
+}
+
+.guarantee-item p {
+  font-size: 0.95rem;
+  color: #64748b;
+}
+
+/* =============== CTA FINAL =============== */
+
+.cta-section {
+  background: linear-gradient(135deg, #020617, #020617, #0b1120);
+  color: white;
+  text-align: center;
+  padding: 90px 0 100px;
+}
+
+.cta-section h2 {
+  font-size: 2.2rem;
+  margin-bottom: 18px;
+}
+
+.cta-section p {
+  font-size: 1.03rem;
+  max-width: 720px;
+  margin: 0 auto 24px;
+  color: #e2e8f0;
+}
+
+.scarcity {
+  display: inline-flex;
+  padding: 8px 18px;
+  border-radius: 999px;
+  background: #dc2626;
+  color: white;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 22px;
+}
+
+.cta-button-large {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 30px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #4f46e5, #6366f1, #8b5cf6);
+  color: white;
+  font-weight: 600;
+  text-decoration: none;
+  margin-right: 12px;
+  margin-bottom: 12px;
+}
+
+.whatsapp-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 24px;
+  border-radius: 999px;
+  background: #22c55e;
+  color: white;
+  font-weight: 500;
+  text-decoration: none;
+  gap: 8px;
+}
+
+.cta-badge {
+  margin-top: 22px;
+}
+
+/* =============== RESPONSIVE =============== */
+
 @media (max-width: 768px) {
-  .hero-inner { padding: 100px 1.5rem 140px; }
-  .hero-badges { flex-direction: column; align-items: center; }
-  .hero-buttons { flex-direction: column; align-items: center; }
+  .hero-inner {
+    padding: 100px 1.5rem 140px;
+  }
+
+  .hero-title {
+    font-size: 2.4rem;
+  }
+
+  .hero-subtitle {
+    font-size: 0.98rem;
+  }
+
+  .vs-table {
+    font-size: 0.85rem;
+  }
+
+  .section-header h2 {
+    font-size: 1.7rem;
+  }
+
+  .hero-badges {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
 }

@@ -57,41 +57,43 @@ export default function Resultados() {
           Tips profesionales de marketing, preguntas frecuentes y recursos útiles después de tener tu página web.
         </p>
 
-       <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-  <a
-    href="/herramientas"
-    className="bg-[#D4D4D8] border border-black/5 p-10 rounded-3xl 
-               shadow-[0_4px_20px_rgba(0,0,0,0.12)] 
-               hover:shadow-[0_6px_28px_rgba(0,0,0,0.18)] 
-               hover:-translate-y-2 transition-all duration-300"
-  >
-    <b className="text-3xl block mb-4 text-gray-900">Tips de marketing digital</b>
-    <p className="text-gray-700">Estrategias que sí funcionan en 2025</p>
-  </a>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+          <a
+            href="/herramientas"
+            className="bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.8),_#d4d4d8_52%)] border border-white/15 p-10 rounded-3xl shadow-[0_18px_45px_rgba(15,23,42,0.45)] hover:shadow-[0_24px_60px_rgba(15,23,42,0.7)] hover:-translate-y-2 transition-all duration-300"
+          >
+            <b className="text-3xl block mb-4 text-slate-900">
+              Tips de marketing digital
+            </b>
+            <p className="text-slate-800/80">
+              Estrategias que sí funcionan en 2025
+            </p>
+          </a>
 
-  <a
-    href="/herramientas"
-    className="bg-[#D4D4D8] border border-black/5 p-10 rounded-3xl 
-               shadow-[0_4px_20px_rgba(0,0,0,0.12)] 
-               hover:shadow-[0_6px_28px_rgba(0,0,0,0.18)] 
-               hover:-translate-y-2 transition-all duration-300"
-  >
-    <b className="text-3xl block mb-4 text-gray-900">Preguntas frecuentes</b>
-    <p className="text-gray-700">Todo lo que necesitás saber después de lanzar tu web</p>
-  </a>
+          <a
+            href="/herramientas"
+            className="bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.8),_#d4d4d8_52%)] border border-white/15 p-10 rounded-3xl shadow-[0_18px_45px_rgba(15,23,42,0.45)] hover:shadow-[0_24px_60px_rgba(15,23,42,0.7)] hover:-translate-y-2 transition-all duration-300"
+          >
+            <b className="text-3xl block mb-4 text-slate-900">
+              Preguntas frecuentes
+            </b>
+            <p className="text-slate-800/80">
+              Todo lo que necesitás saber después de lanzar tu web
+            </p>
+          </a>
 
-  <a
-    href="/herramientas"
-    className="bg-[#D4D4D8] border border-black/5 p-10 rounded-3xl 
-               shadow-[0_4px_20px_rgba(0,0,0,0.12)] 
-               hover:shadow-[0_6px_28px_rgba(0,0,0,0.18)] 
-               hover:-translate-y-2 transition-all duration-300"
-  >
-    <b className="text-3xl block mb-4 text-gray-900">Recursos para empresas</b>
-    <p className="text-gray-700">Guías y herramientas prácticas que usamos con clientes</p>
-  </a>
-</div>
-
+          <a
+            href="/herramientas"
+            className="bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.8),_#d4d4d8_52%)] border border-white/15 p-10 rounded-3xl shadow-[0_18px_45px_rgba(15,23,42,0.45)] hover:shadow-[0_24px_60px_rgba(15,23,42,0.7)] hover:-translate-y-2 transition-all duration-300"
+          >
+            <b className="text-3xl block mb-4 text-slate-900">
+              Recursos para empresas
+            </b>
+            <p className="text-slate-800/80">
+              Guías y herramientas prácticas que usamos con clientes
+            </p>
+          </a>
+        </div>
 
         <div className="mt-20">
           <a href="/herramientas" className="btn primary text-2xl px-20 py-7">

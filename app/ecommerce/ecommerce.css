@@ -1,252 +1,255 @@
-/* =============== CSS COMPLETO FINAL - NEUROMIND33 E-COMMERCE 2025 =============== */
+/* =============== CSS FINAL - NEUROMIND33 E-COMMERCE 2025 - NEXT.JS COMPATIBLE =============== */
 
 :root {
-    --primary: #4f46e5;
-    --primary-dark: #312e81;
-    --secondary: #7c3aed;
-    --dark: #020617;
-    --light: #f8fafc;
-    --gray: #64748b;
-    --success: #10b981;
-    --danger: #ef4444;
-    --accent: #f59e0b;
-    --accent-dark: #d97706;
-    --gold: #f5e7c4;
-    --gold-soft: #e5d3a3;
+  --primary: #4f46e5;
+  --primary-dark: #312e81;
+  --secondary: #7c3aed;
+  --dark: #020617;
+  --light: #f8fafc;
+  --gray: #64748b;
+  --success: #10b981;
+  --danger: #ef4444;
+  --accent: #f59e0b;
+  --accent-dark: #d97706;
+  --gold: #f5e7c4;
+  --gold-soft: #e5d3a3;
 }
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    font-family: 'Inter', sans-serif;
-    background: #f1f5f9;
-    color: #0f172a;
-    line-height: 1.6;
+  font-family: 'Inter', sans-serif;
+  background: #f1f5f9;
+  color: #0f172a;
+  line-height: 1.6;
 }
 
 .container {
-    max-width: 1120px;
-    margin: 0 auto;
-    padding: 0 1.5rem;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
 }
 
-/* ---------------- HERO DORADO QUE BRILLA DE VERDAD ---------------- */
+/* ---------------- HERO CON TU IMAGEN ORIGINAL + TÍTULO DORADO QUE BRILLA ENCIMA ---------------- */
 .hero {
-    position: relative;
-    padding: 160px 0 180px;
-    text-align: center;
-    color: #fff;
-    background: radial-gradient(circle at top left, #0b1220 0%, #020617 60%);
-    overflow: hidden;
+  position: relative;
+  padding: 160px 0 180px;
+  text-align: center;
+  color: #fff;
+  background: radial-gradient(circle at top left, #0b1220 0%, #020617 60%);
+  overflow: hidden;
 }
 
+/* TU IMAGEN DE FONDO ORIGINAL (NO LA CAMBIO) */
 .hero::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: url('tu-imagen-fondo.jpg') center/cover no-repeat;
-    opacity: 0.45;
-    filter: brightness(0.6);
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url('/images/ecommerce/heroEcommerce.png') center/cover no-repeat;
+  opacity: 0.65;
+  mix-blend-mode: screen;
 }
 
+/* Overlay oscuro para que el texto resalte */
 .hero::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at center, transparent 35%, rgba(2,6,23,0.95) 100%);
-    pointer-events: none;
-    z-index: 1;
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, transparent 30%, rgba(2,6,23,0.9) 100%);
+  pointer-events: none;
+  z-index: 1;
 }
 
 .hero-inner {
-    position: relative;
-    z-index: 10;
+  position: relative;
+  z-index: 10;
 }
 
+/* Tag superior */
 .hero-tag span {
-    display: inline-flex;
-    align-items: center;
-    padding: 8px 20px;
-    border-radius: 999px;
-    border: 1px solid rgba(245, 225, 170, 0.5);
-    background: rgba(15, 23, 42, 0.8);
-    backdrop-filter: blur(10px);
-    color: #f5e7c4;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.2em;
-    margin-bottom: 24px;
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 20px;
+  border-radius: 999px;
+  border: 1px solid rgba(245, 225, 170, 0.5);
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(10px);
+  color: #f5e7c4;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  margin-bottom: 24px;
 }
 
-/* TÍTULO DORADO QUE BRILLA COMO ORO REAL */
+/* TÍTULO DORADO QUE BRILLA COMO ORO REAL Y QUEDA ENCIMA DE TODO */
 .hero-title {
-    position: relative;
-    z-index: 20 !important;
-    font-size: 4.6rem !important;
-    font-weight: 900;
-    line-height: 1.02;
-    letter-spacing: -0.03em;
-    margin: 0 auto 28px;
-    padding: 0 20px;
-    
-    background: linear-gradient(
-        90deg,
-        #b8860b 0%,
-        #ffd700 15%,
-        #fffacd 30%,
-        #fff8dc 50%,
-        #fffacd 70%,
-        #ffd700 85%,
-        #b8860b 100%
-    );
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    -webkit-text-fill-color: transparent;
+  position: relative;
+  z-index: 30 !important;
+  font-size: 4.6rem !important;
+  font-weight: 900;
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  margin: 0 auto 28px;
+  padding: 0 20px;
 
-    text-shadow: 
-        0 0 20px #fff,
-        0 0 40px #ffd700,
-        0 0 60px #ffd700,
-        0 0 80px #ff8c00,
-        0 0 100px #ff4500,
-        0 0 120px #ff4500,
-        0 0 140px #ff4500,
-        0 0 30px rgba(255,215,0,0.9);
+  background: linear-gradient(
+    90deg,
+    #b8860b 0%,
+    #ffd700 15%,
+    #fffacd 30%,
+    #fff8dc 50%,
+    #fffacd 70%,
+    #ffd700 85%,
+    #b8860b 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
 
-    animation: goldPulse 4s ease-in-out infinite, goldShine 8s linear infinite;
+  text-shadow: 
+    0 0 20px #fff,
+    0 0 40px #ffd700,
+    0 0 60px #ffd700,
+    0 0 80px #ff8c00,
+    0 0 100px #ff4500,
+    0 0 120px #ff4500,
+    0 0 140px #ff4500,
+    0 0 40px rgba(255,215,0,0.9);
+
+  animation: goldPulse 4s ease-in-out infinite;
 }
 
 @keyframes goldPulse {
-    0%, 100% { 
-        text-shadow: 
-            0 0 20px #fff,
-            0 0 40px #ffd700,
-            0 0 60px #ffd700,
-            0 0 80px #ff8c00,
-            0 0 100px #ff4500;
-    }
-    50% { 
-        text-shadow: 
-            0 0 30px #fff,
-            0 0 60px #ffd700,
-            0 0 90px #ffd700,
-            0 0 120px #ff8c00,
-            0 0 150px #ff4500,
-            0 0 50px rgba(255,215,0,1);
-    }
+  0%, 100% { 
+    text-shadow: 
+      0 0 20px #fff,
+      0 0 40px #ffd700,
+      0 0 60px #ffd700,
+      0 0 80px #ff8c00,
+      0 0 100px #ff4500;
+  }
+  50% { 
+    text-shadow: 
+      0 0 30px #fff,
+      0 0 60px #ffd700,
+      0 0 90px #ffd700,
+      0 0 120px #ff8c00,
+      0 0 150px #ff4500,
+      0 0 60px rgba(255,215,0,1);
+  }
+}
+
+/* Destello que cruza el texto (brillo central que se mueve) */
+.hero-title::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6) 50%, transparent);
+  animation: goldShine 10s linear infinite;
+  z-index: 1;
 }
 
 @keyframes goldShine {
-    0% { background-position: -500% 0; }
-    100% { background-position: 500% 0; }
-}
-
-.hero-title::before {
-    content: "";
-    position: absolute;
-    top: 0; left: -100%; right: -100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5) 50%, transparent);
-    animation: goldShine 8s linear infinite;
-    z-index: 1;
+  0% { transform: translateX(-200%); }
+  100% { transform: translateX(200%); }
 }
 
 .hero-subtitle {
-    font-size: 1.35rem;
-    max-width: 820px;
-    margin: 0 auto 32px;
-    color: #f0f4f8;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.6);
-    line-height: 1.5;
-    z-index: 10;
-    position: relative;
+  font-size: 1.35rem;
+  max-width: 820px;
+  margin: 0 auto 32px;
+  color: #f0f4f8;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+  line-height: 1.5;
+  z-index: 10;
+  position: relative;
 }
 
 .hero-badges {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 16px;
-    margin-bottom: 32px;
-    z-index: 10;
-    position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 32px;
+  z-index: 10;
+  position: relative;
 }
 
 .payment-badge,
 .local-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 26px;
-    border-radius: 999px;
-    font-size: 0.95rem;
-    backdrop-filter: blur(12px);
-    background: rgba(15, 23, 42, 0.7);
-    border: 1px solid rgba(255, 215, 0, 0.4);
-    color: #f5e7c4;
-    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.15);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 26px;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  backdrop-filter: blur(12px);
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(255, 215, 0, 0.4);
+  color: #f5e7c4;
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.15);
 }
 
 .hero-buttons {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 16px;
-    z-index: 10;
-    position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+  z-index: 10;
+  position: relative;
 }
 
 .cta-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 16px 36px;
-    border-radius: 999px;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 36px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .btn-primary {
-    background: linear-gradient(90deg, #6366f1, #8b5cf6, #a855f7);
-    color: white;
-    box-shadow: 0 16px 40px rgba(79, 70, 229, 0.7);
+  background: linear-gradient(90deg, #6366f1, #8b5cf6, #a855f7);
+  color: white;
+  box-shadow: 0 16px 40px rgba(79, 70, 229, 0.7);
 }
 
 .btn-primary:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 20px 50px rgba(79, 70, 229, 0.8);
+  transform: translateY(-3px);
+  box-shadow: 0 20px 50px rgba(79, 70, 229, 0.8);
 }
 
 .btn-secondary {
-    background: rgba(15, 23, 42, 0.9);
-    color: #e5e7eb;
-    border: 1px solid rgba(148, 163, 184, 0.9);
+  background: rgba(15, 23, 42, 0.9);
+  color: #e5e7eb;
+  border: 1px solid rgba(148, 163, 184, 0.9);
 }
 
 .btn-secondary:hover {
-    background: rgba(15, 23, 42, 1);
+  background: rgba(15, 23, 42, 1);
 }
 
 /* RESPONSIVE */
 @media (max-width: 768px) {
-    .hero {
-        padding: 120px 0 140px;
-    }
-    .hero-title {
-        font-size: 3.4rem !important;
-    }
-    .hero-subtitle {
-        font-size: 1.15rem;
-    }
-    .hero-title::before {
-        animation-duration: 12s;
-    }
+  .hero {
+    padding: 120px 0 140px;
+  }
+  .hero-title {
+    font-size: 3.4rem !important;
+  }
+  .hero-subtitle {
+    font-size: 1.15rem;
+  }
 }

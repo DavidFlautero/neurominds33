@@ -1,64 +1,75 @@
 :root {
-  --primary: #6366f1;
-  --primary-soft: #4f46e5;
-  --accent: #38bdf8;
+  --primary: #4f46e5;
+  --primary-dark: #312e81;
+  --secondary: #7c3aed;
   --dark: #020617;
-  --text-main: #e5f2ff;
+  --light: #f8fafc;
+  --gray: #64748b;
+  --success: #10b981;
+  --danger: #ef4444;
+  --accent: #f59e0b;
+  --accent-dark: #d97706;
+  --gold: #d4af37;
+  --gold-soft: #e5d3a3;
 }
 
-/* --------- HERO --------- */
+/* ================== RESET SIMPLE ================== */
+
+.ecommerce-page,
+.hero,
+.design-section,
+.problem-section,
+.vs-section,
+.planes-section,
+.tech-section,
+.testimonials-section,
+.guarantees-section,
+.cta-section {
+  box-sizing: border-box;
+}
+
+.container {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* ================== HERO SIN DIFUMINADO ================== */
 
 .hero {
   position: relative;
   min-height: 100vh;
   margin: 0;
-  padding: 0;
-  background: var(--dark);
+  padding: 120px 0 140px;
   display: flex;
   align-items: center;
   justify-content: center;
+  text-align: center;
+
+  background-color: #020617; /* por si la img tarda */
   overflow: hidden;
 }
 
-/* Fondo: tu imagen, bien visible */
+/* Fondo: solo la imagen, sin overlays ni efectos */
 .hero::before {
   content: "";
   position: absolute;
   inset: 0;
-  background:
-    url("/images/ecommerce/heroEcommerce.png") center top / cover no-repeat;
+  background: url("/images/ecommerce/heroEcommerce.png") center top / cover
+    no-repeat;
+  opacity: 1;
   z-index: 1;
-  opacity: 1;                 /* que se vea toda */
-  filter: saturate(1.08) contrast(1.05); /* un toque más viva */
 }
 
-/* Overlay suave solo para separar texto */
-.hero::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(circle at center,
-      rgba(2, 6, 23, 0.12) 0%,
-      rgba(2, 6, 23, 0.70) 65%,
-      rgba(2, 6, 23, 0.90) 100%);
-  pointer-events: none;
-  z-index: 2;
-}
-
-/* Contenido */
-.hero-inner {
+/* Contenido encima de la imagen */
+.hero .container {
   position: relative;
-  z-index: 3;
-  width: 100%;
+  z-index: 2;
   max-width: 1100px;
-  margin: 0 auto;
-  padding: 120px 1.5rem 140px;
-  text-align: center;
-  color: var(--text-main);
+  color: #ffffff;
 }
 
-/* Tag superior */
+/* Tag superior (si lo usás) */
 .hero-tag span {
   display: inline-flex;
   align-items: center;
@@ -67,7 +78,7 @@
   border-radius: 999px;
   background: rgba(15, 23, 42, 0.7);
   border: 1px solid rgba(148, 163, 184, 0.7);
-  color: #cbd5ff;
+  color: #e5e7eb;
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.18em;
@@ -75,139 +86,471 @@
   margin-bottom: 18px;
 }
 
-/* Título: blanco con degradado sutil frío */
-.hero-title {
+/* Título principal */
+.hero-title,
+.hero h1 {
   font-size: clamp(2.8rem, 6vw, 4.4rem);
   line-height: 1.05;
   margin: 0 0 22px 0;
   font-weight: 800;
-
-  background: linear-gradient(
-    120deg,
-    #ffffff,
-    #e5f2ff,
-    #c4ddff
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-
-  text-shadow:
-    0 0 12px rgba(15, 23, 42, 0.85),
-    0 0 28px rgba(15, 23, 42, 0.9);
+  color: #f9fafb;
+  text-shadow: 0 0 14px rgba(0, 0, 0, 0.9);
 }
 
-/* Subtítulo: claro y muy legible */
-.hero-subtitle {
+/* Subtítulo */
+.hero-subtitle,
+.hero > .container > p:first-of-type {
   font-size: 1.05rem;
   max-width: 760px;
   margin: 0 auto 28px;
-  color: #e2e8f0;
-  text-shadow: 0 0 10px rgba(15, 23, 42, 0.9);
+  color: #e5e7eb;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
 }
 
-/* Badges */
+/* Badges (pagá en 3 cuotas / adaptado 100% AR) */
+
 .hero-badges {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 14px;
-  margin-bottom: 30px;
+  gap: 12px;
+  margin-bottom: 28px;
 }
 
 .payment-badge,
 .local-badge {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px 22px;
+  gap: 8px;
+  padding: 11px 20px;
   border-radius: 999px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  backdrop-filter: blur(18px);
+  font-size: 0.88rem;
+  backdrop-filter: blur(14px);
   background: rgba(15, 23, 42, 0.7);
-  border: 1px solid rgba(148, 163, 184, 0.7);
+  border: 1px solid rgba(248, 250, 252, 0.35);
   color: #f9fafb;
 }
 
-.payment-badge i,
-.local-badge i {
-  font-size: 0.9rem;
-}
+/* Botones Hero */
 
-/* Botones */
 .hero-buttons {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 16px;
-  margin-top: 10px;
+  gap: 14px;
 }
 
 .cta-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 14px 32px;
+  padding: 14px 28px;
   border-radius: 999px;
-  font-weight: 600;
-  font-size: 0.98rem;
   text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
   cursor: pointer;
   border: none;
-  transition: transform 0.18s ease, box-shadow 0.18s ease,
-    background 0.18s ease, color 0.18s ease;
 }
 
-/* Principal: violeta + cian, corporativo */
+/* Primario: bien presente, pero limpio */
 .btn-primary {
-  background: linear-gradient(135deg, var(--primary-soft), var(--accent));
+  background: linear-gradient(90deg, #4f46e5, #6366f1, #8b5cf6);
   color: #ffffff;
-  box-shadow:
-    0 14px 36px rgba(37, 99, 235, 0.55),
-    0 0 16px rgba(59, 130, 246, 0.7);
+  box-shadow: 0 14px 35px rgba(79, 70, 229, 0.6);
 }
 
 .btn-primary:hover {
   transform: translateY(-1px);
-  box-shadow:
-    0 18px 46px rgba(37, 99, 235, 0.75),
-    0 0 22px rgba(59, 130, 246, 0.9);
+  box-shadow: 0 18px 45px rgba(79, 70, 229, 0.75);
 }
 
-/* Secundario: “glass” */
+/* Secundario */
 .btn-secondary {
-  background: rgba(15, 23, 42, 0.65);
-  color: var(--text-main);
+  background: rgba(15, 23, 42, 0.95);
+  color: #e5e7eb;
   border: 1px solid rgba(148, 163, 184, 0.9);
-  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.65);
 }
 
 .btn-secondary:hover {
-  background: rgba(15, 23, 42, 0.9);
+  background: rgba(15, 23, 42, 1);
 }
 
-/* Responsive */
+/* ================== SECCIONES BÁSICAS ================== */
+
+section {
+  padding: 90px 0;
+}
+
+.design-section {
+  background: #ffffff;
+}
+
+.problem-section {
+  background: #f8fafc;
+}
+
+.vs-section {
+  background: #ffffff;
+}
+
+.planes-section {
+  background: #f9fafb;
+}
+
+.tech-section {
+  background: #020617;
+  color: white;
+  text-align: center;
+}
+
+.testimonials-section {
+  background: #ffffff;
+}
+
+.guarantees-section {
+  background: #f8fafc;
+}
+
+.section-header {
+  text-align: center;
+  max-width: 760px;
+  margin: 0 auto 50px;
+}
+
+.section-header h2 {
+  font-size: 2.1rem;
+  margin-bottom: 14px;
+  color: #0f172a;
+}
+
+.section-header p {
+  font-size: 1.02rem;
+  color: #64748b;
+}
+
+/* ================== TABLA VS ================== */
+
+.vs-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 30px 0 0;
+  background: white;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.12);
+  font-size: 0.95rem;
+}
+
+.vs-table th {
+  background: #0f172a;
+  color: white;
+  text-align: left;
+  padding: 18px 20px;
+}
+
+.vs-table td {
+  padding: 14px 20px;
+  border-bottom: 1px solid #e2e8f0;
+  color: #1e293b;
+}
+
+.vs-table tr:last-child td {
+  border-bottom: none;
+}
+
+.vs-table .good {
+  color: var(--success);
+  font-weight: 600;
+}
+
+.vs-table .bad {
+  color: var(--danger);
+}
+
+/* ================== PLANES ================== */
+
+.plans-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 26px;
+  margin-top: 30px;
+}
+
+.plan-card {
+  background: white;
+  border-radius: 18px;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.12);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+}
+
+.plan-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.16);
+}
+
+.plan-header {
+  padding: 24px 26px 16px;
+  background: linear-gradient(135deg, #0f172a, #020617);
+  color: white;
+}
+
+.plan-header h3 {
+  font-size: 1.35rem;
+  margin-bottom: 6px;
+}
+
+.plan-header p {
+  font-size: 0.95rem;
+  color: #e5e7eb;
+}
+
+.fullservice-header {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+.plan-body {
+  padding: 24px 26px 22px;
+}
+
+.plan-features {
+  list-style: none;
+  margin: 0 0 20px;
+  padding: 0;
+}
+
+.plan-features li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 0.95rem;
+  color: #111827;
+  margin-bottom: 10px;
+}
+
+.plan-features i {
+  color: var(--success);
+  margin-top: 3px;
+}
+
+.plan-badge {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  background: var(--success);
+  color: white;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.ai-badge {
+  background: #059669;
+  color: white;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  margin-left: 6px;
+}
+
+.plan-btn {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.fullservice-btn {
+  background: linear-gradient(90deg, #f59e0b, #f97316);
+}
+
+.plan-credit-note {
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--gray);
+}
+
+/* ================== TECNOLOGÍAS ================== */
+
+.tech-text {
+  font-size: 1.05rem;
+  margin-bottom: 30px;
+  opacity: 0.9;
+}
+
+.tech-logos {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 40px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.tech-footnote {
+  margin-top: 28px;
+  font-size: 0.95rem;
+  opacity: 0.7;
+}
+
+/* ================== TESTIMONIOS ================== */
+
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 22px;
+}
+
+.testimonial-card {
+  background: #f8fafc;
+  padding: 24px 22px;
+  border-radius: 14px;
+  box-shadow: 0 10px 25px rgba(148, 163, 184, 0.25);
+}
+
+.testimonial-card blockquote {
+  font-style: italic;
+  font-size: 0.97rem;
+  color: #475569;
+  margin-bottom: 14px;
+}
+
+.testimonial-card cite {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+/* ================== GARANTÍAS ================== */
+
+.guarantee-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 22px;
+  margin-top: 32px;
+}
+
+.guarantee-item {
+  background: #ffffff;
+  padding: 26px 22px;
+  border-radius: 14px;
+  text-align: center;
+  box-shadow: 0 12px 30px rgba(148, 163, 184, 0.25);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.guarantee-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 40px rgba(148, 163, 184, 0.35);
+}
+
+.guarantee-item i {
+  font-size: 2.4rem;
+  color: var(--primary);
+  margin-bottom: 12px;
+}
+
+.guarantee-item h3 {
+  margin-bottom: 8px;
+  font-size: 1.05rem;
+  color: #0f172a;
+}
+
+.guarantee-item p {
+  font-size: 0.95rem;
+  color: #64748b;
+}
+
+/* ================== CTA FINAL ================== */
+
+.cta-section {
+  background: linear-gradient(135deg, #020617, #020617, #0b1120);
+  color: white;
+  text-align: center;
+  padding: 90px 0 100px;
+}
+
+.cta-section h2 {
+  font-size: 2.2rem;
+  margin-bottom: 18px;
+}
+
+.cta-section p {
+  font-size: 1.03rem;
+  max-width: 720px;
+  margin: 0 auto 24px;
+  color: #e2e8f0;
+}
+
+.scarcity {
+  display: inline-flex;
+  padding: 8px 18px;
+  border-radius: 999px;
+  background: #dc2626;
+  color: white;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 22px;
+}
+
+.cta-button-large {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 30px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #4f46e5, #6366f1, #8b5cf6);
+  color: white;
+  font-weight: 600;
+  text-decoration: none;
+  margin-right: 12px;
+  margin-bottom: 12px;
+}
+
+.whatsapp-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 24px;
+  border-radius: 999px;
+  background: #22c55e;
+  color: white;
+  font-weight: 500;
+  text-decoration: none;
+  gap: 8px;
+}
+
+.cta-badge {
+  margin-top: 22px;
+}
+
+/* ================== RESPONSIVE ================== */
+
 @media (max-width: 768px) {
-  .hero-inner {
-    padding: 110px 1.5rem 120px;
+  .hero {
+    padding: 100px 0 120px;
   }
 
-  .hero-title {
-    font-size: 2.4rem;
+  .hero-title,
+  .hero h1 {
+    font-size: 2.2rem;
   }
 
-  .hero-subtitle {
+  .hero-subtitle,
+  .hero > .container > p:first-of-type {
     font-size: 0.98rem;
   }
 
-  .hero-badges {
-    flex-direction: column;
-    align-items: center;
+  .vs-table {
+    font-size: 0.85rem;
   }
 
-  .hero-buttons {
-    flex-direction: column;
-    align-items: center;
+  .section-header h2 {
+    font-size: 1.7rem;
   }
 }

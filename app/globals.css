@@ -1044,3 +1044,28 @@ section:not(#vision):not(.nm-section):not(#socios):not(#contacto) .p{
 #socios .h2 {
   font-size: clamp(1.3rem, 1.7vw, 1.6rem);  /* 20–24px */
 }
+
+/* ==========================================
+   FIJAR ALTURA REAL DE SECCIONES BANNER
+   ========================================== */
+
+.nm-banner {
+  min-height: 340px !important;   /* altura fija y pequeña */
+  height: 340px !important;
+  max-height: 340px !important;
+
+  padding: 40px 0 !important;     /* padding reducido */
+  display: flex !important;
+  flex-direction: column;
+  justify-content: center;         /* centra el texto */
+  align-items: center;
+}
+
+/* Evitar que la imagen del fondo fuerce a expandirse */
+.nm-banner__media img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0; left: 0;
+}

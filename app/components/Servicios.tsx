@@ -30,7 +30,6 @@ function useSlowPlayback(ref: React.RefObject<HTMLVideoElement | null>, rate = 0
   }, [ref, rate]);
 }
 
-// El resto del código permanece igual...
 function CardVideo({
   webm,
   mp4,
@@ -61,7 +60,6 @@ function CardVideo({
         <source src={webm} type="video/webm" />
         <source src={mp4} type="video/mp4" />
       </video>
-      {/* Fallback por si el navegador bloquea todo */}
       <noscript>
         <img src={poster} alt={alt} />
       </noscript>
@@ -97,7 +95,7 @@ export default function Servicios() {
       <div className="wrap">
         <div className="grid3">
           {/* Tienda Online */}
-          <article className="card reveal">
+          <article className="card reveal bg-[#F5F5F7] text-slate-900/90">
             <CardVideo
               webm="/videos/serv_tienda_vp9.webm?v=1"
               mp4="/videos/serv_tienda_h264.mp4?v=1"
@@ -112,7 +110,7 @@ export default function Servicios() {
           </article>
 
           {/* Automatización */}
-          <article className="card reveal">
+          <article className="card reveal bg-[#F5F5F7] text-slate-900/90">
             <CardVideo
               webm="/videos/serv_auto_vp9.webm?v=1"
               mp4="/videos/serv_ia_h266.mp4?v=1"
@@ -127,7 +125,7 @@ export default function Servicios() {
           </article>
 
           {/* Agentes IA */}
-          <article className="card reveal">
+          <article className="card reveal bg-[#F5F5F7] text-slate-900/90">
             <CardVideo
               webm="/videos/serv_ia_vp9.webm?v=1"
               mp4="/videos/serv_ia_h264.mp4?v=1"

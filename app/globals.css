@@ -59,7 +59,9 @@
 }
 
 /* Dejamos que Next/font gobierne (definido en layout.tsx) */
-@layer utilities { body { font-family: inherit; } }
+@layer utilities {
+  body { font-family: inherit; }
+}
 
 /* =================================
    Tokens globales (light / dark)
@@ -163,8 +165,12 @@
 
 /* Aplicación global y focus ring */
 @layer base {
-  * { @apply border-border outline-ring/50; }
-  body { @apply bg-background text-foreground; }
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }
 
 /* =======================================================
@@ -183,15 +189,28 @@
 }
 
 /* Base y scroll suave */
-html,body{
+html,
+body{
   background:#020617; /* fondo oscuro global para que no se vean líneas entre videos */
   color:var(--nm-ink);
   -webkit-font-smoothing:antialiased;
   scroll-behavior:smooth;
 }
 
+/* Texto base */
+body {
+  font-size:15px;
+  line-height:1.7;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
 /* Contenedores */
 .wrap{
+  width:min(100%,var(--nm-max));
+  margin-inline:auto;
+  padding-inline:24px;
+}
+.section-inner{
   width:min(100%,var(--nm-max));
   margin-inline:auto;
   padding-inline:24px;
@@ -294,7 +313,10 @@ html,body{
   pointer-events:none;
   transition:.2s;
 }
-.drawer.open{ opacity:1; pointer-events:auto; }
+.drawer.open{
+  opacity:1;
+  pointer-events:auto;
+}
 .drawer-inner{
   position:absolute;
   right:0;
@@ -395,8 +417,17 @@ html,body{
   background: #000;
   color: white;
 }
-.hero-media { position:absolute; inset:0; z-index:1; }
-.hero-video { width:100%; height:100%; object-fit:cover; display:block; }
+.hero-media {
+  position:absolute;
+  inset:0;
+  z-index:1;
+}
+.hero-video {
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
 .hero-overlay {
   position:absolute;
   inset:0;
@@ -412,6 +443,12 @@ html,body{
   z-index:10;
   max-width:600px;
 }
+.hero-buttons {
+  display:flex;
+  gap:12px;
+  margin-top:24px;
+  flex-wrap:wrap;
+}
 @media (max-width: 768px) {
   .hero-content {
     left:1.5rem;
@@ -419,49 +456,41 @@ html,body{
     max-width:none;
     text-align:center;
   }
-  .hero .h1 { font-size: clamp(2.5rem, 8vw, 3.5rem); }
-}
-.hero-buttons {
-  display:flex;
-  gap:12px;
-  margin-top:24px;
-  flex-wrap:wrap;
-}
-@media (max-width:768px){
-  .hero-buttons{ justify-content:center; }
+  .hero .h1 {
+    font-size: clamp(2.5rem, 8vw, 3.5rem);
+  }
+  .hero-buttons{
+    justify-content:center;
+  }
 }
 
 /* =======================
    SECCIONES GENERALES
    ======================= */
-
-/* Ritmo base de todas las sections */
 section{
-  padding:60px 0;
+  padding:64px 0;
   background:var(--nm-bg);
 }
 
-/* Helpers para usar en JSX si querés */
+/* Helpers */
 .section-base{
-  padding:60px 0;
+  padding:64px 0;
 }
 .section-large{
   padding:80px 0;
 }
-.section-inner{
-  width:min(100%,var(--nm-max));
-  margin-inline:auto;
-  padding-inline:24px;
-}
 
+/* Tipografía por defecto de secciones */
 .h2{
-  font-size:clamp(26px,4.3vw,36px);
+  font-size:clamp(1.6rem, 2.3vw, 2rem); /* 25–32px aprox */
   letter-spacing:-.03em;
   margin:0 0 8px;
+  font-weight:600;
 }
 .p{
-  font-size:14px;
+  font-size:0.95rem; /* ~15px */
   color:var(--nm-muted);
+  line-height:1.7;
 }
 
 .grid2{
@@ -500,9 +529,10 @@ section{
 #vision{
   position:relative;
   isolation:isolate;
-  padding:80px 0;
+  padding:72px 0;
   background:transparent;
   overflow:hidden;
+  color:#e5e7eb;
 }
 #vision .wrap{
   width:min(100%,var(--nm-max));
@@ -583,9 +613,10 @@ section{
 .nm-section{
   position:relative;
   isolation:isolate;
-  padding:80px 0;
+  padding:72px 0;
   background:transparent;
   overflow:hidden;
+  color:#e5e7eb;
 }
 .nm-fullbg{
   position:absolute;
@@ -618,7 +649,7 @@ section{
 }
 .eyebrow{
   display:inline-block;
-  font-size:13px;
+  font-size:0.8rem;
   letter-spacing:.18em;
   text-transform:uppercase;
   padding:6px 12px;
@@ -628,13 +659,11 @@ section{
   color:#dce3ec;
 }
 .nm-section .h2{
-  font-size:clamp(28px,4.6vw,42px);
-  font-weight:600;
-  letter-spacing:-.03em;
+  font-size:clamp(1.7rem, 2.5vw, 2.1rem); /* un poco más chica que el hero */
   color:#f9fafb;
 }
 .nm-section .p{
-  font-size:15px;
+  font-size:0.98rem;
   color:rgba(230,235,240,.9);
   line-height:1.6;
 }
@@ -668,12 +697,13 @@ section{
 }
 .card h3{
   margin:0 0 4px;
-  font-size:16px;
+  font-size:1rem;
   letter-spacing:-.01em;
 }
 .card p{
   margin:0;
-  font-size:13px;
+  font-size:0.88rem;
+  line-height:1.6;
 }
 
 /* Card media con video o imagen */
@@ -703,10 +733,12 @@ section{
   border:1px dashed #e2e1de;
   background:#fff;
 }
-.kpi b{ font-size:22px; }
+.kpi b{
+  font-size:22px;
+}
 
 /* =======================
-   IMAGEN SERVICIOS (para "Sistemas diseñados...")
+   IMAGEN SERVICIOS
    ======================= */
 .nm-service-image-wrapper{
   position:relative;
@@ -770,20 +802,20 @@ section{
   margin-bottom:10px;
   border-radius:999px;
   border:1px solid rgba(255,255,255,.35);
-  font-size:12px;
+  font-size:0.78rem;
   letter-spacing:.18em;
   text-transform:uppercase;
   background:rgba(15,23,42,.72);
 }
 .nm-banner__title{
-  font-size:clamp(28px,4.6vw,40px);
+  font-size:clamp(1.8rem, 2.6vw, 2.4rem);
   letter-spacing:-.04em;
   margin:6px 0 8px;
 }
 .nm-banner__lead{
   max-width:760px;
   margin:0 auto 18px;
-  font-size:14px;
+  font-size:0.94rem;
   color:rgba(226,232,240,.94);
 }
 .nm-banner__cta{
@@ -861,7 +893,9 @@ section{
 @media (max-width:720px){
   .form .row{ grid-template-columns:1fr; }
 }
-.input, textarea, select{
+.input,
+textarea,
+select{
   width:100%;
   padding:12px 14px;
   border:1px solid #e1e1de;
@@ -895,9 +929,12 @@ footer{
   opacity:1;
   transform:none;
 }
-body{ padding-bottom: env(safe-area-inset-bottom); }
-.wa{ bottom: calc(18px + env(safe-area-inset-bottom)); }
-.quick{ bottom: calc(88px + env(safe-area-inset-bottom)); }
+.wa{
+  bottom: calc(18px + env(safe-area-inset-bottom));
+}
+.quick{
+  bottom: calc(88px + env(safe-area-inset-bottom));
+}
 
 /* =======================
    Ajustes específicos secciones video
@@ -913,258 +950,97 @@ body{ padding-bottom: env(safe-area-inset-bottom); }
   border:none;
 }
 
-/* CTA final un poco más compacta */
+/* CTA final */
+#socios{
+  padding:72px 0;
+}
 #contacto{
-  padding-top:40px;
-  padding-bottom:40px;
+  padding-top:56px;
+  padding-bottom:56px;
+}
+
+/* Texto en secciones claras (Empresas / PYMES / etc) más oscuro */
+section:not(#vision):not(.nm-section):not(#socios):not(#contacto){
+  color:#111827;
+}
+section:not(#vision):not(.nm-section):not(#socios):not(#contacto) .p{
+  color:#4b5563;
+}
+
+/* HERO – jerarquía tipográfica fuerte */
+.hero .h1,
+.hero h1{
+  font-size:clamp(3rem,5vw,4rem); /* 48–64 */
+  letter-spacing:-0.05em;
+  font-weight:700;
+  margin-bottom:12px;
+}
+.hero p{
+  font-size:1rem;
+  line-height:1.8;
+  max-width:38rem;
+}
+.hero small,
+.hero .tagline{
+  display:block;
+  font-size:0.9rem;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  opacity:0.8;
+  margin-bottom:10px;
+}
+
+/* Socios / CTA un poco más pequeños que Automatización */
+#socios .h2{
+  font-size:clamp(1.6rem,2.2vw,2rem);
+}
+#contacto .h2{
+  font-size:clamp(1.5rem,2vw,1.9rem);
+}
+#contacto .btn{
+  padding:11px 20px;
+  font-size:0.95rem;
+}
+
+/* Responsive extra: evitar texto pegado en móvil */
+@media (max-width:640px){
+  .wrap,
+  .section-inner{
+    padding-inline:18px;
+  }
 }
 /* ==========================================
-   AJUSTE GLOBAL TIPOGRAFÍA + RITMO DE SECCIONES
-   (pegar AL FINAL del CSS actual)
+   AJUSTE SECCIONES TIPO BANNER
+   (Empresas + Socios) -> más chicas
    ========================================== */
 
-/* Texto base un poco más grande y cómodo */
-body {
-  font-size: 16px;
-  line-height: 1.7;
-  color: #e5e7eb;
+.nm-banner {
+  min-height: 32vh;          /* antes 48vh, ahora mucho más baja */
+  padding: 40px 0 32px;      /* menos padding arriba/abajo */
 }
 
-/* -------------------------
-   HERO – claim principal
-   ------------------------- */
-
-.hero .h1,
-.hero h1 {
-  font-size: clamp(2.8rem, 4.8vw, 3.6rem);
-  letter-spacing: -0.05em;
-  font-weight: 700;
-  margin-bottom: 12px;
+/* Título del banner (Llevá tu empresa / Socios…) */
+.nm-banner__title {
+  font-size: clamp(1.4rem, 1.8vw, 1.7rem);  /* 22–27px aprox */
+  letter-spacing: -0.03em;
 }
 
-.hero p {
-  font-size: 1rem;
-  line-height: 1.8;
-  max-width: 38rem;
+/* Texto debajo del título */
+.nm-banner__lead {
+  max-width: 640px;
+  margin: 0 auto 14px;
+  font-size: 0.9rem;         /* más chico que las secciones normales */
+  line-height: 1.6;
 }
 
-/* Tagline “Estrategia · Software · IA...” */
-.hero small,
-.hero .tagline {
-  display: block;
+/* Botones del banner también más discretos */
+.nm-banner__cta .btn {
+  padding: 8px 16px;
   font-size: 0.9rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  opacity: 0.8;
-  margin-bottom: 10px;
 }
 
-/* -------------------------
-   TITULARES Y PÁRRAFOS
-   ------------------------- */
-
-/* Títulos de sección */
-.h2 {
-  font-size: clamp(2rem, 3.2vw, 2.6rem); /* ~32–42px */
-  letter-spacing: -0.04em;
-  font-weight: 600;
-  margin-bottom: 10px;
-}
-
-/* Párrafos genéricos en secciones “de papel” */
-section .p,
-.surface .p {
-  font-size: 0.98rem; /* ~15–16px */
-  line-height: 1.8;
-}
-
-/* Subtítulos / texto dentro de tarjetas */
-.card p {
-  font-size: 0.9rem;
-  line-height: 1.7;
-}
-
-/* Listas dentro de secciones de texto (Visión, etc.) */
-.surface ul {
-  margin-top: 10px;
-  padding-left: 1.3rem;
-  font-size: 0.95rem;
-  line-height: 1.7;
-}
-
-/* Eyebrow (“Tecnología inteligente”, etc.) */
-.eyebrow {
-  font-size: 0.8rem;
-  letter-spacing: 0.2em;
-}
-
-/* -------------------------
-   RITMO VERTICAL DE SECCIONES
-   ------------------------- */
-
-/* Base para TODAS las secciones */
-section {
-  padding: 80px 0;          /* más aire en desktop */
-}
-
-/* Secciones de video / bloques importantes más “altas” */
-#vision,
-.nm-section,
-#socios {
-  padding-top: 96px;
-  padding-bottom: 96px;
-}
-
-/* CTA final un poco más grande también */
-#contacto {
-  padding-top: 72px;
-  padding-bottom: 72px;
-}
-
-/* Ajustes responsivos de padding */
-@media (max-width: 900px) {
-  section {
-    padding: 60px 0;
-  }
-
-  #vision,
-  .nm-section,
-  #socios {
-    padding-top: 72px;
-    padding-bottom: 72px;
-  }
-}
-
-@media (max-width: 640px) {
-  section {
-    padding: 44px 0;
-  }
-
-  #vision,
-  .nm-section,
-  #socios {
-    padding-top: 56px;
-    padding-bottom: 56px;
-  }
-}
-
-/* -------------------------
-   ANCHO Y ALINEACIÓN DEL CONTENIDO
-   ------------------------- */
-
-.wrap,
-.section-inner {
-  max-width: 1120px; /* un toque más angosto que 1200px para lectura */
-}
-
-/* En secciones textuales, que el texto no se pegue a los bordes */
-#vision .wrap,
-.nm-section .wrap,
-#socios .wrap,
-#contacto .wrap {
-  padding-inline: 24px;
-}
-
-/* -------------------------
-   GRIDS – separaciones más limpias
-   ------------------------- */
-
-.grid2 {
-  gap: 32px;
-}
-
-.grid3 {
-  gap: 22px;
-}
-
-/* En móvil, que no se sientan aplastadas las tarjetas */
-@media (max-width: 680px) {
-  .grid2,
-  .grid3 {
-    gap: 18px;
-  }
-}
-
-/* -------------------------
-   BLOQUE AUTOMATIZACIÓN / SERVICIOS
-   ------------------------- */
-
-/* Stack de texto de Automatización más “hero” */
-.nm-stack {
-  max-width: 760px;
-  gap: 16px;
-}
-
-.nm-section .h2 {
-  font-size: clamp(2.1rem, 3.4vw, 2.7rem);
-}
-
-.nm-section .p {
-  font-size: 1rem;
-}
-
-/* Cards de servicios con un poquito más de padding */
-.card {
-  padding: 18px 18px 20px;
-}
-
-/* -------------------------
-   BLOQUE SOCIOS
-   ------------------------- */
-
+/* Por si tu bloque de Socios no está dentro de .nm-banner,
+   bajamos aún más el tamaño del título */
 #socios .h2 {
-  font-size: clamp(2.1rem, 3.4vw, 2.8rem);
-}
-
-#socios .p {
-  font-size: 1rem;
-}
-
-/* Limitar ancho del texto para que sea cómodo de leer */
-#socios .wrap > .surface,
-#socios .wrap > div {
-  max-width: 880px;
-}
-
-/* -------------------------
-   CTA FINAL
-   ------------------------- */
-
-#contacto .h2 {
-  font-size: clamp(2rem, 3vw, 2.5rem);
-}
-
-#contacto .p {
-  font-size: 0.98rem;
-}
-
-/* Botones de la CTA un poco más grandes */
-#contacto .btn {
-  padding: 11px 20px;
-  font-size: 0.95rem;
-}
-
-/* -------------------------
-   DETALLES DE LEGIBILIDAD
-   ------------------------- */
-
-/* Aumentar contraste de texto sobre videos */
-#vision,
-.nm-section,
-#socios {
-  color: #e5e7eb;
-}
-
-#vision .p,
-.nm-section .p,
-#socios .p {
-  color: rgba(226, 232, 240, 0.96);
-}
-
-/* Evitar que el texto se pegue demasiado al borde del viewport en móvil */
-@media (max-width: 640px) {
-  .wrap,
-  .section-inner {
-    padding-inline: 18px;
-  }
+  font-size: clamp(1.3rem, 1.7vw, 1.6rem);  /* 20–24px */
 }

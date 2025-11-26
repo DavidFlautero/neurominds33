@@ -130,9 +130,22 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     // sameAs: [...] cuando tengas redes
   };
 
-  return (
-    <html lang="es" className={`${font.className} scroll-smooth`}>
+  <html lang="es" className={`${font.className} scroll-smooth`}>
       <head>
+        {/* 👉 NUEVO: Font Awesome para íconos */}
+        <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+          crossOrigin="anonymous"
+          referrerPolicy="no-referrer"
+        />
+
+        {/* 👉 NUEVO: Google Fonts Satoshi + Inter (para tu landing) */}
+        <link
+          href="https://fonts.googleapis.com/css2?family=Satoshi:wght@400;500;700;900&family=Inter:wght@400;500;600;700&display=swap"
+          rel="stylesheet"
+        />
+
         {/* JSON-LD estructurado para Google */}
         <script
           type="application/ld+json"

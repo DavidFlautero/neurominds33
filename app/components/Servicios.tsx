@@ -8,7 +8,7 @@ function useSlowPlayback(ref: React.RefObject<HTMLVideoElement | null>, rate = 0
   useEffect(() => {
     const v = ref.current;
     if (!v) return;
-    
+
     const setRate = () => {
       if (v) {
         v.playbackRate = rate;
@@ -18,7 +18,7 @@ function useSlowPlayback(ref: React.RefObject<HTMLVideoElement | null>, rate = 0
     v.addEventListener('loadedmetadata', setRate);
     v.addEventListener('canplay', setRate);
     v.addEventListener('playing', setRate);
-    
+
     // Manejar el error de autoplay silenciosamente
     v.play().catch(() => {});
 
@@ -94,19 +94,22 @@ export default function Servicios() {
 
       <div className="wrap">
         <div className="grid3">
-          {/* Tienda Online */}
+          {/* E-commerce / Tienda Online */}
           <article className="card reveal bg-[#F5F5F7] text-slate-900/90">
             <CardVideo
               webm="/videos/serv_tienda_vp9.webm?v=1"
               mp4="/videos/serv_tienda_h264.mp4?v=1"
               poster="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1600&auto=format&fit=crop"
-              alt="Tienda Online"
+              alt="E-commerce y Tienda Online"
             />
-            <h3>Tienda Online</h3>
+            <h3>E-commerce &amp; Tienda Online</h3>
             <p className="p">
-              Catálogo, checkout, cuotas y logística. Integración con Mercado Pago y panel del cliente.
+              Tiendas online a medida con catálogo, checkout, cuotas y logística integrada. Pensadas para vender
+              en Argentina con Mercado Pago y panel claro para tu equipo.
             </p>
-            <a className="btn" href="/tiendas">Ver Tiendas →</a>
+            <a className="btn" href="/ecommerce">
+              Ver E-commerce →
+            </a>
           </article>
 
           {/* Automatización */}
@@ -121,7 +124,9 @@ export default function Servicios() {
             <p className="p">
               Procesos repetitivos, ERP/CRM, WhatsApp y dashboards. Menos fricción, más ROI.
             </p>
-            <a className="btn" href="/automatizacion">Ver Automatización →</a>
+            <a className="btn" href="/automatizacion">
+              Ver Automatización →
+            </a>
           </article>
 
           {/* Agentes IA */}
@@ -136,7 +141,9 @@ export default function Servicios() {
             <p className="p">
               Ventas, soporte y operaciones con RAG y datos internos. Integración multicanal.
             </p>
-            <a className="btn" href="/ia">Ver IA →</a>
+            <a className="btn" href="/ia">
+              Ver IA →
+            </a>
           </article>
         </div>
       </div>

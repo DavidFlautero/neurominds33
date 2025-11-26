@@ -57,15 +57,26 @@ export default function Resultados() {
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-          <a href="/herramientas" className="bg-white/95 backdrop-blur p-10 rounded-3xl shadow-2xl hover:shadow-3xl hover:-translate-y-3 transition-all">
+          <a
+            href="/herramientas"
+            className="bg-slate-100/95 backdrop-blur p-10 rounded-3xl shadow-2xl hover:shadow-3xl hover:-translate-y-3 transition-all"
+          >
             <b className="text-3xl block mb-4 text-gray-900">Tips de marketing digital</b>
             <p className="text-gray-700">Estrategias que sí funcionan en 2025</p>
           </a>
-          <a href="/herramientas" className="bg-white/95 backdrop-blur p-10 rounded-3xl shadow-2xl hover:shadow-3xl hover:-translate-y-3 transition-all">
+
+          <a
+            href="/herramientas"
+            className="bg-slate-100/95 backdrop-blur p-10 rounded-3xl shadow-2xl hover:shadow-3xl hover:-translate-y-3 transition-all"
+          >
             <b className="text-3xl block mb-4 text-gray-900">Preguntas frecuentes</b>
             <p className="text-gray-700">Todo lo que necesitás saber después de lanzar tu web</p>
           </a>
-          <a href="/herramientas" className="bg-white/95 backdrop-blur p-10 rounded-3xl shadow-2xl hover:shadow-3xl hover:-translate-y-3 transition-all">
+
+          <a
+            href="/herramientas"
+            className="bg-slate-100/95 backdrop-blur p-10 rounded-3xl shadow-2xl hover:shadow-3xl hover:-translate-y-3 transition-all"
+          >
             <b className="text-3xl block mb-4 text-gray-900">Recursos para empresas</b>
             <p className="text-gray-700">Guías y herramientas prácticas que usamos con clientes</p>
           </a>

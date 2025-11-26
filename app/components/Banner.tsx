@@ -33,7 +33,7 @@ export default function SeccionAutomatizacion() {
   }, []);
 
   return (
-    <section id="automatizacion" className="nm-section relative overflow-hidden min-h-[80vh] flex items-center">
+    <section id="automatizacion" className="nm-section relative overflow-hidden min-h-[60vh] flex items-center">
       {/* VIDEO DE FONDO */}
       <video
         ref={videoRef}
@@ -47,45 +47,44 @@ export default function SeccionAutomatizacion() {
         <source src="/videos/fondobanner.mp4" type="video/mp4" />
       </video>
 
-      {/* Overlay sutil para todo el fondo */}
-      <div className="absolute inset-0 bg-black/40 z-10 pointer-events-none" />
+      {/* Overlay sutil */}
+      <div className="absolute inset-0 bg-black/30 z-10 pointer-events-none" />
 
-      {/* CONTENEDOR PRINCIPAL - CENTRADO */}
-      <div className="relative z-20 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* CONTENEDOR PRINCIPAL */}
+      <div className="relative z-20 w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
           
-          {/* Eyebrow/tagline */}
-          <div className="mb-6">
-            <span className="inline-block px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full text-white text-sm font-semibold tracking-wide uppercase shadow-lg">
+          {/* Eyebrow/tagline - más pequeño */}
+          <div className="mb-4">
+            <span className="inline-block px-3 py-1 bg-blue-600/80 backdrop-blur-sm rounded-full text-white text-xs font-medium tracking-wide uppercase">
               Tecnología Inteligente
             </span>
           </div>
 
-          {/* Título principal */}
-          <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-8 leading-tight drop-shadow-2xl">
+          {/* Título principal - reducido */}
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-6 leading-snug drop-shadow-lg">
             Automatización
-            <span className="block bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent mt-2">
+            <span className="block text-blue-100 mt-1">
               que transforma
             </span>
           </h2>
 
-          {/* Contenedor del texto con fondo semitransparente elegante */}
-          <div className="inline-block bg-black/60 backdrop-blur-sm rounded-2xl p-8 md:p-10 border border-white/10 shadow-2xl max-w-4xl mx-auto">
-            <p className="text-xl md:text-2xl lg:text-3xl text-white font-light leading-relaxed md:leading-loose">
-              <span className="font-semibold bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent">
+          {/* Contenedor del texto - mucho más compacto */}
+          <div className="bg-black/50 backdrop-blur-sm rounded-xl p-6 border border-white/5 shadow-lg max-w-2xl mx-auto">
+            <p className="text-base md:text-lg text-white font-light leading-relaxed">
+              <span className="font-medium text-blue-200">
                 Fusionamos inteligencia artificial y desarrollo avanzado
               </span>{' '}
               para crear procesos autónomos, precisos y escalables.
-              <br />
-              <span className="block mt-4 text-white/90">
-                Tu empresa evoluciona, <span className="font-bold text-white">nosotros hacemos que el sistema piense.</span>
+              <span className="block mt-3 text-white/95 text-sm md:text-base">
+                Tu empresa evoluciona, <span className="font-semibold text-white">nosotros hacemos que el sistema piense.</span>
               </span>
             </p>
           </div>
 
-          {/* CTA adicional opcional */}
-          <div className="mt-12">
-            <button className="px-8 py-4 bg-white text-blue-900 rounded-xl font-bold text-lg hover:bg-blue-50 transition-all duration-300 transform hover:scale-105 shadow-2xl">
+          {/* CTA más discreto */}
+          <div className="mt-8">
+            <button className="px-6 py-3 bg-white/95 text-blue-900 rounded-lg font-semibold text-sm hover:bg-white transition-all duration-300 shadow-lg hover:shadow-xl">
               Descubre Nuestra Tecnología
             </button>
           </div>

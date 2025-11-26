@@ -2,31 +2,33 @@ export default function SoftwareMedida() {
   return (
     <section
       id="software-medida"
-      className="relative overflow-hidden py-20"
+      className="relative overflow-hidden py-16 md:py-20 bg-transparent"
     >
-      {/* VIDEO DE FONDO */}
-      <video
-        src="/videos/softwaremedida.mp4"
-        autoPlay
-        loop
-        muted
-        playsInline
-        className="absolute inset-0 w-full h-full object-cover -z-10"
-      />
+      {/* FONDO: VIDEO + DEGRADADO */}
+      <div className="absolute inset-0">
+        <video
+          src="/videos/softwaremedida.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="w-full h-full object-cover"
+        />
 
-      {/* Degradado para que el texto se lea (más fuerte del lado derecho) */}
-      <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/55 to-black/10 -z-10" />
+        {/* Degradado para legibilidad (encima del video) */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/55 to-black/10" />
+      </div>
 
       {/* CONTENIDO */}
-      <div className="wrap relative">
-        <div className="grid2 items-center gap-12">
-          {/* IZQUIERDA: IMAGEN – MISMA LÓGICA QUE EL OJO (CARD, PROPORCIÓN CONTROLADA) */}
-          <div className="reveal">
-            <div className="nm-service-image-wrapper">
+      <div className="wrap relative z-10">
+        <div className="grid2 items-center gap-10">
+          {/* IZQUIERDA: IMAGEN MÁS BAJA / PANORÁMICA */}
+          <div className="reveal flex justify-center">
+            <div className="relative w-full max-w-sm md:max-w-md lg:max-w-lg aspect-[16/9] rounded-3xl overflow-hidden shadow-2xl border border-white/15 bg-black/40">
               <img
                 src="/images/softwareMedida/empresas2.png"
                 alt="Dashboard de software a medida para empresas"
-                className="w-full h-full object-cover"
+                className="absolute inset-0 w-full h-full object-cover"
               />
             </div>
           </div>

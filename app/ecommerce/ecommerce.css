@@ -29,7 +29,7 @@ h1,h2,h3,h4 {
 .hero {
   position: relative;
   min-height: 100vh;
-  padding: 0; /* quitamos todo el padding */
+  padding: 0;
   margin: 0;
   text-align: center;
   background: #020617;
@@ -39,27 +39,30 @@ h1,h2,h3,h4 {
   overflow: hidden;
 }
 
-/* TU IMAGEN DE FONDO EXACTA (subila a esta ruta) */
+/* IMAGEN DE FONDO – MÁS PROTAGÓNICA */
 .hero::before {
   content: "";
   position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
+  inset: 0;
   background: url("/images/ecommerce/heroEcommerce.png") center/cover no-repeat;
-  background-attachment: fixed; /* para que no se mueva al scrollear */
   z-index: 1;
+  opacity: 1;                         /* la mostramos completa */
+  filter: brightness(1.08) contrast(1.05) saturate(1.1); /* un toque más viva */
 }
 
-/* Overlay oscuro para que se lea perfecto */
+/* OVERLAY – OSCURO SOLO EN BORDES, CENTRO MÁS CLARO */
 .hero::after {
   content: "";
   position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: linear-gradient(to bottom, 
-    rgba(2,6,23,0.7) 0%, 
-    rgba(2,6,23,0.85) 70%, 
-    rgba(2,6,23,0.98) 100%
+  inset: 0;
+  background: radial-gradient(
+    circle at center,
+    rgba(2, 6, 23, 0.10) 0%,   /* casi transparente en el centro → se ven los destellos */
+    rgba(2, 6, 23, 0.45) 55%,  /* medio */
+    rgba(2, 6, 23, 0.80) 100%  /* bordes más oscuros */
   );
   z-index: 2;
+  pointer-events: none;
 }
 
 /* Contenido encima */
@@ -67,7 +70,7 @@ h1,h2,h3,h4 {
   position: relative;
   z-index: 3;
   width: 100%;
-  padding: 120px 1.5rem 160px; /* solo padding interno */
+  padding: 120px 1.5rem 160px;
 }
 
 /* TAG SUPERIOR */
@@ -77,7 +80,7 @@ h1,h2,h3,h4 {
   gap: 10px;
   padding: 10px 28px;
   border-radius: 999px;
-  background: rgba(212, 175, 55, 0.2);
+  background: rgba(212, 175, 55, 0.18);
   border: 1px solid rgba(212, 175, 55, 0.5);
   color: var(--gold);
   font-size: 0.85rem;
@@ -87,13 +90,17 @@ h1,h2,h3,h4 {
   margin-bottom: 20px;
 }
 
-/* TÍTULO DORADO ELEGANTE (sólido, sin brillo barato) */
+/* TÍTULO DORADO ELEGANTE */
 .hero-title {
   font-size: clamp(3.2rem, 9vw, 7rem);
   line-height: 1.02;
   margin: 0 0 24px 0;
   color: var(--gold);
-  text-shadow: 0 4px 16px rgba(0, 0, 0, 0.8);
+
+  /* brillo controlado, no “barato” */
+  text-shadow:
+    0 0 18px rgba(0, 0, 0, 0.9),
+    0 0 26px rgba(212, 175, 55, 0.35);
 }
 
 /* Subtítulo */
@@ -101,8 +108,9 @@ h1,h2,h3,h4 {
   font-size: clamp(1.15rem, 3.5vw, 1.5rem);
   max-width: 900px;
   margin: 0 auto 40px;
-  color: #e2e8f0;
+  color: #f9fafb;
   line-height: 1.55;
+  text-shadow: 0 0 10px rgba(2, 6, 23, 0.9);
 }
 
 /* Badges */
@@ -123,19 +131,20 @@ h1,h2,h3,h4 {
   border-radius: 999px;
   font-size: 1rem;
   font-weight: 600;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #f1f5f9;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  color: #f9fafb;
+  backdrop-filter: blur(16px);
 }
 
 .payment-badge {
-  background: rgba(34, 197, 94, 0.15);
-  border-color: rgba(34, 197, 94, 0.4);
+  background: rgba(34, 197, 94, 0.22);
+  border-color: rgba(34, 197, 94, 0.6);
 }
 
 .local-badge {
-  background: rgba(79, 70, 229, 0.15);
-  border-color: rgba(79, 70, 229, 0.4);
+  background: rgba(79, 70, 229, 0.22);
+  border-color: rgba(79, 70, 229, 0.6);
 }
 
 /* Botones */
@@ -163,18 +172,25 @@ h1,h2,h3,h4 {
 .btn-primary {
   background: linear-gradient(135deg, #6366f1, #8b5cf6);
   color: white;
-  box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+  box-shadow:
+    0 10px 30px rgba(99, 102, 241, 0.4),
+    0 0 18px rgba(59, 130, 246, 0.5);
 }
-.btn-primary:hover { transform: translateY(-4px); box-shadow: 0 20px 50px rgba(99, 102, 241, 0.6); }
+.btn-primary:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 20px 50px rgba(99, 102, 241, 0.6),
+    0 0 24px rgba(59, 130, 246, 0.9);
+}
 
 .btn-secondary {
   background: transparent;
-  color: white;
-  border: 2px solid rgba(255, 255, 255, 0.4);
+  color: #e5e7eb;
+  border: 2px solid rgba(255, 255, 255, 0.5);
 }
 .btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: white;
+  background: rgba(15, 23, 42, 0.8);
+  border-color: #ffffff;
 }
 
 /* Responsive */

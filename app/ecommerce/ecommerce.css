@@ -1,21 +1,14 @@
 :root {
   --primary: #4f46e5;
   --primary-dark: #312e81;
-  --secondary: #7c3aed;
   --dark: #020617;
-  --light: #f8fafc;
-  --gray: #94a3b8;
-  --success: #10b981;
-  --danger: #ef4444;
-  --accent: #f59e0b;
-
-  /* DORADO ELEGANTE REAL (mate, sólido, premium) */
-  --gold: #d4af37;        /* oro real */
+  --gold: #d4af37;        /* dorado elegante real */
   --gold-light: #e8c56e;
   --gold-dark: #b8931a;
 }
 
 * { margin:0; padding:0; box-sizing:border-box; }
+html, body { height:100%; margin:0; padding:0; }
 body { 
   font-family: 'Inter', sans-serif; 
   background: #020617; 
@@ -25,7 +18,6 @@ body {
 h1,h2,h3,h4 { 
   font-family: 'Satoshi', sans-serif; 
   font-weight: 900; 
-  letter-spacing: -0.02em;
 }
 .container { 
   max-width: 1280px; 
@@ -33,13 +25,17 @@ h1,h2,h3,h4 {
   padding: 0 1.5rem; 
 }
 
-/* ==================== HERO ELEGANTE ==================== */
+/* ==================== HERO PEGADO ARRIBA ==================== */
 .hero {
   position: relative;
   min-height: 100vh;
-  padding: 180px 0 200px;
+  padding: 0; /* quitamos todo el padding */
+  margin: 0;
   text-align: center;
   background: #020617;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   overflow: hidden;
 }
 
@@ -47,21 +43,21 @@ h1,h2,h3,h4 {
 .hero::before {
   content: "";
   position: absolute;
-  inset: 0;
+  top: 0; left: 0; right: 0; bottom: 0;
   background: url("/images/hero-ecommerce.jpg") center/cover no-repeat;
-  opacity: 0.92;
+  background-attachment: fixed; /* para que no se mueva al scrollear */
   z-index: 1;
 }
 
-/* Overlay oscuro sutil para que el texto se lea perfecto */
+/* Overlay oscuro para que se lea perfecto */
 .hero::after {
   content: "";
   position: absolute;
-  inset: 0;
+  top: 0; left: 0; right: 0; bottom: 0;
   background: linear-gradient(to bottom, 
-    rgba(2,6,23,0.75) 0%, 
-    rgba(2,6,23,0.85) 50%, 
-    rgba(2,6,23,0.95) 100%
+    rgba(2,6,23,0.7) 0%, 
+    rgba(2,6,23,0.85) 70%, 
+    rgba(2,6,23,0.98) 100%
   );
   z-index: 2;
 }
@@ -70,38 +66,37 @@ h1,h2,h3,h4 {
 .hero-inner {
   position: relative;
   z-index: 3;
+  width: 100%;
+  padding: 120px 1.5rem 160px; /* solo padding interno */
 }
 
 /* TAG SUPERIOR */
-.hero-tag {
-  margin-bottom: 32px;
-}
 .hero-tag span {
   display: inline-flex;
   align-items: center;
   gap: 10px;
   padding: 10px 28px;
   border-radius: 999px;
-  background: rgba(212, 175, 55, 0.15);
-  border: 1px solid rgba(212, 175, 55, 0.4);
-  color: #d4af37;
-  font-size: 0.8rem;
+  background: rgba(212, 175, 55, 0.2);
+  border: 1px solid rgba(212, 175, 55, 0.5);
+  color: var(--gold);
+  font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 0.2em;
   font-weight: 600;
+  margin-bottom: 20px;
 }
 
 /* TÍTULO DORADO ELEGANTE (sólido, sin brillo barato) */
 .hero-title {
-  font-size: clamp(3.2rem, 9vw, 6.8rem);
+  font-size: clamp(3.2rem, 9vw, 7rem);
   line-height: 1.02;
-  margin-bottom: 28px;
-  color: #d4af37;                     /* dorado real sólido */
-  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
-  font-weight: 900;
+  margin: 0 0 24px 0;
+  color: var(--gold);
+  text-shadow: 0 4px 16px rgba(0, 0, 0, 0.8);
 }
 
-/* Subtítulo limpio */
+/* Subtítulo */
 .hero-subtitle {
   font-size: clamp(1.15rem, 3.5vw, 1.5rem);
   max-width: 900px;
@@ -110,7 +105,7 @@ h1,h2,h3,h4 {
   line-height: 1.55;
 }
 
-/* Badges elegantes */
+/* Badges */
 .hero-badges {
   display: flex;
   flex-wrap: wrap;
@@ -136,16 +131,14 @@ h1,h2,h3,h4 {
 .payment-badge {
   background: rgba(34, 197, 94, 0.15);
   border-color: rgba(34, 197, 94, 0.4);
-  color: #dcfce7;
 }
 
 .local-badge {
   background: rgba(79, 70, 229, 0.15);
   border-color: rgba(79, 70, 229, 0.4);
-  color: #e0e7ff;
 }
 
-/* Botones elegantes */
+/* Botones */
 .hero-buttons {
   display: flex;
   flex-wrap: wrap;
@@ -172,10 +165,7 @@ h1,h2,h3,h4 {
   color: white;
   box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
 }
-.btn-primary:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 20px 50px rgba(99, 102, 241, 0.6);
-}
+.btn-primary:hover { transform: translateY(-4px); box-shadow: 0 20px 50px rgba(99, 102, 241, 0.6); }
 
 .btn-secondary {
   background: transparent;
@@ -189,7 +179,7 @@ h1,h2,h3,h4 {
 
 /* Responsive */
 @media (max-width: 768px) {
-  .hero { padding: 140px 0 160px; }
+  .hero-inner { padding: 100px 1.5rem 140px; }
   .hero-badges { flex-direction: column; align-items: center; }
   .hero-buttons { flex-direction: column; align-items: center; }
 }

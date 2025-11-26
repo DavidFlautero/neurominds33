@@ -166,7 +166,7 @@ section {
   color: #cbd5e1;
 }
 
-/* ====== TABLA VS (mantiene estilo oscuro) ====== */
+/* ====== TABLA VS ====== */
 
 .vs-table {
   width: 100%;
@@ -206,7 +206,6 @@ section {
 }
 
 /* ====== PLANES / TESTIMONIOS / GARANTÍAS / CTA ====== */
-/* (los mantengo oscuros, sin cambiar tu lógica anterior) */
 
 .plans-grid {
   display: grid;
@@ -223,6 +222,7 @@ section {
   display: flex;
   flex-direction: column;
   border: 1px solid rgba(30, 64, 175, 0.6);
+  position: relative;
 }
 
 .plan-header {
@@ -303,6 +303,8 @@ section {
   color: #cbd5e1;
 }
 
+/* TECNOLOGÍAS */
+
 .tech-section {
   text-align: center;
 }
@@ -328,6 +330,8 @@ section {
   font-size: 0.95rem;
   color: #94a3b8;
 }
+
+/* TESTIMONIOS */
 
 .testimonials-grid {
   display: grid;
@@ -356,6 +360,8 @@ section {
   color: #cbd5e1;
 }
 
+/* GARANTÍAS */
+
 .guarantee-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -377,6 +383,8 @@ section {
   color: var(--primary);
   margin-bottom: 10px;
 }
+
+/* CTA FINAL */
 
 .cta-section {
   text-align: center;
@@ -438,6 +446,7 @@ section {
 }
 
 /* RESPONSIVE */
+
 @media (max-width: 768px) {
   .hero {
     padding: 120px 0 120px;
@@ -462,27 +471,4 @@ section {
   .hero-buttons {
     flex-direction: column;
   }
-}
-.design-section {
-  background: #ffffff;
-}
-
-.problem-section {
-  background: #f8fafc;
-}
-
-.vs-section {
-  background: #ffffff;
-}
-
-.planes-section {
-  background: #f9fafb;
-}
-
-.testimonials-section {
-  background: #ffffff;
-}
-
-.guarantees-section {
-  background: #f8fafc;
 }

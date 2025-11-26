@@ -537,3 +537,22 @@ section {
     font-size: 1.7rem;
   }
 }
+
+.hero-title {
+  font-size: 3rem;
+  line-height: 1.1;
+  margin-bottom: 20px;
+  letter-spacing: 0.01em;
+  font-weight: 700;
+
+  /* Dorado más fuerte */
+  background: linear-gradient(125deg, #fff7da, #f5e1a8, #facc6b);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+
+  /* BRILLO */
+  text-shadow:
+    0 0 10px rgba(250, 204, 107, 0.35),
+    0 0 26px rgba(56, 189, 248, 0.25);
+}

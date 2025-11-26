@@ -33,8 +33,12 @@ export default function CTAContacto() {
   }, []);
 
   return (
-    <section id="contacto" className="relative h-screen overflow-hidden">
-      {/* VIDEO DE FONDO – 100% visible */}
+    // ✅ YA NO ES h-screen: solo una banda con padding
+    <section
+      id="contacto"
+      className="relative overflow-hidden py-16 md:py-20 lg:py-24"
+    >
+      {/* VIDEO DE FONDO */}
       <video
         ref={videoRef}
         autoPlay
@@ -42,31 +46,31 @@ export default function CTAContacto() {
         muted
         playsInline
         preload="auto"
-        className="absolute inset-0 w-full h-full object-cover"
+        className="absolute inset-0 w-full h-full object-cover -z-10"
       >
         <source src="/videos/fondo3.mp4" type="video/mp4" />
       </video>
 
-      {/* SIN overlay negro → el video se ve perfecto */}
-      {/* Solo un backdrop-blur muy leve detrás del texto para que resalte */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute inset-0 bg-black/20 backdrop-blur-[2px]" />
-      </div>
+      {/* Overlay suave para legibilidad */}
+      <div className="absolute inset-0 bg-black/25 backdrop-blur-[2px] -z-10" />
 
-      {/* CONTENIDO – letras y botones encima del video */}
-      <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-6">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-5xl md:text-6xl lg:text-7xl font-black text-white leading-tight drop-shadow-2xl">
+      {/* CONTENIDO */}
+      <div className="relative z-10 flex flex-col items-center justify-center px-6">
+        <div className="max-w-3xl mx-auto text-center">
+          {/* ✅ TÍTULO MUCHO MÁS CHICO QUE EL HERO */}
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-semibold text-white leading-snug">
             Llevá tu empresa al siguiente nivel
           </h2>
 
-          <p className="text-xl md:text-2xl lg:text-3xl text-gray-100 mt-8 max-w-3xl mx-auto font-light drop-shadow-lg">
+          {/* ✅ PÁRRAFO DE TAMAÑO NORMAL */}
+          <p className="mt-4 md:mt-5 text-sm md:text-base lg:text-lg text-gray-100 font-light">
             Contanos tu objetivo real y te enviamos propuesta técnica + presupuesto exacto en 48 h.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-6 lg:gap-8 justify-center items-center mt-12 lg:mt-16">
+          {/* ✅ BOTONES COMPACTOS */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-8">
             <button
-              className="btn primary text-2xl lg:text-3xl px-16 lg:px-20 py-7 lg:py-8 shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 font-bold"
+              className="btn primary text-sm md:text-base px-8 md:px-10 py-3 md:py-3.5 font-semibold shadow-xl hover:shadow-2xl"
               id="openModalBottom"
             >
               Hablar ahora
@@ -74,7 +78,7 @@ export default function CTAContacto() {
 
             <a
               href="/login"
-              className="btn text-2xl lg:text-3xl px-14 lg:px-18 py-7 lg:py-8 border-4 border-white hover:bg-white hover:text-black transition-all duration-300 font-bold backdrop-blur-sm"
+              className="btn text-sm md:text-base px-7 md:px-9 py-3 md:py-3.5 border border-white/70 hover:bg-white hover:text-black transition-all duration-200 font-semibold backdrop-blur-sm"
             >
               Login / Panel
             </a>

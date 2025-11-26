@@ -463,3 +463,26 @@ section {
     flex-direction: column;
   }
 }
+.design-section {
+  background: #ffffff;
+}
+
+.problem-section {
+  background: #f8fafc;
+}
+
+.vs-section {
+  background: #ffffff;
+}
+
+.planes-section {
+  background: #f9fafb;
+}
+
+.testimonials-section {
+  background: #ffffff;
+}
+
+.guarantees-section {
+  background: #f8fafc;
+}

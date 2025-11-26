@@ -1,5 +1,3 @@
-/* =============== CSS FINAL - NEUROMIND33 E-COMMERCE 2025 - NEXT.JS COMPATIBLE =============== */
-
 :root {
   --primary: #4f46e5;
   --primary-dark: #312e81;
@@ -11,245 +9,209 @@
   --danger: #ef4444;
   --accent: #f59e0b;
   --accent-dark: #d97706;
+
+  /* DORADOS PREMIUM 2025 */
   --gold: #f5e7c4;
   --gold-soft: #e5d3a3;
+  --gold-glow: #ffd26a;
+  --gold-shine: #fff8e1;
+  --gold-gradient: linear-gradient(125deg, #fffef8 0%, #f5e7c4 25%, #ffd26a 50%, #f5e7c4 75%, #fff8e1 100%);
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+* { margin:0; padding:0; box-sizing:border-box; }
+body { 
+  font-family: 'Inter', sans-serif; 
+  background: #020617; 
+  color: #e5e7eb; 
+  line-height: 1.6; 
+}
+h1,h2,h3,h4,.logo,.cta-button { 
+  font-family: 'Satoshi', sans-serif; 
+  font-weight: 900; 
+}
+.container { 
+  max-width: 1280px; 
+  margin: 0 auto; 
+  padding: 0 1.5rem; 
 }
 
-body {
-  font-family: 'Inter', sans-serif;
-  background: #f1f5f9;
-  color: #0f172a;
-  line-height: 1.6;
-}
-
-.container {
-  max-width: 1120px;
-  margin: 0 auto;
-  padding: 0 1.5rem;
-}
-
-/* ---------------- HERO CON TU IMAGEN ORIGINAL + TÍTULO DORADO QUE BRILLA ENCIMA ---------------- */
+/* ==================== HERO ÉPICO ==================== */
 .hero {
   position: relative;
-  padding: 160px 0 180px;
+  min-height: 100vh;
+  padding: 180px 0 200px;
   text-align: center;
-  color: #fff;
-  background: radial-gradient(circle at top left, #0b1220 0%, #020617 60%);
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(79, 70, 229, 0.18) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(124, 58, 237, 0.18) 0%, transparent 50%),
+    #020617;
   overflow: hidden;
 }
 
-/* TU IMAGEN DE FONDO ORIGINAL (NO LA CAMBIO) */
+/* IMAGEN DE FONDO (subí tu captura a esta ruta) */
 .hero::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: url('/images/ecommerce/heroEcommerce.png') center/cover no-repeat;
-  opacity: 0.65;
-  mix-blend-mode: screen;
+  background: url("/images/hero-ecommerce.jpg") center/cover no-repeat;
+  opacity: 0.75;
+  mix-blend-mode: overlay;
+  z-index: 1;
 }
 
-/* Overlay oscuro para que el texto resalte */
+/* Overlay oscuro elegante */
 .hero::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at center, transparent 30%, rgba(2,6,23,0.9) 100%);
+  background: radial-gradient(circle at center, transparent 30%, rgba(2, 6, 23, 0.98) 100%);
   pointer-events: none;
-  z-index: 1;
+  z-index: 2;
 }
 
+/* Contenido encima */
 .hero-inner {
   position: relative;
-  z-index: 10;
+  z-index: 3;
 }
 
-/* Tag superior */
+/* TAG SUPERIOR */
+.hero-tag {
+  display: inline-block;
+  margin-bottom: 32px;
+}
 .hero-tag span {
   display: inline-flex;
   align-items: center;
-  padding: 8px 20px;
+  gap: 10px;
+  padding: 10px 24px;
   border-radius: 999px;
+  background: rgba(245, 225, 170, 0.15);
   border: 1px solid rgba(245, 225, 170, 0.5);
-  background: rgba(15, 23, 42, 0.8);
-  backdrop-filter: blur(10px);
   color: #f5e7c4;
-  font-size: 0.75rem;
+  font-size: 0.85rem;
   text-transform: uppercase;
-  letter-spacing: 0.2em;
-  margin-bottom: 24px;
+  letter-spacing: 0.25em;
+  backdrop-filter: blur(12px);
 }
 
-/* TÍTULO DORADO QUE BRILLA COMO ORO REAL Y QUEDA ENCIMA DE TODO */
+/* TÍTULO DORADO CON BRILLO DE CINE */
 .hero-title {
-  position: relative;
-  z-index: 30 !important;
-  font-size: 4.6rem !important;
-  font-weight: 900;
+  font-size: clamp(3rem, 9vw, 6.5rem);
   line-height: 1.02;
+  margin-bottom: 28px;
+  font-weight: 900;
   letter-spacing: -0.03em;
-  margin: 0 auto 28px;
-  padding: 0 20px;
-
-  background: linear-gradient(
-    90deg,
-    #b8860b 0%,
-    #ffd700 15%,
-    #fffacd 30%,
-    #fff8dc 50%,
-    #fffacd 70%,
-    #ffd700 85%,
-    #b8860b 100%
-  );
+  
+  background: var(--gold-gradient);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  -webkit-text-fill-color: transparent;
-
+  
   text-shadow: 
-    0 0 20px #fff,
-    0 0 40px #ffd700,
-    0 0 60px #ffd700,
-    0 0 80px #ff8c00,
-    0 0 100px #ff4500,
-    0 0 120px #ff4500,
-    0 0 140px #ff4500,
-    0 0 40px rgba(255,215,0,0.9);
-
-  animation: goldPulse 4s ease-in-out infinite;
+    0 0 40px rgba(255, 210, 106, 0.6),
+    0 0 80px rgba(255, 210, 106, 0.4),
+    0 6px 20px rgba(0, 0, 0, 0.6);
+  
+  animation: goldPulse 8s ease-in-out infinite alternate;
 }
 
 @keyframes goldPulse {
-  0%, 100% { 
-    text-shadow: 
-      0 0 20px #fff,
-      0 0 40px #ffd700,
-      0 0 60px #ffd700,
-      0 0 80px #ff8c00,
-      0 0 100px #ff4500;
-  }
-  50% { 
-    text-shadow: 
-      0 0 30px #fff,
-      0 0 60px #ffd700,
-      0 0 90px #ffd700,
-      0 0 120px #ff8c00,
-      0 0 150px #ff4500,
-      0 0 60px rgba(255,215,0,1);
-  }
+  0% { filter: brightness(1) saturate(1); }
+  100% { filter: brightness(1.2) saturate(1.4); }
 }
 
-/* Destello que cruza el texto (brillo central que se mueve) */
-.hero-title::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6) 50%, transparent);
-  animation: goldShine 10s linear infinite;
-  z-index: 1;
-}
-
-@keyframes goldShine {
-  0% { transform: translateX(-200%); }
-  100% { transform: translateX(200%); }
-}
-
+/* Subtítulo */
 .hero-subtitle {
-  font-size: 1.35rem;
-  max-width: 820px;
-  margin: 0 auto 32px;
-  color: #f0f4f8;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.6);
-  line-height: 1.5;
-  z-index: 10;
-  position: relative;
+  font-size: clamp(1.15rem, 3.5vw, 1.5rem);
+  max-width: 900px;
+  margin: 0 auto 40px;
+  color: #f1f5f9;
+  line-height: 1.55;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
 }
 
+/* Badges */
 .hero-badges {
   display: flex;
   flex-wrap: wrap;
+  gap: 18px;
   justify-content: center;
-  gap: 16px;
-  margin-bottom: 32px;
-  z-index: 10;
-  position: relative;
+  margin: 40px 0;
 }
 
 .payment-badge,
 .local-badge {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  padding: 12px 26px;
+  gap: 12px;
+  padding: 14px 28px;
   border-radius: 999px;
-  font-size: 0.95rem;
-  backdrop-filter: blur(12px);
-  background: rgba(15, 23, 42, 0.7);
-  border: 1px solid rgba(255, 215, 0, 0.4);
-  color: #f5e7c4;
-  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.15);
+  font-size: 1rem;
+  font-weight: 600;
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
 }
 
+.payment-badge {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.25), rgba(34, 197, 94, 0.1));
+  border-color: rgba(34, 197, 94, 0.6);
+  color: #dcfce7;
+}
+
+.local-badge {
+  background: linear-gradient(135deg, rgba(79, 70, 229, 0.25), rgba(79, 70, 229, 0.1));
+  border-color: rgba(79, 70, 229, 0.6);
+  color: #e0e7ff;
+}
+
+/* Botones Hero */
 .hero-buttons {
   display: flex;
   flex-wrap: wrap;
+  gap: 20px;
   justify-content: center;
-  gap: 16px;
-  z-index: 10;
-  position: relative;
+  margin-top: 50px;
 }
 
 .cta-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 16px 36px;
+  gap: 12px;
+  padding: 18px 40px;
   border-radius: 999px;
+  font-weight: 700;
+  font-size: 1.1rem;
   text-decoration: none;
-  font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.4s ease;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
 }
 
 .btn-primary {
-  background: linear-gradient(90deg, #6366f1, #8b5cf6, #a855f7);
+  background: linear-gradient(135deg, #6366f1, #8b5cf6, #a855f7);
   color: white;
-  box-shadow: 0 16px 40px rgba(79, 70, 229, 0.7);
 }
-
 .btn-primary:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 20px 50px rgba(79, 70, 229, 0.8);
+  transform: translateY(-6px);
+  box-shadow: 0 25px 60px rgba(99, 102, 241, 0.6);
 }
 
 .btn-secondary {
-  background: rgba(15, 23, 42, 0.9);
-  color: #e5e7eb;
-  border: 1px solid rgba(148, 163, 184, 0.9);
+  background: rgba(255, 255, 255, 0.12);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(12px);
 }
-
 .btn-secondary:hover {
-  background: rgba(15, 23, 42, 1);
+  background: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.7);
 }
 
-/* RESPONSIVE */
+/* Responsive */
 @media (max-width: 768px) {
-  .hero {
-    padding: 120px 0 140px;
-  }
-  .hero-title {
-    font-size: 3.4rem !important;
-  }
-  .hero-subtitle {
-    font-size: 1.15rem;
-  }
+  .hero { padding: 140px 0 160px; }
+  .hero-badges { flex-direction: column; align-items: center; }
+  .hero-buttons { flex-direction: column; align-items: center; }
 }

@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import './ecommerce.css';
+import '../components/Navbar.tsx'
 
 export default function EcommercePage() {
   useEffect(() => {

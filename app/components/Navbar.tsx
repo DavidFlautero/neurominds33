@@ -35,6 +35,10 @@ export default function Navbar() {
         <nav className="menu desktop" aria-label="Principal">
           <a href="#vision">Visión</a>
           <a href="#servicios">Servicios</a>
+
+          {/* 🔹 Nuevo: link a la landing de E-commerce */}
+          <Link href="/ecommerce">E-commerce</Link>
+
           <a href="#empresas">Empresas</a>
           <a href="#pymes">PYMES</a>
           <a href="#socios">Socios</a>
@@ -72,6 +76,10 @@ export default function Navbar() {
         >
           <a href="#vision">Visión</a>
           <a href="#servicios">Servicios</a>
+
+          {/* 🔹 Nuevo también en móvil */}
+          <Link href="/ecommerce">E-commerce</Link>
+
           <a href="#empresas">Empresas</a>
           <a href="#pymes">PYMES</a>
           <a href="#socios">Socios</a>

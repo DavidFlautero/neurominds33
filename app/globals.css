@@ -918,3 +918,253 @@ body{ padding-bottom: env(safe-area-inset-bottom); }
   padding-top:40px;
   padding-bottom:40px;
 }
+/* ==========================================
+   AJUSTE GLOBAL TIPOGRAFÍA + RITMO DE SECCIONES
+   (pegar AL FINAL del CSS actual)
+   ========================================== */
+
+/* Texto base un poco más grande y cómodo */
+body {
+  font-size: 16px;
+  line-height: 1.7;
+  color: #e5e7eb;
+}
+
+/* -------------------------
+   HERO – claim principal
+   ------------------------- */
+
+.hero .h1,
+.hero h1 {
+  font-size: clamp(2.8rem, 4.8vw, 3.6rem);
+  letter-spacing: -0.05em;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.hero p {
+  font-size: 1rem;
+  line-height: 1.8;
+  max-width: 38rem;
+}
+
+/* Tagline “Estrategia · Software · IA...” */
+.hero small,
+.hero .tagline {
+  display: block;
+  font-size: 0.9rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.8;
+  margin-bottom: 10px;
+}
+
+/* -------------------------
+   TITULARES Y PÁRRAFOS
+   ------------------------- */
+
+/* Títulos de sección */
+.h2 {
+  font-size: clamp(2rem, 3.2vw, 2.6rem); /* ~32–42px */
+  letter-spacing: -0.04em;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+/* Párrafos genéricos en secciones “de papel” */
+section .p,
+.surface .p {
+  font-size: 0.98rem; /* ~15–16px */
+  line-height: 1.8;
+}
+
+/* Subtítulos / texto dentro de tarjetas */
+.card p {
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+/* Listas dentro de secciones de texto (Visión, etc.) */
+.surface ul {
+  margin-top: 10px;
+  padding-left: 1.3rem;
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+/* Eyebrow (“Tecnología inteligente”, etc.) */
+.eyebrow {
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+}
+
+/* -------------------------
+   RITMO VERTICAL DE SECCIONES
+   ------------------------- */
+
+/* Base para TODAS las secciones */
+section {
+  padding: 80px 0;          /* más aire en desktop */
+}
+
+/* Secciones de video / bloques importantes más “altas” */
+#vision,
+.nm-section,
+#socios {
+  padding-top: 96px;
+  padding-bottom: 96px;
+}
+
+/* CTA final un poco más grande también */
+#contacto {
+  padding-top: 72px;
+  padding-bottom: 72px;
+}
+
+/* Ajustes responsivos de padding */
+@media (max-width: 900px) {
+  section {
+    padding: 60px 0;
+  }
+
+  #vision,
+  .nm-section,
+  #socios {
+    padding-top: 72px;
+    padding-bottom: 72px;
+  }
+}
+
+@media (max-width: 640px) {
+  section {
+    padding: 44px 0;
+  }
+
+  #vision,
+  .nm-section,
+  #socios {
+    padding-top: 56px;
+    padding-bottom: 56px;
+  }
+}
+
+/* -------------------------
+   ANCHO Y ALINEACIÓN DEL CONTENIDO
+   ------------------------- */
+
+.wrap,
+.section-inner {
+  max-width: 1120px; /* un toque más angosto que 1200px para lectura */
+}
+
+/* En secciones textuales, que el texto no se pegue a los bordes */
+#vision .wrap,
+.nm-section .wrap,
+#socios .wrap,
+#contacto .wrap {
+  padding-inline: 24px;
+}
+
+/* -------------------------
+   GRIDS – separaciones más limpias
+   ------------------------- */
+
+.grid2 {
+  gap: 32px;
+}
+
+.grid3 {
+  gap: 22px;
+}
+
+/* En móvil, que no se sientan aplastadas las tarjetas */
+@media (max-width: 680px) {
+  .grid2,
+  .grid3 {
+    gap: 18px;
+  }
+}
+
+/* -------------------------
+   BLOQUE AUTOMATIZACIÓN / SERVICIOS
+   ------------------------- */
+
+/* Stack de texto de Automatización más “hero” */
+.nm-stack {
+  max-width: 760px;
+  gap: 16px;
+}
+
+.nm-section .h2 {
+  font-size: clamp(2.1rem, 3.4vw, 2.7rem);
+}
+
+.nm-section .p {
+  font-size: 1rem;
+}
+
+/* Cards de servicios con un poquito más de padding */
+.card {
+  padding: 18px 18px 20px;
+}
+
+/* -------------------------
+   BLOQUE SOCIOS
+   ------------------------- */
+
+#socios .h2 {
+  font-size: clamp(2.1rem, 3.4vw, 2.8rem);
+}
+
+#socios .p {
+  font-size: 1rem;
+}
+
+/* Limitar ancho del texto para que sea cómodo de leer */
+#socios .wrap > .surface,
+#socios .wrap > div {
+  max-width: 880px;
+}
+
+/* -------------------------
+   CTA FINAL
+   ------------------------- */
+
+#contacto .h2 {
+  font-size: clamp(2rem, 3vw, 2.5rem);
+}
+
+#contacto .p {
+  font-size: 0.98rem;
+}
+
+/* Botones de la CTA un poco más grandes */
+#contacto .btn {
+  padding: 11px 20px;
+  font-size: 0.95rem;
+}
+
+/* -------------------------
+   DETALLES DE LEGIBILIDAD
+   ------------------------- */
+
+/* Aumentar contraste de texto sobre videos */
+#vision,
+.nm-section,
+#socios {
+  color: #e5e7eb;
+}
+
+#vision .p,
+.nm-section .p,
+#socios .p {
+  color: rgba(226, 232, 240, 0.96);
+}
+
+/* Evitar que el texto se pegue demasiado al borde del viewport en móvil */
+@media (max-width: 640px) {
+  .wrap,
+  .section-inner {
+    padding-inline: 18px;
+  }
+}

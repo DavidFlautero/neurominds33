@@ -50,14 +50,13 @@ section {
 /* ================= HERO ================= */
 .hero {
   position: relative;
-  padding: 140px 0 160px;
+  padding: 80px 0 140px;  /* ⬅️ antes 140px 0 160px */
   text-align: center;
-
-  /* ⬇️ Tu imagen de HERO encima del fondo general */
   background: url("/images/ecommerce/heroEcommerce.png")
     center top / cover no-repeat;
   background-attachment: fixed;
 }
+
 
 .hero-overlay {
   position: absolute;
@@ -617,3 +616,12 @@ section {
     transform: translateY(-2px);
   }
 }
+/* ====== FORZAR QUE EL HERO USE SU IMAGEN, PASE LO QUE PASE ====== */
+.ecommerce-page .hero {
+  background-image: url("/images/ecommerce/heroEcommerce.png") !important;
+  background-position: center top !important;
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
+  background-attachment: fixed !important;
+}
+

@@ -395,7 +395,7 @@ export default function EcommercePage() {
         </section>
 
         {/* CTA FINAL / CONTACTO */}
-        <section id="contacto" className="cta-section section-compact">
+         <section id="contacto" className="cta-section section-compact">
           <div className="container">
             <div className="cta-section-inner">
               <h2>¿Lista para Recuperar tu Tiempo y Hacer Crecer tu Negocio?</h2>
@@ -406,17 +406,17 @@ export default function EcommercePage() {
               <div className="urgency-elegant">
                 <span>Cerrando agenda diciembre · Nuevos proyectos desde enero</span>
               </div>
-              <a
-                href={getWhatsAppLink(messages.consulta)}
-                target="_blank"
+              <a 
+                href={getWhatsAppLink(messages.consulta)} 
+                target="_blank" 
                 rel="noopener noreferrer"
                 className="cta-button-large cta-premium"
               >
                 <span>Agendar Consulta Gratuita (15 min)</span>
               </a>
-              <a
-                href={getWhatsAppLink(messages.consulta)}
-                target="_blank"
+              <a 
+                href={getWhatsAppLink(messages.consulta)} 
+                target="_blank" 
                 rel="noopener noreferrer"
                 className="whatsapp-cta"
               >

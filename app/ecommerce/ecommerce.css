@@ -1,47 +1,49 @@
 /* ============================================================= */
-/*           CSS COMPLETO - FONDO EN TODA LA PÁGINA 100% VISIBLE  */
+/*           CSS FINAL 100% FUNCIONAL - BRILLOS VISIBLES         */
 /* ============================================================= */
 
 :root {
   --primary: #6366f1;
-  --primary-dark: #1e1b4b;
-  --dark: #020617;
-  --gray: #64748b;
   --success: #10b981;
   --danger: #ef4444;
   --accent: #f97316;
 }
 
-/* ====================== FONDO QUE CUBRE TODO EL SITIO ====================== */
+/* ====================== FONDO DE TODA LA PÁGINA ====================== */
 .ecommerce-page {
   min-height: 100vh;
   background: url("/images/ecommerce/fondotodalapagina.png") center center / cover no-repeat fixed;
-  background-color: #000;           /* fallback negro */
+  background-color: #000;
   color: #e5e7eb;
   position: relative;
 }
 
-/* ====================== HERO (MANTIENE SU IMAGEN PROPIA) ====================== */
+/* ====================== HERO - SOLO LA IMAGEN CON BRILLOS ====================== */
 .hero {
   position: relative;
-  padding: 140px 0 160px;
+  padding: 160px 0 180px;
   text-align: center;
+  min-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  /* TU IMAGEN CON BRILLOS SIN NINGÚN OVERLAY AZUL QUE LA MATE */
   background: url("/images/ecommerce/heroEcommerce.png") center top / cover no-repeat;
   background-attachment: fixed;
 }
 
-/* Transición suave al final del hero */
+/* Sin degradado azul fuerte → solo un toque muy suave al final para unir con el fondo de abajo */
 .hero::after {
   content: '';
   position: absolute;
   bottom: 0; left: 0; right: 0;
-  height: 180px;
-  background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.6));
+  height: 150px;
+  background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.4));
   pointer-events: none;
 }
 
 /* ====================== TODAS LAS SECCIONES TRANSPARENTES ====================== */
-/* Esto es LO MÁS IMPORTANTE: quitamos TODO fondo oscuro que tape la imagen */
 section:not(.hero),
 .container,
 .vs-table,
@@ -56,8 +58,7 @@ section:not(.hero),
   background: transparent !important;
 }
 
-/* ====================== EFECTO VIDRIO ESMERILADO (opcional pero queda brutal) ====================== */
-/* Si querés que las tarjetas se vean modernas pero dejen ver el fondo: */
+/* ====================== EFECTO VIDRIO SUTIL (para que no tape los brillos) ====================== */
 .vs-table,
 .plan-card,
 .testimonial-card,
@@ -65,99 +66,114 @@ section:not(.hero),
 .payment-badge,
 .local-badge,
 .hero-tag span {
-  background: rgba(15, 23, 42, 0.45) !important;   /* muy transparente */
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+  background: rgba(10, 15, 40, 0.35) !important;   /* muy transparente */
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(100, 140, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
 }
 
-/* Tabla comparativa con fondo casi transparente */
 .vs-table {
-  background: rgba(15, 23, 42, 0.38) !important;
-  backdrop-filter: blur(10px);
+  background: rgba(10, 15, 40, 0.3) !important;
 }
 
-/* ====================== RESTO DEL CSS (sin cambios de fondo) ====================== */
+/* ====================== TEXTOS BIEN LEGIBLES SOBRE LOS BRILLOS ====================== */
+.hero-title,
+.section-header h2,
+h3, p, li, td, th {
+  text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+  position: relative;
+  z-index: 2;
+}
+
+/* ====================== RESTO DEL ESTILO (sin fondos que tapen) ====================== */
 .container { max-width: 1120px; margin: 0 auto; padding: 0 1.5rem; }
-section { padding: 96px 0; position: relative; }
+section { padding: 100px 0; position: relative; z-index: 2; }
 
-.hero-inner { position: relative; z-index: 2; }
-
-.hero-tag span {
-  padding: 8px 22px;
-  border-radius: 999px;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-  margin-bottom: 22px;
-}
+.hero-inner { position: relative; z-index: 3; max-width: 900px; margin: 0 auto; }
 
 .hero-title {
-  font-size: clamp(2.7rem, 5vw, 3.8rem);
-  line-height: 1.05;
+  font-size: clamp(2.8rem, 6vw, 4.2rem);
+  font-weight: 900;
+  line-height: 1.1;
+  color: #ffffff;
   margin-bottom: 20px;
-  font-weight: 800;
-  color: #f9fafb;
-  text-shadow: 0 4px 20px rgba(0,0,0,0.8);
 }
 
 .hero-subtitle {
-  font-size: 1.05rem;
-  max-width: 720px;
-  margin: 0 auto 28px;
+  font-size: 1.15rem;
   color: #cbd5e1;
+  max-width: 720px;
+  margin: 0 auto 30px;
 }
 
-.hero-badges { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-bottom: 30px; }
-.payment-badge, .local-badge { padding: 10px 20px; border-radius: 999px; font-size: 0.88rem; }
-
-.hero-buttons { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; margin-top: 8px; }
+.hero-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 18px;
+  margin-top: 20px;
+}
 
 .cta-button {
-  padding: 14px 30px;
+  padding: 16px 36px;
   border-radius: 999px;
   font-weight: 600;
-  font-size: 0.98rem;
   text-decoration: none;
-  transition: all 0.25s ease;
+  transition: all 0.3s ease;
 }
 
 .btn-primary {
   background: linear-gradient(120deg, #6366f1, #8b5cf6);
   color: white;
-  box-shadow: 0 18px 40px rgba(79,70,229,0.55);
+  box-shadow: 0 15px 35px rgba(99, 102, 241, 0.5);
 }
 
-.btn-primary:hover { transform: translateY(-3px); box-shadow: 0 22px 55px rgba(79,70,229,0.75); }
+.btn-primary:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 50px rgba(99, 102, 241, 0.7);
+}
 
-.btn-secondary {
-  background: transparent;
+/* Tabla comparativa */
+.vs-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 30px 0;
+  border-radius: 20px;
+  overflow: hidden;
+  font-size: 0.98rem;
+}
+
+.vs-table th {
+  padding: 18px 22px;
+  text-align: left;
+  color: #e0e7ff;
+  font-weight: 700;
+}
+
+.vs-table td {
+  padding: 16px 22px;
+  border-bottom: 1px solid rgba(100, 140, 255, 0.2);
   color: #e5e7eb;
-  border: 1px solid rgba(148,163,184,0.85);
 }
 
-.btn-secondary:hover { background: rgba(15,23,42,0.75); }
-
-/* Tablas y tarjetas */
-.vs-table { width: 100%; border-collapse: collapse; margin: 24px 0 0; border-radius: 18px; overflow: hidden; font-size: 0.95rem; }
-.vs-table th { padding: 16px 20px; color: #e5e7eb; font-weight: 600; }
-.vs-table td { padding: 14px 20px; border-bottom: 1px solid rgba(100,116,139,0.3); color: #e5e7eb; }
-.vs-table .good { color: var(--success); font-weight: 600; }
+.vs-table .good { color: var(--success); font-weight: 700; }
 .vs-table .bad  { color: var(--danger); }
 
-.plans-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 26px; margin-top: 30px; }
-.plan-card { border-radius: 20px; overflow: hidden; position: relative; display: flex; flex-direction: column; }
-.plan-header { padding: 22px 24px 16px; color: #f9fafb; }
-.fullservice-header { background: linear-gradient(135deg, #f97316, #ea580c); }
-.plan-body { padding: 22px 24px 20px; flex-grow: 1; }
-.plan-features li { display: flex; gap: 8px; color: #e5e7eb; margin-bottom: 8px; }
-.plan-btn { background: linear-gradient(120deg, #6366f1, #8b5cf6); color: white; }
+/* Planes */
+.plans-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 30px;
+  margin-top: 40px;
+}
+
+.plan-card { border-radius: 24px; overflow: hidden; position: relative; }
 
 /* Responsive */
 @media (max-width: 768px) {
   .hero { padding: 120px 0; background-attachment: scroll; }
   .ecommerce-page { background-attachment: scroll; }
-  section { padding: 72px 0; }
+  section { padding: 80px 0; }
   .plans-grid { grid-template-columns: 1fr; }
 }

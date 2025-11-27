@@ -1,139 +1,163 @@
-/* ================= RESET BÁSICO ================= */
+/* ============================================
+   ECOMMERCE LANDING – NEUROMIND33 (LIMPIO)
+   Todo scopeado dentro de .ecommerce-page
+   ============================================ */
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-:root {
-  --primary: #6366f1;
-  --primary-dark: #1e1b4b;
-  --gray: #64748b;
-  --success: #10b981;
-  --danger: #ef4444;
-  --accent: #f97316;
-}
-
-/* ================= FONDO GENERAL ================= */
-
-html,
-body {
-  min-height: 100%;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
-}
-
+/* WRAPPER GLOBAL DE LA LANDING */
 .ecommerce-page {
+  position: relative;
   min-height: 100vh;
-  background: url("/images/ecommerce/fondotodalapagina.png")
-    center top / cover no-repeat fixed;
+  isolation: isolate;
   color: #e5e7eb;
+  font-family: system-ui, -apple-system, sans-serif;
 }
 
-/* Ninguna sección pone su propio fondo sólido */
-.ecommerce-page section {
-  background: transparent;
+/* FONDO AZUL + DESTELLOS PARA TODA LA PÁGINA */
+.ecommerce-page::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    #020617
+    url("/images/ecommerce/fondotodalapagina.png")
+      center top / cover no-repeat;
 }
 
-/* Contenedor general */
-.container {
+/* Evitar que las secciones agarren fondos claros de globals.css */
+.ecommerce-page section,
+.ecommerce-page footer {
+  background: transparent !important;
+}
+
+/* Contenedor genérico */
+.ecommerce-page .container {
   max-width: 1120px;
   margin: 0 auto;
   padding: 0 1.5rem;
 }
 
-section {
+.ecommerce-page section {
   padding: 96px 0;
   position: relative;
 }
 
-/* ================= HERO ================= */
+/* =========================
+   HERO – heroEcommerce.png
+   ========================= */
 
-.hero {
+.ecommerce-page .hero {
   position: relative;
-  padding: 140px 0 160px;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
+  padding: 0 1.5rem;
+  overflow: hidden;
+}
 
-  /* SOLO la imagen de hero encima del fondo general */
+/* Solo la imagen del hero encima del fondo general */
+.ecommerce-page .hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
   background: url("/images/ecommerce/heroEcommerce.png")
     center top / cover no-repeat;
-  background-attachment: fixed;
+  z-index: -1;
 }
 
-.hero-inner {
+/* Suavizar el corte abajo del hero (sin matar los brillos) */
+.ecommerce-page .hero::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 160px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(2, 6, 23, 0.65)
+  );
+  pointer-events: none;
+}
+
+.ecommerce-page .hero-inner {
   position: relative;
   z-index: 1;
+  max-width: 760px;
+  margin: 0 auto;
 }
 
-.hero-tag span {
+/* TAG */
+.ecommerce-page .hero-tag span {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   padding: 8px 22px;
   border-radius: 999px;
   border: 1px solid rgba(148, 163, 184, 0.6);
-  background: rgba(15, 23, 42, 0.75);
+  background: rgba(15, 23, 42, 0.7);
   color: #e5e7eb;
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.18em;
-  margin-bottom: 22px;
+  margin-bottom: 18px;
 }
 
-.hero-title {
+/* TÍTULO HERO */
+.ecommerce-page .hero-title {
   font-size: clamp(2.7rem, 5vw, 3.8rem);
   line-height: 1.05;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
   font-weight: 800;
   letter-spacing: 0.01em;
   color: #f9fafb;
-  text-shadow: 0 18px 40px rgba(0, 0, 0, 0.9);
+  text-shadow: 0 18px 40px rgba(0, 0, 0, 0.95);
 }
 
-.hero-subtitle {
+/* SUBTÍTULO HERO */
+.ecommerce-page .hero-subtitle {
   font-size: 1.05rem;
   max-width: 720px;
-  margin: 0 auto 28px;
-  color: #cbd5e1;
-  text-shadow: 0 10px 30px rgba(0, 0, 0, 0.9);
+  margin: 0 auto 26px;
+  color: #e5e7eb;
+  text-shadow: 0 10px 30px rgba(0, 0, 0, 0.95);
 }
 
-.hero-badges {
+/* BADGES HERO */
+.ecommerce-page .hero-badges {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 12px;
-  margin-bottom: 30px;
+  margin-bottom: 26px;
 }
 
-/* Badges con efecto vidrio */
-.payment-badge,
-.local-badge {
+.ecommerce-page .payment-badge,
+.ecommerce-page .local-badge {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   padding: 10px 20px;
   border-radius: 999px;
   font-size: 0.88rem;
-  color: #e5e7eb;
-
-  background: rgba(10, 15, 40, 0.5);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
+  background: rgba(15, 23, 42, 0.8);
   border: 1px solid rgba(148, 163, 184, 0.6);
+  color: #e5e7eb;
 }
 
-.hero-buttons {
+/* BOTONES HERO */
+.ecommerce-page .hero-buttons {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 16px;
-  margin-top: 8px;
+  gap: 14px;
+  margin-top: 6px;
 }
 
-/* ================= BOTONES ================= */
-
-.cta-button {
+.ecommerce-page .cta-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -144,118 +168,121 @@ section {
   font-size: 0.98rem;
   cursor: pointer;
   border: none;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease,
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease,
     color 0.2s ease;
 }
 
-.btn-primary {
+.ecommerce-page .btn-primary {
   background: linear-gradient(120deg, #6366f1, #8b5cf6);
   color: #ffffff;
   box-shadow: 0 18px 40px rgba(79, 70, 229, 0.55);
 }
 
-.btn-primary:hover {
+.ecommerce-page .btn-primary:hover {
   transform: translateY(-2px);
   box-shadow: 0 22px 55px rgba(79, 70, 229, 0.75);
 }
 
-.btn-secondary {
+.ecommerce-page .btn-secondary {
   background: transparent;
   color: #e5e7eb;
   border: 1px solid rgba(148, 163, 184, 0.85);
 }
 
-.btn-secondary:hover {
+.ecommerce-page .btn-secondary:hover {
   background: rgba(15, 23, 42, 0.75);
 }
 
-/* ================= CABECERAS DE SECCIÓN ================= */
+/* =========================
+   CABECERAS DE SECCIÓN
+   ========================= */
 
-.section-header {
+.ecommerce-page .section-header {
   text-align: center;
   max-width: 760px;
   margin: 0 auto 48px;
 }
 
-.section-header h2 {
+.ecommerce-page .section-header h2 {
   font-size: 2rem;
   margin-bottom: 12px;
   color: #f9fafb;
-  text-shadow: 0 12px 30px rgba(0, 0, 0, 0.7);
+  text-shadow: 0 10px 26px rgba(0, 0, 0, 0.9);
 }
 
-.section-header p {
+.ecommerce-page .section-header p {
   font-size: 1rem;
   color: #cbd5e1;
-  text-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
+  text-shadow: 0 8px 20px rgba(0, 0, 0, 0.85);
 }
 
-/* ================= TABLA VS ================= */
+/* =========================
+   TABLA VS
+   ========================= */
 
-.vs-table {
+.ecommerce-page .vs-table {
   width: 100%;
   border-collapse: collapse;
   margin: 24px 0 0;
-  font-size: 0.95rem;
-
-  background: rgba(10, 15, 40, 0.6);
+  background: rgba(15, 23, 42, 0.92);
   border-radius: 18px;
   overflow: hidden;
-  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border: 1px solid rgba(30, 64, 175, 0.6);
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.7);
+  font-size: 0.95rem;
 }
 
-.vs-table th {
+.ecommerce-page .vs-table th {
   background: rgba(15, 23, 42, 0.98);
   color: #e5e7eb;
   text-align: left;
   padding: 16px 20px;
 }
 
-.vs-table td {
+.ecommerce-page .vs-table td {
   padding: 14px 20px;
   border-bottom: 1px solid rgba(30, 64, 175, 0.55);
   color: #e5e7eb;
 }
 
-.vs-table tr:last-child td {
+.ecommerce-page .vs-table tr:last-child td {
   border-bottom: none;
 }
 
-.vs-table .good {
-  color: var(--success);
+.ecommerce-page .vs-table .good {
+  color: #10b981;
   font-weight: 600;
 }
 
-.vs-table .bad {
-  color: var(--danger);
+.ecommerce-page .vs-table .bad {
+  color: #ef4444;
 }
 
-/* ================= PLANES ================= */
+/* =========================
+   PLANES
+   ========================= */
 
-.plans-grid {
+.ecommerce-page .plans-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 26px;
   margin-top: 30px;
 }
 
-.plan-card {
-  position: relative;
-  background: rgba(10, 15, 40, 0.7);
+.ecommerce-page .plan-card {
+  background: rgba(15, 23, 42, 0.94);
   border-radius: 20px;
-  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.8);
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.7);
   overflow: hidden;
   display: flex;
   flex-direction: column;
   border: 1px solid rgba(30, 64, 175, 0.6);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
+  position: relative;
 }
 
-.plan-header {
+.ecommerce-page .plan-header {
   padding: 22px 24px 16px;
   background: linear-gradient(
     135deg,
@@ -265,31 +292,31 @@ section {
   color: #f9fafb;
 }
 
-.plan-header h3 {
+.ecommerce-page .plan-header h3 {
   font-size: 1.25rem;
   margin-bottom: 6px;
 }
 
-.plan-header p {
+.ecommerce-page .plan-header p {
   font-size: 0.95rem;
   color: #e5e7eb;
 }
 
-.fullservice-header {
+.ecommerce-page .fullservice-header {
   background: linear-gradient(135deg, #f97316, #ea580c);
 }
 
-.plan-body {
+.ecommerce-page .plan-body {
   padding: 22px 24px 20px;
 }
 
-.plan-features {
+.ecommerce-page .plan-features {
   list-style: none;
   padding: 0;
   margin: 0 0 18px;
 }
 
-.plan-features li {
+.ecommerce-page .plan-features li {
   display: flex;
   align-items: flex-start;
   gap: 8px;
@@ -298,16 +325,16 @@ section {
   margin-bottom: 8px;
 }
 
-.plan-features i {
-  color: var(--success);
+.ecommerce-page .plan-features i {
+  color: #10b981;
   margin-top: 3px;
 }
 
-.plan-badge {
+.ecommerce-page .plan-badge {
   position: absolute;
   top: 14px;
   right: 16px;
-  background: var(--success);
+  background: #10b981;
   color: white;
   padding: 6px 14px;
   border-radius: 999px;
@@ -315,7 +342,7 @@ section {
   font-weight: 700;
 }
 
-.ai-badge {
+.ecommerce-page .ai-badge {
   background: #059669;
   color: white;
   padding: 2px 10px;
@@ -324,32 +351,34 @@ section {
   margin-left: 6px;
 }
 
-.plan-btn {
+.ecommerce-page .plan-btn {
   width: 100%;
   text-align: center;
   background: linear-gradient(120deg, #6366f1, #8b5cf6);
   color: white;
 }
 
-.plan-credit-note {
+.ecommerce-page .plan-credit-note {
   text-align: center;
   font-size: 0.9rem;
   color: #cbd5e1;
 }
 
-/* ================= TECNOLOGÍAS ================= */
+/* =========================
+   TECNOLOGÍAS
+   ========================= */
 
-.tech-section {
+.ecommerce-page .tech-section {
   text-align: center;
 }
 
-.tech-text {
+.ecommerce-page .tech-text {
   font-size: 1.02rem;
   margin-bottom: 26px;
   color: #cbd5e1;
 }
 
-.tech-logos {
+.ecommerce-page .tech-logos {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -359,89 +388,91 @@ section {
   margin: 0 auto;
 }
 
-.tech-footnote {
+.ecommerce-page .tech-footnote {
   margin-top: 24px;
   font-size: 0.95rem;
   color: #94a3b8;
 }
 
-/* ================= TESTIMONIOS ================= */
+/* =========================
+   TESTIMONIOS
+   ========================= */
 
-.testimonials-grid {
+.ecommerce-page .testimonials-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 22px;
 }
 
-.testimonial-card {
-  background: rgba(10, 15, 40, 0.7);
+.ecommerce-page .testimonial-card {
+  background: rgba(15, 23, 42, 0.9);
   border-radius: 18px;
   padding: 22px 20px;
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.85);
+  box-shadow: 0 16px 36px rgba(15, 23, 42, 0.7);
   border: 1px solid rgba(30, 64, 175, 0.6);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
 }
 
-.testimonial-card blockquote {
+.ecommerce-page .testimonial-card blockquote {
   font-style: italic;
   font-size: 0.97rem;
   color: #e2e8f0;
   margin-bottom: 12px;
 }
 
-.testimonial-card cite {
+.ecommerce-page .testimonial-card cite {
   font-size: 0.9rem;
   font-weight: 600;
   color: #cbd5e1;
 }
 
-/* ================= GARANTÍAS ================= */
+/* =========================
+   GARANTÍAS
+   ========================= */
 
-.guarantee-grid {
+.ecommerce-page .guarantee-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 22px;
   margin-top: 26px;
 }
 
-.guarantee-item {
-  background: rgba(10, 15, 40, 0.7);
+.ecommerce-page .guarantee-item {
+  background: rgba(15, 23, 42, 0.9);
   border-radius: 18px;
   padding: 24px 20px;
   text-align: center;
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.85);
+  box-shadow: 0 16px 36px rgba(15, 23, 42, 0.75);
   border: 1px solid rgba(30, 64, 175, 0.6);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
 }
 
-.guarantee-item i {
+.ecommerce-page .guarantee-item i {
   font-size: 2.2rem;
-  color: var(--primary);
+  color: #6366f1;
   margin-bottom: 10px;
 }
 
-/* ================= CTA FINAL ================= */
+/* =========================
+   CTA FINAL / CONTACTO
+   ========================= */
 
-.cta-section {
+.ecommerce-page .cta-section {
   text-align: center;
 }
 
-.cta-section h2 {
+.ecommerce-page .cta-section h2 {
   font-size: 2.1rem;
   margin-bottom: 14px;
   color: #f9fafb;
 }
 
-.cta-section p {
+.ecommerce-page .cta-section p {
   font-size: 1.02rem;
   max-width: 720px;
   margin: 0 auto 20px;
   color: #cbd5e1;
 }
 
-.scarcity {
+.ecommerce-page .scarcity {
   display: inline-flex;
   padding: 8px 18px;
   border-radius: 999px;
@@ -452,7 +483,7 @@ section {
   margin-bottom: 20px;
 }
 
-.cta-button-large {
+.ecommerce-page .cta-button-large {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -466,7 +497,7 @@ section {
   margin-bottom: 12px;
 }
 
-.whatsapp-cta {
+.ecommerce-page .whatsapp-cta {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -479,35 +510,36 @@ section {
   gap: 8px;
 }
 
-.cta-badge {
+.ecommerce-page .cta-badge {
   margin-top: 20px;
 }
 
-/* ================= RESPONSIVE ================= */
+/* =========================
+   RESPONSIVE
+   ========================= */
 
 @media (max-width: 768px) {
-  .hero {
-    padding: 120px 0 120px;
-    background-attachment: scroll;
+  .ecommerce-page .hero {
+    padding: 0 1.2rem;
   }
 
-  section {
-    padding: 72px 0;
-  }
-
-  .hero-title {
+  .ecommerce-page .hero-title {
     font-size: 2.3rem;
   }
 
-  .hero-subtitle {
+  .ecommerce-page .hero-subtitle {
     font-size: 0.98rem;
   }
 
-  .plans-grid {
+  .ecommerce-page section {
+    padding: 72px 0;
+  }
+
+  .ecommerce-page .plans-grid {
     grid-template-columns: 1fr;
   }
 
-  .hero-buttons {
+  .ecommerce-page .hero-buttons {
     flex-direction: column;
   }
 }

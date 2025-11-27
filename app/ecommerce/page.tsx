@@ -48,24 +48,6 @@ export default function EcommercePage() {
     };
   }, []);
 
-  // Número de WhatsApp
-  const whatsappNumber = '5491168322437';
-  
-  // Mensajes específicos para cada sección
-  const messages = {
-    hero: 'Hola! Vi tu página de ecommerce y quiero saber más sobre el Sistema Automático. ¿Podemos conversar?',
-    plan1: 'Hola! Me interesa el plan E-commerce Profesional. ¿Podrías darme más información?',
-    plan2: 'Hola! Quiero conocer más sobre el plan E-commerce + App Mobile. ¿Disponible?',
-    plan3: 'Hola! Me interesa el Servicio Integral con Chatbot IA. ¿Podemos agendar una consulta?',
-    consulta: 'Hola! Quiero agendar una consulta gratuita de 15 minutos para mi proyecto.'
-  };
-
-  // Función para generar enlace de WhatsApp
-  const getWhatsAppLink = (message: string) => {
-    const encodedMessage = encodeURIComponent(message);
-    return `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
-  };
-
   return (
     <>
       <Navbar />
@@ -101,12 +83,7 @@ export default function EcommercePage() {
             </div>
 
             <div className="hero-buttons">
-              <a 
-                href={getWhatsAppLink(messages.hero)} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="cta-button btn-primary"
-              >
+              <a href="#planes" className="cta-button btn-primary">
                 Quiero Mi Sistema Automático
               </a>
               <a href="#problema" className="cta-button btn-secondary">
@@ -261,12 +238,7 @@ export default function EcommercePage() {
                       IA 24/7 <span style={{ color: 'var(--gray)' }}>(costo adicional)</span>
                     </li>
                   </ul>
-                  <a 
-                    href={getWhatsAppLink(messages.plan1)} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="cta-button plan-btn"
-                  >
+                  <a href="#contacto" className="cta-button plan-btn">
                     Quiero mi Tienda Web a Medida
                   </a>
                   <div className="plan-credit-note">
@@ -311,12 +283,7 @@ export default function EcommercePage() {
                       IA 24/7 <span style={{ color: 'var(--gray)' }}>(costo adicional)</span>
                     </li>
                   </ul>
-                  <a 
-                    href={getWhatsAppLink(messages.plan2)} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="cta-button plan-btn"
-                  >
+                  <a href="#contacto" className="cta-button plan-btn">
                     Quiero Tienda + App para mi Negocio
                   </a>
                   <div className="plan-credit-note">
@@ -366,12 +333,7 @@ export default function EcommercePage() {
                       1 año + cambios ilimitados
                     </li>
                   </ul>
-                  <a 
-                    href={getWhatsAppLink(messages.plan3)} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="cta-button plan-btn fullservice-btn"
-                  >
+                  <a href="#contacto" className="cta-button plan-btn fullservice-btn">
                     Quiero el Servicio Integral
                   </a>
                   <div className="plan-credit-note">
@@ -444,23 +406,11 @@ export default function EcommercePage() {
                 No esperes más para dar el salto que tu negocio necesita. Agenda una consulta
                 gratuita y descubrí cómo podemos crear juntos el sistema perfecto para tu marca.
               </p>
-              <div className="urgency-elegant">
-                <span>Cerrando agenda diciembre · Nuevos proyectos desde enero</span>
-              </div>
-              <a 
-                href={getWhatsAppLink(messages.consulta)} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="cta-button-large cta-premium"
-              >
-                <span>Agendar Consulta Gratuita (15 min)</span>
+              <div className="scarcity">¡Quedan solo 2 cupos este mes!</div>
+              <a href="#" className="cta-button-large">
+                Agendar Consulta Gratuita Ahora (15 min)
               </a>
-              <a 
-                href={getWhatsAppLink(messages.consulta)} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="whatsapp-cta"
-              >
+              <a href="https://wa.me/541112345678" className="whatsapp-cta">
                 <i className="fab fa-whatsapp" /> Chatear por WhatsApp Ahora
               </a>
               <div className="payment-badge cta-badge">

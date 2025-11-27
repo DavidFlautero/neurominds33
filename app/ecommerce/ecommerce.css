@@ -1,64 +1,48 @@
-/* ============================================================= */
-/*                  CSS COMPLETO - ECOMMERCE LANDING              */
-/*          Fondo hero + fondo completo de página correcto        */
-/* ============================================================= */
+/* ================= RESET BÁSICO ================= */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
 :root {
   --primary: #6366f1;
   --primary-dark: #1e1b4b;
-  --dark: #020617;
   --gray: #64748b;
   --success: #10b981;
   --danger: #ef4444;
   --accent: #f97316;
 }
 
-/* ====================== FONDO GENERAL DE LA PÁGINA ====================== */
-/* Esta es la imagen que cubre TODO el sitio DESDE el final del hero hasta abajo */
+/* ================= FONDO GENERAL ================= */
+
+html,
+body {
+  min-height: 100%;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
+  background-color: #020617; /* fallback oscuro */
+  color: #e5e7eb;
+}
+
+/* MAIN de la landing (asegurate de usar className="ecommerce-page" en <main>) */
 .ecommerce-page {
   min-height: 100vh;
-  background: 
-    url("/images/ecommerce/fondotodalapagina.png") center center / cover no-repeat fixed,
-    #020617;                            /* fallback por si la imagen falla */
+  background: url("/images/ecommerce/fondotodalapagina.png")
+    center top / cover no-repeat fixed;
   color: #e5e7eb;
-  position: relative;
 }
 
-/* ====================== HERO CON IMAGEN PROPIA ====================== */
-/* Solo el hero lleva su propia imagen de fondo */
-.hero {
-  position: relative;
-  padding: 140px 0 160px;
-  text-align: center;
-  
-  /* Imagen exclusiva del hero */
-  background: 
-    url("/images/ecommerce/heroEcommerce.png") center top / cover no-repeat,
-    linear-gradient(rgba(2, 6, 23, 0.88), rgba(2, 6, 23, 0.95));
-  
-  background-attachment: fixed;   /* efecto parallax sutil */
-  z-index: 1;
+/* Ninguna sección pone su propio fondo sólido; todo transparente sobre el fondo */
+.ecommerce-page section {
+  background: transparent;
 }
 
-/* Transición suave entre el hero y el fondo general (queda pro) */
-.hero::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 200px;                              /* altura del degradado */
-  background: linear-gradient(to bottom, transparent, rgba(2, 6, 23, 0.98));
-  pointer-events: none;
-  z-index: 2;
-}
-
-/* ====================== TODAS LAS DEMÁS SECCIONES ====================== */
-/* Importante: que no tengan fondo blanco ni azul sólido → transparentes */
-.ecommerce-page section:not(.hero) {
-  background: transparent !important;
-  position: relative;
-  z-index: 3;
+/* Contenedor general */
+.container {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
 }
 
 section {
@@ -66,17 +50,30 @@ section {
   position: relative;
 }
 
-/* ====================== CONTENEDOR ====================== */
-.container {
-  max-width: 1120px;
-  margin: 0 auto;
-  padding: 0 1.5rem;
+/* ================= HERO ================= */
+
+.hero {
+  position: relative;
+  padding: 140px 0 160px;
+  text-align: center;
+
+  /* SOLO la imagen de hero encima del fondo general */
+  background: url("/images/ecommerce/heroEcommerce.png")
+    center top / cover no-repeat;
+  background-attachment: fixed;
 }
 
-/* ====================== HERO - CONTENIDO ====================== */
+/* Por si sigue existiendo el div .hero-overlay en el JSX, que no moleste */
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: transparent;
+}
+
 .hero-inner {
   position: relative;
-  z-index: 3;
+  z-index: 1;
 }
 
 .hero-tag span {
@@ -101,7 +98,7 @@ section {
   font-weight: 800;
   letter-spacing: 0.01em;
   color: #f9fafb;
-  text-shadow: 0 18px 40px rgba(15, 23, 42, 0.9);
+  text-shadow: 0 18px 40px rgba(0, 0, 0, 0.9);
 }
 
 .hero-subtitle {
@@ -109,6 +106,7 @@ section {
   max-width: 720px;
   margin: 0 auto 28px;
   color: #cbd5e1;
+  text-shadow: 0 10px 30px rgba(0, 0, 0, 0.9);
 }
 
 .hero-badges {
@@ -119,6 +117,7 @@ section {
   margin-bottom: 30px;
 }
 
+/* Badges con efecto vidrio */
 .payment-badge,
 .local-badge {
   display: inline-flex;
@@ -127,10 +126,12 @@ section {
   padding: 10px 20px;
   border-radius: 999px;
   font-size: 0.88rem;
-  backdrop-filter: blur(14px);
-  background: rgba(15, 23, 42, 0.8);
-  border: 1px solid rgba(148, 163, 184, 0.6);
   color: #e5e7eb;
+
+  background: rgba(10, 15, 40, 0.5);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(148, 163, 184, 0.6);
 }
 
 .hero-buttons {
@@ -140,6 +141,8 @@ section {
   gap: 16px;
   margin-top: 8px;
 }
+
+/* ================= BOTONES ================= */
 
 .cta-button {
   display: inline-flex;
@@ -152,7 +155,8 @@ section {
   font-size: 0.98rem;
   cursor: pointer;
   border: none;
-  transition: all 0.25s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease,
+    color 0.2s ease;
 }
 
 .btn-primary {
@@ -162,7 +166,7 @@ section {
 }
 
 .btn-primary:hover {
-  transform: translateY(-3px);
+  transform: translateY(-2px);
   box-shadow: 0 22px 55px rgba(79, 70, 229, 0.75);
 }
 
@@ -176,7 +180,8 @@ section {
   background: rgba(15, 23, 42, 0.75);
 }
 
-/* ====================== CABECERAS DE SECCIÓN ====================== */
+/* ================= CABECERAS DE SECCIÓN ================= */
+
 .section-header {
   text-align: center;
   max-width: 760px;
@@ -187,23 +192,30 @@ section {
   font-size: 2rem;
   margin-bottom: 12px;
   color: #f9fafb;
+  text-shadow: 0 12px 30px rgba(0, 0, 0, 0.7);
 }
 
 .section-header p {
   font-size: 1rem;
   color: #cbd5e1;
+  text-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
 }
 
-/* ====================== TABLA COMPARATIVA ====================== */
+/* ================= TABLA VS ================= */
+
 .vs-table {
   width: 100%;
   border-collapse: collapse;
   margin: 24px 0 0;
-  background: rgba(15, 23, 42, 0.94);
+  font-size: 0.95rem;
+
+  background: rgba(10, 15, 40, 0.6);
   border-radius: 18px;
   overflow: hidden;
-  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.7);
-  font-size: 0.95rem;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(30, 64, 175, 0.6);
 }
 
 .vs-table th {
@@ -211,7 +223,6 @@ section {
   color: #e5e7eb;
   text-align: left;
   padding: 16px 20px;
-  font-weight: 600;
 }
 
 .vs-table td {
@@ -224,10 +235,17 @@ section {
   border-bottom: none;
 }
 
-.vs-table .good { color: var(--success); font-weight: 600; }
-.vs-table .bad  { color: var(--danger); }
+.vs-table .good {
+  color: var(--success);
+  font-weight: 600;
+}
 
-/* ====================== PLANES ====================== */
+.vs-table .bad {
+  color: var(--danger);
+}
+
+/* ================= PLANES ================= */
+
 .plans-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -236,30 +254,45 @@ section {
 }
 
 .plan-card {
-  background: rgba(15, 23, 42, 0.94);
-  border-radius: 20px;
-  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.7);
-  overflow: hidden;
-  border: 1px solid rgba(30, 64, 175, 0.6);
   position: relative;
+  background: rgba(10, 15, 40, 0.7);
+  border-radius: 20px;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.8);
+  overflow: hidden;
   display: flex;
   flex-direction: column;
+  border: 1px solid rgba(30, 64, 175, 0.6);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
 }
 
 .plan-header {
   padding: 22px 24px 16px;
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.98), rgba(30, 64, 175, 0.98));
+  background: linear-gradient(
+    135deg,
+    rgba(15, 23, 42, 0.98),
+    rgba(30, 64, 175, 0.98)
+  );
   color: #f9fafb;
+}
+
+.plan-header h3 {
+  font-size: 1.25rem;
+  margin-bottom: 6px;
+}
+
+.plan-header p {
+  font-size: 0.95rem;
+  color: #e5e7eb;
 }
 
 .fullservice-header {
   background: linear-gradient(135deg, #f97316, #ea580c);
 }
 
-.plan-header h3 { font-size: 1.25rem; margin-bottom: 6px; }
-.plan-header p  { font-size: 0.95rem; color: #e5e7eb; }
-
-.plan-body { padding: 22px 24px 20px; flex-grow: 1; }
+.plan-body {
+  padding: 22px 24px 20px;
+}
 
 .plan-features {
   list-style: none;
@@ -276,7 +309,10 @@ section {
   margin-bottom: 8px;
 }
 
-.plan-features i { color: var(--success); margin-top: 3px; }
+.plan-features i {
+  color: var(--success);
+  margin-top: 3px;
+}
 
 .plan-badge {
   position: absolute;
@@ -288,7 +324,6 @@ section {
   border-radius: 999px;
   font-size: 0.8rem;
   font-weight: 700;
-  z-index: 5;
 }
 
 .ai-badge {
@@ -305,30 +340,58 @@ section {
   text-align: center;
   background: linear-gradient(120deg, #6366f1, #8b5cf6);
   color: white;
-  margin-top: auto;
 }
 
 .plan-credit-note {
   text-align: center;
   font-size: 0.9rem;
   color: #cbd5e1;
-  margin-top: 12px;
 }
 
-/* ====================== TESTIMONIOS, GARANTÍAS, CTA ====================== */
-.testimonials-grid, .guarantee-grid {
+/* ================= TECNOLOGÍAS ================= */
+
+.tech-section {
+  text-align: center;
+}
+
+.tech-text {
+  font-size: 1.02rem;
+  margin-bottom: 26px;
+  color: #cbd5e1;
+}
+
+.tech-logos {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 40px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.tech-footnote {
+  margin-top: 24px;
+  font-size: 0.95rem;
+  color: #94a3b8;
+}
+
+/* ================= TESTIMONIOS ================= */
+
+.testimonials-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 22px;
-  margin-top: 26px;
 }
 
-.testimonial-card, .guarantee-item {
-  background: rgba(15, 23, 42, 0.92);
+.testimonial-card {
+  background: rgba(10, 15, 40, 0.7);
   border-radius: 18px;
   padding: 22px 20px;
-  box-shadow: 0 16px 36px rgba(15, 23, 42, 0.7);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.85);
   border: 1px solid rgba(30, 64, 175, 0.6);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
 }
 
 .testimonial-card blockquote {
@@ -344,13 +407,50 @@ section {
   color: #cbd5e1;
 }
 
-.guarantee-item { text-align: center; }
-.guarantee-item i { font-size: 2.2rem; color: var(--primary); margin-bottom: 10px; }
+/* ================= GARANTÍAS ================= */
 
-/* ====================== CTA FINAL ====================== */
-.cta-section { text-align: center; }
-.cta-section h2 { font-size: 2.1rem; margin-bottom: 14px; color: #f9fafb; }
-.cta-section p { font-size: 1.02rem; max-width: 720px; margin: 0 auto 20px; color: #cbd5e1; }
+.guarantee-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 22px;
+  margin-top: 26px;
+}
+
+.guarantee-item {
+  background: rgba(10, 15, 40, 0.7);
+  border-radius: 18px;
+  padding: 24px 20px;
+  text-align: center;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.85);
+  border: 1px solid rgba(30, 64, 175, 0.6);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.guarantee-item i {
+  font-size: 2.2rem;
+  color: var(--primary);
+  margin-bottom: 10px;
+}
+
+/* ================= CTA FINAL ================= */
+
+.cta-section {
+  text-align: center;
+}
+
+.cta-section h2 {
+  font-size: 2.1rem;
+  margin-bottom: 14px;
+  color: #f9fafb;
+}
+
+.cta-section p {
+  font-size: 1.02rem;
+  max-width: 720px;
+  margin: 0 auto 20px;
+  color: #cbd5e1;
+}
 
 .scarcity {
   display: inline-flex;
@@ -363,42 +463,62 @@ section {
   margin-bottom: 20px;
 }
 
-.cta-button-large, .whatsapp-cta {
+.cta-button-large {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 16px 32px;
+  padding: 16px 30px;
   border-radius: 999px;
+  background: linear-gradient(120deg, #6366f1, #8b5cf6);
+  color: white;
   font-weight: 600;
   text-decoration: none;
-  margin: 0 8px 12px;
+  margin-right: 12px;
+  margin-bottom: 12px;
 }
 
-.cta-button-large { background: linear-gradient(120deg, #6366f1, #8b5cf6); color: white; }
-.whatsapp-cta { background: #22c55e; color: white; gap: 8px; }
+.whatsapp-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 24px;
+  border-radius: 999px;
+  background: #22c55e;
+  color: white;
+  font-weight: 500;
+  text-decoration: none;
+  gap: 8px;
+}
 
-/* ====================== RESPONSIVE ====================== */
+.cta-badge {
+  margin-top: 20px;
+}
+
+/* ================= RESPONSIVE ================= */
+
 @media (max-width: 768px) {
   .hero {
-    padding: 120px 0;
-    background-attachment: scroll;   /* fixed a veces rompe en móviles */
-  }
-  
-  .hero-title { font-size: 2.5rem; }
-  .hero-buttons { flex-direction: column; align-items: center; }
-  
-  section { padding: 72px 0; }
-  
-  .plans-grid { grid-template-columns: 1fr; }
-  
-  /* Aseguramos que el fondo general también funcione bien en móvil */
-  .ecommerce-page {
+    padding: 120px 0 120px;
     background-attachment: scroll;
   }
-}
 
-@media (max-width: 480px) {
-  .hero-title { font-size: 2.2rem; }
-  .vs-table { font-size: 0.88rem; }
-  .vs-table th, .vs-table td { padding: 12px 14px; }
+  section {
+    padding: 72px 0;
+  }
+
+  .hero-title {
+    font-size: 2.3rem;
+  }
+
+  .hero-subtitle {
+    font-size: 0.98rem;
+  }
+
+  .plans-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+  }
 }

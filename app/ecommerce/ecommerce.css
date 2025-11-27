@@ -522,3 +522,15 @@ section {
     flex-direction: column;
   }
 }
+
+/* ====== FORZAR QUE EL HERO USE SU PROPIA IMAGEN ====== */
+
+.ecommerce-page {
+  background: url("/images/ecommerce/fondotodalapagina.png")
+    center top / cover no-repeat fixed;
+}
+
+.ecommerce-page .hero {
+  background: url("/images/ecommerce/heroEcommerce.png")
+    center top / cover no-repeat fixed !important;
+}

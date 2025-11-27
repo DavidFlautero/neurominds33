@@ -23,12 +23,15 @@ body {
   color: #e5e7eb;
 }
 
+/* Fondo de estrellas para toda la landing */
 .ecommerce-page {
   min-height: 100vh;
-  background: url("/images/ecommerce/fondotodalapagina.png") center center / cover no-repeat fixed !important;
+  background: url("/images/ecommerce/fondotodalapagina.png")
+    center center / cover no-repeat fixed !important;
   color: #e5e7eb;
 }
 
+/* Secciones transparentes sobre el fondo */
 .ecommerce-page section {
   background: transparent;
 }
@@ -49,7 +52,11 @@ section {
   position: relative;
   padding: 140px 0 160px;
   text-align: center;
-  background: transparent !important;
+
+  /* ⬇️ Tu imagen de HERO encima del fondo general */
+  background: url("/images/ecommerce/heroEcommerce.png")
+    center top / cover no-repeat;
+  background-attachment: fixed;
 }
 
 .hero-overlay {
@@ -79,17 +86,15 @@ section {
   margin-bottom: 22px;
 }
 
+/* ⬇️ Volvemos al estilo de letras que tenías antes */
 .hero-title {
-  font-size: clamp(3.5rem, 8vw, 6.5rem) !important;
+  font-size: clamp(2.7rem, 5vw, 3.8rem);
   line-height: 1.05;
   margin-bottom: 20px;
-  font-weight: 900 !important;
-  letter-spacing: 0.02em;
-  background: linear-gradient(135deg, #a5b4fc, #6366f1, #4f46e5) !important;
-  -webkit-background-clip: text !important;
-  background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
-  text-align: center !important;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  color: #f9fafb;
+  text-align: center;
   text-shadow: 0 18px 40px rgba(0, 0, 0, 0.9);
 }
 
@@ -149,14 +154,14 @@ section {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #6366f1, #4f46e5) !important;
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
   color: #ffffff;
-  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.4) !important;
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.4);
 }
 
 .btn-primary:hover {
-  transform: translateY(-2px) !important;
-  box-shadow: 0 6px 20px rgba(79, 70, 229, 0.6) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(79, 70, 229, 0.6);
 }
 
 .btn-secondary {
@@ -171,40 +176,40 @@ section {
 
 /* ================= CTA PREMIUM ================= */
 .cta-premium {
-  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%) !important;
-  border: 1px solid rgba(99, 102, 241, 0.3) !important;
-  box-shadow: 0 8px 32px rgba(99, 102, 241, 0.25) !important;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-  font-weight: 600 !important;
-  letter-spacing: 0.5px !important;
-  color: white !important;
-  text-decoration: none !important;
-  border-radius: 12px !important;
-  padding: 16px 32px !important;
-  font-size: 1.1rem !important;
-  position: relative !important;
-  overflow: hidden !important;
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  box-shadow: 0 8px 32px rgba(99, 102, 241, 0.25);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: white;
+  text-decoration: none;
+  border-radius: 12px;
+  padding: 16px 32px;
+  font-size: 1.1rem;
+  position: relative;
+  overflow: hidden;
 }
 
 .cta-premium:hover {
-  transform: translateY(-2px) !important;
-  box-shadow: 0 12px 40px rgba(99, 102, 241, 0.4) !important;
-  border-color: rgba(99, 102, 241, 0.5) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(99, 102, 241, 0.4);
+  border-color: rgba(99, 102, 241, 0.5);
 }
 
 .urgency-elegant {
-  background: rgba(99, 102, 241, 0.08) !important;
-  border: 1px solid rgba(99, 102, 241, 0.2) !important;
-  color: #c7d2fe !important;
-  padding: 10px 20px !important;
-  border-radius: 8px !important;
-  font-size: 0.9rem !important;
-  font-weight: 500 !important;
-  backdrop-filter: blur(12px) !important;
-  -webkit-backdrop-filter: blur(12px) !important;
-  letter-spacing: 0.3px !important;
-  margin-bottom: 20px !important;
-  display: inline-block !important;
+  background: rgba(99, 102, 241, 0.08);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  color: #c7d2fe;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  letter-spacing: 0.3px;
+  margin-bottom: 20px;
+  display: inline-block;
 }
 
 /* ================= CABECERAS DE SECCIÓN ================= */
@@ -233,12 +238,12 @@ section {
   max-width: 900px;
   margin: 0 auto;
   padding: 32px 40px;
-  background: rgba(15,23,42,0.55) !important;
+  background: rgba(15, 23, 42, 0.55);
   border-radius: 20px;
-  border: 1px solid rgba(99,102,241,0.25) !important;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.4) !important;
-  backdrop-filter: blur(20px) !important;
-  -webkit-backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 
 .section-card .section-header {
@@ -265,13 +270,13 @@ section {
   border-collapse: collapse;
   margin: 24px 0 0;
   font-size: 0.95rem;
-  background: rgba(15,23,42,0.55) !important;
+  background: rgba(15, 23, 42, 0.55);
   border-radius: 18px;
   overflow: hidden;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.4) !important;
-  backdrop-filter: blur(20px) !important;
-  -webkit-backdrop-filter: blur(20px) !important;
-  border: 1px solid rgba(99,102,241,0.25) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(99, 102, 241, 0.25);
 }
 
 .vs-table th {
@@ -310,22 +315,22 @@ section {
 
 .plan-card {
   position: relative;
-  background: rgba(15,23,42,0.55) !important;
+  background: rgba(15, 23, 42, 0.55);
   border-radius: 20px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.4) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  border: 1px solid rgba(99,102,241,0.25) !important;
-  backdrop-filter: blur(20px) !important;
-  -webkit-backdrop-filter: blur(20px) !important;
-  transition: all 0.3s ease !important;
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  transition: all 0.3s ease;
 }
 
 .plan-card:hover {
-  transform: translateY(-5px) !important;
-  box-shadow: 0 12px 28px rgba(99,102,241,0.3) !important;
-  border-color: rgba(99,102,241,0.5) !important;
+  transform: translateY(-5px);
+  box-shadow: 0 12px 28px rgba(99, 102, 241, 0.3);
+  border-color: rgba(99, 102, 241, 0.5);
 }
 
 .plan-header {
@@ -400,7 +405,7 @@ section {
 .plan-btn {
   width: 100%;
   text-align: center;
-  background: linear-gradient(135deg, #6366f1, #4f46e5) !important;
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
   color: white;
 }
 
@@ -445,13 +450,13 @@ section {
 }
 
 .testimonial-card {
-  background: rgba(15,23,42,0.55) !important;
+  background: rgba(15, 23, 42, 0.55);
   border-radius: 18px;
   padding: 22px 20px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.4) !important;
-  border: 1px solid rgba(99,102,241,0.25) !important;
-  backdrop-filter: blur(20px) !important;
-  -webkit-backdrop-filter: blur(20px) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 
 .testimonial-card blockquote {
@@ -476,14 +481,14 @@ section {
 }
 
 .guarantee-item {
-  background: rgba(15,23,42,0.55) !important;
+  background: rgba(15, 23, 42, 0.55);
   border-radius: 18px;
   padding: 24px 20px;
   text-align: center;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.4) !important;
-  border: 1px solid rgba(99,102,241,0.25) !important;
-  backdrop-filter: blur(20px) !important;
-  -webkit-backdrop-filter: blur(20px) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 
 .guarantee-item i {
@@ -501,12 +506,12 @@ section {
   max-width: 960px;
   margin: 0 auto;
   padding: 32px 40px;
-  background: rgba(15,23,42,0.55) !important;
+  background: rgba(15, 23, 42, 0.55);
   border-radius: 24px;
-  backdrop-filter: blur(20px) !important;
-  -webkit-backdrop-filter: blur(20px) !important;
-  border: 1px solid rgba(99,102,241,0.25) !important;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.4) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
 }
 
 .cta-section h2 {
@@ -539,20 +544,20 @@ section {
   justify-content: center;
   padding: 16px 32px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #6366f1, #4f46e5) !important;
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
   color: white;
   font-weight: 600;
   text-decoration: none;
   margin-right: 12px;
   margin-bottom: 12px;
   border: none;
-  box-shadow: 0 4px 14px rgba(99,102,241,0.4) !important;
-  transition: all 0.3s ease !important;
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);
+  transition: all 0.3s ease;
 }
 
 .cta-button-large:hover {
-  transform: translateY(-2px) !important;
-  box-shadow: 0 6px 20px rgba(99,102,241,0.6) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.6);
 }
 
 .whatsapp-cta {
@@ -576,6 +581,7 @@ section {
 @media (max-width: 768px) {
   .hero {
     padding: 120px 0 120px;
+    background-attachment: scroll;
   }
 
   section {
@@ -587,7 +593,7 @@ section {
   }
 
   .hero-title {
-    font-size: clamp(2.5rem, 8vw, 4rem) !important;
+    font-size: clamp(2.3rem, 8vw, 3.4rem);
   }
 
   .hero-subtitle {
@@ -606,8 +612,8 @@ section {
   .cta-section-inner {
     padding: 24px 20px;
   }
-  
+
   .plan-card:hover {
-    transform: translateY(-2px) !important;
+    transform: translateY(-2px);
   }
 }

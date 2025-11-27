@@ -364,21 +364,6 @@ export default function EcommercePage() {
           </div>
         </section>
 
-        {/* TESTIMONIOS */}
-        <section id="testimonios" className="section-compact">
-          <div className="container">
-            <div className="section-card">
-              <div className="section-header">
-                <h2>Lo que Dicen Nuestros Clientes</h2>
-                <p>5.0 en Google basado en 167 opiniones – Más de 450 proyectos realizados.</p>
-              </div>
-              <div className="testimonials-grid">
-                {/* testimonial-card... */}
-              </div>
-            </div>
-          </div>
-        </section>
-
         {/* GARANTÍAS */}
         <section className="section-compact">
           <div className="container">

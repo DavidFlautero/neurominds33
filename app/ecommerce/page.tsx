@@ -56,7 +56,7 @@ export default function EcommercePage() {
       <main className="ecommerce-page">
         {/* HERO */}
         <section className="hero">
-          {/* si querés, podés borrar este div; ahora es transparente en CSS */}
+          {/* overlay transparente (se controla en CSS) */}
           <div className="hero-overlay" />
           <div className="container hero-inner">
             <div className="hero-tag">
@@ -348,29 +348,33 @@ export default function EcommercePage() {
         {/* TECNOLOGÍAS */}
         <section className="tech-section section-compact">
           <div className="container">
-            <p className="tech-text">
-              Trabajamos con las mejores tecnologías del mercado para entregarte un sistema
-              sólido, rápido y 100% adaptado a tu negocio.
-            </p>
-            <div className="tech-logos">
-              {/* tus logos aquí */}
+            <div className="section-card">
+              <p className="tech-text">
+                Trabajamos con las mejores tecnologías del mercado para entregarte un sistema
+                sólido, rápido y 100% adaptado a tu negocio.
+              </p>
+              <div className="tech-logos">
+                {/* tus logos aquí */}
+              </div>
+              <p className="tech-footnote">
+                Usamos la combinación perfecta según tu proyecto. Vos no tenés que entender nada
+                técnico.
+              </p>
             </div>
-            <p className="tech-footnote">
-              Usamos la combinación perfecta según tu proyecto. Vos no tenés que entender nada
-              técnico.
-            </p>
           </div>
         </section>
 
         {/* TESTIMONIOS */}
-        <section id="testimonios">
+        <section id="testimonios" className="section-compact">
           <div className="container">
-            <div className="section-header">
-              <h2>Lo que Dicen Nuestros Clientes</h2>
-              <p>5.0 en Google basado en 167 opiniones – Más de 450 proyectos realizados.</p>
-            </div>
-            <div className="testimonials-grid">
-              {/* cards de testimonios... */}
+            <div className="section-card">
+              <div className="section-header">
+                <h2>Lo que Dicen Nuestros Clientes</h2>
+                <p>5.0 en Google basado en 167 opiniones – Más de 450 proyectos realizados.</p>
+              </div>
+              <div className="testimonials-grid">
+                {/* testimonial-card... */}
+              </div>
             </div>
           </div>
         </section>
@@ -378,15 +382,17 @@ export default function EcommercePage() {
         {/* GARANTÍAS */}
         <section className="section-compact">
           <div className="container">
-            <div className="section-header">
-              <h2>Invertí con Confianza Total</h2>
-              <p>
-                Garantía de 2 meses en todos los planes – No entregamos hasta que apruebes cada
-                detalle.
-              </p>
-            </div>
-            <div className="guarantee-grid">
-              {/* guarantee items... */}
+            <div className="section-card">
+              <div className="section-header">
+                <h2>Invertí con Confianza Total</h2>
+                <p>
+                  Garantía de 2 meses en todos los planes – No entregamos hasta que apruebes cada
+                  detalle.
+                </p>
+              </div>
+              <div className="guarantee-grid">
+                {/* guarantee-item... */}
+              </div>
             </div>
           </div>
         </section>

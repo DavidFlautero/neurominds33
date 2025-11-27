@@ -1,179 +1,134 @@
 /* ============================================================= */
-/*           CSS FINAL 100% FUNCIONAL - BRILLOS VISIBLES         */
+/*          CSS FINAL 100% LIMPIO - SOLO TUS IMÁGENES            */
 /* ============================================================= */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 :root {
   --primary: #6366f1;
   --success: #10b981;
   --danger: #ef4444;
-  --accent: #f97316;
 }
 
-/* ====================== FONDO DE TODA LA PÁGINA ====================== */
-.ecommerce-page {
+/* ====================== FONDO DE TODA LA PÁGINA (INCLUIDO FOOTER) ====================== */
+html, body, .ecommerce-page {
   min-height: 100vh;
   background: url("/images/ecommerce/fondotodalapagina.png") center center / cover no-repeat fixed;
   background-color: #000;
   color: #e5e7eb;
-  position: relative;
+  font-family: system-ui, -apple-system, sans-serif;
 }
 
-/* ====================== HERO - SOLO LA IMAGEN CON BRILLOS ====================== */
+/* ====================== HERO - SOLO TU IMAGEN CON BRILLOS ====================== */
 .hero {
-  position: relative;
-  padding: 160px 0 180px;
-  text-align: center;
-  min-height: 90vh;
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  
-  /* TU IMAGEN CON BRILLOS SIN NINGÚN OVERLAY AZUL QUE LA MATE */
+  text-align: center;
+  padding: 0 20px;
   background: url("/images/ecommerce/heroEcommerce.png") center top / cover no-repeat;
   background-attachment: fixed;
+  position: relative;
 }
 
-/* Sin degradado azul fuerte → solo un toque muy suave al final para unir con el fondo de abajo */
+/* Transición suave al final del hero */
 .hero::after {
   content: '';
   position: absolute;
   bottom: 0; left: 0; right: 0;
-  height: 150px;
-  background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.4));
+  height: 200px;
+  background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.3));
   pointer-events: none;
 }
 
-/* ====================== TODAS LAS SECCIONES TRANSPARENTES ====================== */
-section:not(.hero),
-.container,
-.vs-table,
-.plan-card,
-.testimonial-card,
-.guarantee-item,
-.payment-badge,
-.local-badge,
-.hero-tag span,
-.section-header,
-.cta-section {
+/* ====================== TODAS LAS SECCIONES Y ELEMENTOS 100% TRANSPARENTES ====================== */
+section, .container, header, footer, 
+.vs-table, .plan-card, .testimonial-card, 
+.payment-badge, .local-badge, .hero-tag span {
   background: transparent !important;
 }
 
-/* ====================== EFECTO VIDRIO SUTIL (para que no tape los brillos) ====================== */
-.vs-table,
-.plan-card,
-.testimonial-card,
-.guarantee-item,
-.payment-badge,
-.local-badge,
-.hero-tag span {
-  background: rgba(10, 15, 40, 0.35) !important;   /* muy transparente */
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(100, 140, 255, 0.2);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+/* Efecto vidrio sutil para que se vea lindo pero NO tape los brillos */
+.vs-table, .plan-card, .testimonial-card, .guarantee-item,
+.payment-badge, .local-badge, .hero-tag span, footer {
+  background: rgba(10, 15, 40, 0.25) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(100, 140, 255, 0.15);
+  border-radius: 16px;
 }
 
-.vs-table {
-  background: rgba(10, 15, 40, 0.3) !important;
+/* Footer también con fondo transparente y tu imagen visible */
+footer {
+  padding: 60px 20px 30px;
+  text-align: center;
+  margin-top: 100px;
+  background: transparent !important;
 }
 
-/* ====================== TEXTOS BIEN LEGIBLES SOBRE LOS BRILLOS ====================== */
-.hero-title,
-.section-header h2,
-h3, p, li, td, th {
-  text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+/* ====================== TEXTOS LEGIBLES SOBRE LOS BRILLOS ====================== */
+h1, h2, h3, h4, p, li, td, th, span {
+  text-shadow: 0 2px 8px rgba(0,0,0,0.9);
   position: relative;
   z-index: 2;
 }
 
-/* ====================== RESTO DEL ESTILO (sin fondos que tapen) ====================== */
-.container { max-width: 1120px; margin: 0 auto; padding: 0 1.5rem; }
-section { padding: 100px 0; position: relative; z-index: 2; }
-
-.hero-inner { position: relative; z-index: 3; max-width: 900px; margin: 0 auto; }
-
 .hero-title {
-  font-size: clamp(2.8rem, 6vw, 4.2rem);
+  font-size: clamp(3rem, 8vw, 5rem);
   font-weight: 900;
-  line-height: 1.1;
-  color: #ffffff;
+  color: white;
   margin-bottom: 20px;
 }
 
-.hero-subtitle {
-  font-size: 1.15rem;
-  color: #cbd5e1;
-  max-width: 720px;
-  margin: 0 auto 30px;
-}
-
-.hero-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 18px;
-  margin-top: 20px;
-}
-
-.cta-button {
-  padding: 16px 36px;
-  border-radius: 999px;
-  font-weight: 600;
-  text-decoration: none;
-  transition: all 0.3s ease;
-}
-
+/* ====================== BOTONES ====================== */
 .btn-primary {
   background: linear-gradient(120deg, #6366f1, #8b5cf6);
   color: white;
-  box-shadow: 0 15px 35px rgba(99, 102, 241, 0.5);
+  padding: 16px 36px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 600;
+  display: inline-block;
+  box-shadow: 0 15px 35px rgba(99,102,241,0.4);
+  transition: all 0.3s;
 }
 
 .btn-primary:hover {
   transform: translateY(-4px);
-  box-shadow: 0 20px 50px rgba(99, 102, 241, 0.7);
+  box-shadow: 0 20px 50px rgba(99,102,241,0.6);
 }
 
-/* Tabla comparativa */
+/* ====================== TABLA Y TARJETAS ====================== */
 .vs-table {
   width: 100%;
-  border-collapse: collapse;
-  margin: 30px 0;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 40px 0;
   border-radius: 20px;
   overflow: hidden;
-  font-size: 0.98rem;
+}
+
+.vs-table th, .vs-table td {
+  padding: 18px 22px;
+  text-align: left;
 }
 
 .vs-table th {
-  padding: 18px 22px;
-  text-align: left;
-  color: #e0e7ff;
+  color: #c3dafe;
   font-weight: 700;
 }
 
-.vs-table td {
-  padding: 16px 22px;
-  border-bottom: 1px solid rgba(100, 140, 255, 0.2);
-  color: #e5e7eb;
-}
+.vs-table .good { color: #34d399; font-weight: bold; }
+.vs-table .bad  { color: #f87171; }
 
-.vs-table .good { color: var(--success); font-weight: 700; }
-.vs-table .bad  { color: var(--danger); }
-
-/* Planes */
-.plans-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-  gap: 30px;
-  margin-top: 40px;
-}
-
-.plan-card { border-radius: 24px; overflow: hidden; position: relative; }
-
-/* Responsive */
+/* ====================== RESPONSIVE ====================== */
 @media (max-width: 768px) {
-  .hero { padding: 120px 0; background-attachment: scroll; }
-  .ecommerce-page { background-attachment: scroll; }
-  section { padding: 80px 0; }
-  .plans-grid { grid-template-columns: 1fr; }
+  .hero { background-attachment: scroll; }
+  html, body, .ecommerce-page { background-attachment: scroll; }
+}
+
+/* ====================== ELIMINA CUALQUIER FONDO AZUL RESIDUAL ====================== */
+* {
+  background-color: transparent !important;
 }

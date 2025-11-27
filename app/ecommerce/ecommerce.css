@@ -1,5 +1,4 @@
 /* ================= RESET BÁSICO ================= */
-
 * {
   margin: 0;
   padding: 0;
@@ -16,29 +15,24 @@
 }
 
 /* ================= FONDO GENERAL ================= */
-
 html,
 body {
   min-height: 100%;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
-  background-color: #020617; /* fallback oscuro */
+  background-color: #020617;
   color: #e5e7eb;
 }
 
-/* MAIN de la landing (usar className="ecommerce-page" en <main>) */
 .ecommerce-page {
   min-height: 100vh;
-  background: url("/images/ecommerce/fondotodalapagina.png")
-    center top / cover no-repeat fixed;
+  background: url("/images/ecommerce/fondotodalapagina.png") center center / cover no-repeat fixed !important;
   color: #e5e7eb;
 }
 
-/* Ninguna sección pone su propio fondo sólido; todo transparente sobre el fondo */
 .ecommerce-page section {
   background: transparent;
 }
 
-/* Contenedor general */
 .container {
   max-width: 1120px;
   margin: 0 auto;
@@ -51,25 +45,13 @@ section {
 }
 
 /* ================= HERO ================= */
-
 .hero {
   position: relative;
   padding: 140px 0 160px;
   text-align: center;
-
-  /* SOLO la imagen de hero encima del fondo general */
-  background: url("/images/ecommerce/heroEcommerce.png")
-    center top / cover no-repeat;
-  background-attachment: fixed;
+  background: transparent !important;
 }
 
-/* Forzar que el hero SIEMPRE use su propia imagen dentro de ecommerce-page */
-.ecommerce-page .hero {
-  background: url("/images/ecommerce/heroEcommerce.png")
-    center top / cover no-repeat fixed !important;
-}
-
-/* Por si sigue existiendo el div .hero-overlay en el JSX, que no moleste */
 .hero-overlay {
   position: absolute;
   inset: 0;
@@ -98,12 +80,16 @@ section {
 }
 
 .hero-title {
-  font-size: clamp(2.7rem, 5vw, 3.8rem);
+  font-size: clamp(3.5rem, 8vw, 6.5rem) !important;
   line-height: 1.05;
   margin-bottom: 20px;
-  font-weight: 800;
+  font-weight: 900 !important;
   letter-spacing: 0.02em;
-  color: #f9fafb;
+  background: linear-gradient(135deg, #a5b4fc, #6366f1, #4f46e5) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  text-align: center !important;
   text-shadow: 0 18px 40px rgba(0, 0, 0, 0.9);
 }
 
@@ -123,7 +109,6 @@ section {
   margin-bottom: 30px;
 }
 
-/* Badges con efecto vidrio */
 .payment-badge,
 .local-badge {
   display: inline-flex;
@@ -133,7 +118,6 @@ section {
   border-radius: 999px;
   font-size: 0.88rem;
   color: #e5e7eb;
-
   background: rgba(10, 15, 40, 0.5);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
@@ -149,7 +133,6 @@ section {
 }
 
 /* ================= BOTONES ================= */
-
 .cta-button {
   display: inline-flex;
   align-items: center;
@@ -166,14 +149,14 @@ section {
 }
 
 .btn-primary {
-  background: linear-gradient(120deg, #6366f1, #8b5cf6);
+  background: linear-gradient(135deg, #6366f1, #4f46e5) !important;
   color: #ffffff;
-  box-shadow: 0 18px 40px rgba(79, 70, 229, 0.55);
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.4) !important;
 }
 
 .btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 22px 55px rgba(79, 70, 229, 0.75);
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(79, 70, 229, 0.6) !important;
 }
 
 .btn-secondary {
@@ -186,8 +169,45 @@ section {
   background: rgba(15, 23, 42, 0.75);
 }
 
-/* ================= CABECERAS DE SECCIÓN ================= */
+/* ================= CTA PREMIUM ================= */
+.cta-premium {
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%) !important;
+  border: 1px solid rgba(99, 102, 241, 0.3) !important;
+  box-shadow: 0 8px 32px rgba(99, 102, 241, 0.25) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.5px !important;
+  color: white !important;
+  text-decoration: none !important;
+  border-radius: 12px !important;
+  padding: 16px 32px !important;
+  font-size: 1.1rem !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
 
+.cta-premium:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 12px 40px rgba(99, 102, 241, 0.4) !important;
+  border-color: rgba(99, 102, 241, 0.5) !important;
+}
+
+.urgency-elegant {
+  background: rgba(99, 102, 241, 0.08) !important;
+  border: 1px solid rgba(99, 102, 241, 0.2) !important;
+  color: #c7d2fe !important;
+  padding: 10px 20px !important;
+  border-radius: 8px !important;
+  font-size: 0.9rem !important;
+  font-weight: 500 !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  letter-spacing: 0.3px !important;
+  margin-bottom: 20px !important;
+  display: inline-block !important;
+}
+
+/* ================= CABECERAS DE SECCIÓN ================= */
 .section-header {
   text-align: center;
   max-width: 760px;
@@ -209,18 +229,16 @@ section {
 }
 
 /* ================= SECTION CARD & COMPACT ================= */
-
-/* Tarjeta de vidrio para textos sueltos (Diseños, ¿Te sentís...? etc.) */
 .section-card {
   max-width: 900px;
   margin: 0 auto;
   padding: 32px 40px;
-  background: rgba(10, 15, 40, 0.72);
+  background: rgba(15,23,42,0.55) !important;
   border-radius: 20px;
-  border: 1px solid rgba(99, 102, 241, 0.35);
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.9);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(99,102,241,0.25) !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
 }
 
 .section-card .section-header {
@@ -237,26 +255,23 @@ section {
   line-height: 1.55;
 }
 
-/* Secciones que tienen poco texto → menos padding vertical */
 .section-compact {
   padding: 64px 0;
 }
 
 /* ================= TABLA VS ================= */
-
 .vs-table {
   width: 100%;
   border-collapse: collapse;
   margin: 24px 0 0;
   font-size: 0.95rem;
-
-  background: rgba(10, 15, 40, 0.6);
+  background: rgba(15,23,42,0.55) !important;
   border-radius: 18px;
   overflow: hidden;
-  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border: 1px solid rgba(30, 64, 175, 0.6);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(99,102,241,0.25) !important;
 }
 
 .vs-table th {
@@ -286,7 +301,6 @@ section {
 }
 
 /* ================= PLANES ================= */
-
 .plans-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -296,15 +310,22 @@ section {
 
 .plan-card {
   position: relative;
-  background: rgba(10, 15, 40, 0.7);
+  background: rgba(15,23,42,0.55) !important;
   border-radius: 20px;
-  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.8);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4) !important;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  border: 1px solid rgba(30, 64, 175, 0.6);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(99,102,241,0.25) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  transition: all 0.3s ease !important;
+}
+
+.plan-card:hover {
+  transform: translateY(-5px) !important;
+  box-shadow: 0 12px 28px rgba(99,102,241,0.3) !important;
+  border-color: rgba(99,102,241,0.5) !important;
 }
 
 .plan-header {
@@ -379,7 +400,7 @@ section {
 .plan-btn {
   width: 100%;
   text-align: center;
-  background: linear-gradient(120deg, #6366f1, #8b5cf6);
+  background: linear-gradient(135deg, #6366f1, #4f46e5) !important;
   color: white;
 }
 
@@ -390,7 +411,6 @@ section {
 }
 
 /* ================= TECNOLOGÍAS ================= */
-
 .tech-section {
   text-align: center;
 }
@@ -418,7 +438,6 @@ section {
 }
 
 /* ================= TESTIMONIOS ================= */
-
 .testimonials-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -426,13 +445,13 @@ section {
 }
 
 .testimonial-card {
-  background: rgba(10, 15, 40, 0.7);
+  background: rgba(15,23,42,0.55) !important;
   border-radius: 18px;
   padding: 22px 20px;
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.85);
-  border: 1px solid rgba(30, 64, 175, 0.6);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4) !important;
+  border: 1px solid rgba(99,102,241,0.25) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
 }
 
 .testimonial-card blockquote {
@@ -449,7 +468,6 @@ section {
 }
 
 /* ================= GARANTÍAS ================= */
-
 .guarantee-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -458,14 +476,14 @@ section {
 }
 
 .guarantee-item {
-  background: rgba(10, 15, 40, 0.7);
+  background: rgba(15,23,42,0.55) !important;
   border-radius: 18px;
   padding: 24px 20px;
   text-align: center;
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.85);
-  border: 1px solid rgba(30, 64, 175, 0.6);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4) !important;
+  border: 1px solid rgba(99,102,241,0.25) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
 }
 
 .guarantee-item i {
@@ -475,22 +493,20 @@ section {
 }
 
 /* ================= CTA FINAL ================= */
-
 .cta-section {
   text-align: center;
 }
 
-/* Card vidrio para el bloque CTA final */
 .cta-section-inner {
   max-width: 960px;
   margin: 0 auto;
   padding: 32px 40px;
-  background: rgba(10, 15, 40, 0.8);
+  background: rgba(15,23,42,0.55) !important;
   border-radius: 24px;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(99, 102, 241, 0.35);
-  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(99,102,241,0.25) !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4) !important;
 }
 
 .cta-section h2 {
@@ -521,14 +537,22 @@ section {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 16px 30px;
-  border-radius: 999px;
-  background: linear-gradient(120deg, #6366f1, #8b5cf6);
+  padding: 16px 32px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #6366f1, #4f46e5) !important;
   color: white;
   font-weight: 600;
   text-decoration: none;
   margin-right: 12px;
   margin-bottom: 12px;
+  border: none;
+  box-shadow: 0 4px 14px rgba(99,102,241,0.4) !important;
+  transition: all 0.3s ease !important;
+}
+
+.cta-button-large:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(99,102,241,0.6) !important;
 }
 
 .whatsapp-cta {
@@ -549,11 +573,9 @@ section {
 }
 
 /* ================= RESPONSIVE ================= */
-
 @media (max-width: 768px) {
   .hero {
     padding: 120px 0 120px;
-    background-attachment: scroll;
   }
 
   section {
@@ -565,7 +587,7 @@ section {
   }
 
   .hero-title {
-    font-size: 2.3rem;
+    font-size: clamp(2.5rem, 8vw, 4rem) !important;
   }
 
   .hero-subtitle {
@@ -584,93 +606,8 @@ section {
   .cta-section-inner {
     padding: 24px 20px;
   }
-}
-/* ================= MEJORAS DEFINITIVAS - PEGAR AL FINAL ================= */
-
-/* 1. FONDO ESTRELLAS MEJORADO */
-html, body, .ecommerce-page {
-  background: url("/images/ecommerce/fondotodalapagina.png") center center / cover no-repeat fixed !important;
-  background-color: #000 !important;
-  min-height: 100vh !important;
-}
-
-.hero {
-  background: transparent !important;
-}
-
-/* 2. GLASSMORPHISM FUERTE EN PLANES Y TARJETAS */
-.plan-card, .testimonial-card, .guarantee-item, .section-card, .cta-section-inner {
-  background: rgba(15,23,42,0.55) !important;
-  backdrop-filter: blur(22px) !important;
-  -webkit-backdrop-filter: blur(22px) !important;
-  border: 1px solid rgba(99,102,241,0.35) !important;
-  box-shadow: 0 15px 40px rgba(0,0,0,0.6) !important;
-}
-
-/* 3. TÍTULO HERO CON GRADIENTE BRILLANTE */
-.hero-title {
-  font-size: clamp(3.5rem,8vw,6.5rem) !important;
-  font-weight: 900 !important;
-  background: linear-gradient(135deg,#c3dafe,#818cf8,#6366f1,#a855f7) !important;
-  -webkit-background-clip: text !important;
-  background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
-  text-align: center !important;
-  line-height: 1.1 !important;
-  margin-bottom: 1rem !important;
-}
-
-/* 4. HOVER LIFT + GLOW EN PLANES */
-.plan-card {
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
-}
-
-.plan-card:hover {
-  transform: translateY(-10px) scale(1.02) !important;
-  box-shadow: 0 25px 60px rgba(99,102,241,0.5) !important;
-  border-color: rgba(168,85,247,0.8) !important;
-}
-
-/* 5. SCARCITY PULSANTE MEJORADO */
-.scarcity {
-  animation: scarcityPulse 2s infinite !important;
-  background: linear-gradient(45deg, #dc2626, #ef4444, #dc2626) !important;
-  border: none !important;
-  box-shadow: 0 0 30px rgba(220,38,38,0.7) !important;
-}
-
-@keyframes scarcityPulse {
-  0%, 100% { 
-    transform: scale(1);
-    box-shadow: 0 0 20px rgba(220, 38, 38, 0.7);
-  }
-  50% { 
-    transform: scale(1.05);
-    box-shadow: 0 0 40px rgba(220, 38, 38, 0.9);
-  }
-}
-
-/* 6. BOTONES CTA MEJORADOS */
-.cta-button-large, .btn-primary {
-  background: linear-gradient(135deg, #6366f1, #8b5cf6, #a855f7) !important;
-  border: none !important;
-  position: relative !important;
-  overflow: hidden !important;
-  transition: all 0.3s ease !important;
-}
-
-.cta-button-large:hover, .btn-primary:hover {
-  transform: translateY(-2px) !important;
-  box-shadow: 0 15px 40px rgba(99,102,241,0.6) !important;
-}
-
-/* 7. RESPONSIVE PARA NUEVOS ESTILOS */
-@media (max-width: 768px) {
-  .hero-title {
-    font-size: clamp(2.5rem, 8vw, 4rem) !important;
-  }
   
   .plan-card:hover {
-    transform: translateY(-5px) scale(1.01) !important;
+    transform: translateY(-2px) !important;
   }
 }

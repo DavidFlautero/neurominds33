@@ -52,11 +52,11 @@ export default function EcommercePage() {
     <>
       <Navbar />
 
-      {/* 👇 IMPORTANTE: clase ecommerce-page para que tome el fondo global */}
+      {/* MAIN con fondo global de estrellas */}
       <main className="ecommerce-page">
         {/* HERO */}
         <section className="hero">
-          {/* si querés, podés borrar este div */}
+          {/* si querés, podés borrar este div; ahora es transparente en CSS */}
           <div className="hero-overlay" />
           <div className="container hero-inner">
             <div className="hero-tag">
@@ -94,32 +94,36 @@ export default function EcommercePage() {
         </section>
 
         {/* DISEÑO EXCLUSIVO */}
-        <section id="diseno">
+        <section id="diseno" className="section-compact">
           <div className="container">
-            <div className="section-header">
-              <h2>Diseños 100% Exclusivos y Únicos para Tu Marca</h2>
-              <p>
-                No usamos plantillas genéricas. Cada proyecto es creado desde cero, con
-                experiencia optimizada para móviles y navegabilidad intuitiva.
-              </p>
+            <div className="section-card">
+              <div className="section-header">
+                <h2>Diseños 100% Exclusivos y Únicos para Tu Marca</h2>
+                <p>
+                  No usamos plantillas genéricas. Cada proyecto es creado desde cero, con
+                  experiencia optimizada para móviles y navegabilidad intuitiva.
+                </p>
+              </div>
             </div>
           </div>
         </section>
 
         {/* PROBLEMA */}
-        <section id="problema">
+        <section id="problema" className="section-compact">
           <div className="container">
-            <div className="section-header">
-              <h2>¿Te Sentís Identificada con Esto?</h2>
-              <p>
-                El caos de WhatsApp, Instagram como rehén, ventas limitadas... No es tu culpa.
-              </p>
+            <div className="section-card">
+              <div className="section-header">
+                <h2>¿Te Sentís Identificada con Esto?</h2>
+                <p>
+                  El caos de WhatsApp, Instagram como rehén, ventas limitadas... No es tu culpa.
+                </p>
+              </div>
             </div>
           </div>
         </section>
 
         {/* POR QUÉ NOSOTROS vs COMPETENCIA */}
-        <section id="vs">
+        <section id="vs" className="section-compact">
           <div className="container">
             <div className="section-header">
               <h2>Por Qué Elegirnos vs Tiendanube, Mercado Shops o Plantillas Baratas</h2>
@@ -318,10 +322,10 @@ export default function EcommercePage() {
                       inscripción Google Console + Pixel
                     </li>
                     <li>
-                      <i className="fas fa-robot" />{" "}
+                      <i className="fas fa-robot" />{' '}
                       <strong>
                         Chatbot IA 24/7 con WhatsApp + Instagram INCLUIDO
-                      </strong>{" "}
+                      </strong>{' '}
                       <span className="ai-badge">+38% ventas promedio</span>
                     </li>
                     <li>
@@ -342,7 +346,7 @@ export default function EcommercePage() {
         </section>
 
         {/* TECNOLOGÍAS */}
-        <section className="tech-section">
+        <section className="tech-section section-compact">
           <div className="container">
             <p className="tech-text">
               Trabajamos con las mejores tecnologías del mercado para entregarte un sistema
@@ -372,7 +376,7 @@ export default function EcommercePage() {
         </section>
 
         {/* GARANTÍAS */}
-        <section>
+        <section className="section-compact">
           <div className="container">
             <div className="section-header">
               <h2>Invertí con Confianza Total</h2>
@@ -388,23 +392,25 @@ export default function EcommercePage() {
         </section>
 
         {/* CTA FINAL / CONTACTO */}
-        <section id="contacto" className="cta-section">
+        <section id="contacto" className="cta-section section-compact">
           <div className="container">
-            <h2>¿Lista para Recuperar tu Tiempo y Hacer Crecer tu Negocio?</h2>
-            <p>
-              No esperes más para dar el salto que tu negocio necesita. Agenda una consulta
-              gratuita y descubrí cómo podemos crear juntos el sistema perfecto para tu marca.
-            </p>
-            <div className="scarcity">¡Quedan solo 2 cupos este mes!</div>
-            <a href="#" className="cta-button-large">
-              Agendar Consulta Gratuita Ahora (15 min)
-            </a>
-            <a href="https://wa.me/541112345678" className="whatsapp-cta">
-              <i className="fab fa-whatsapp" /> Chatear por WhatsApp Ahora
-            </a>
-            <div className="payment-badge cta-badge">
-              <i className="fas fa-credit-card" /> Pagá en{" "}
-              <strong>3 cuotas sin interés</strong> con tarjeta de crédito
+            <div className="cta-section-inner">
+              <h2>¿Lista para Recuperar tu Tiempo y Hacer Crecer tu Negocio?</h2>
+              <p>
+                No esperes más para dar el salto que tu negocio necesita. Agenda una consulta
+                gratuita y descubrí cómo podemos crear juntos el sistema perfecto para tu marca.
+              </p>
+              <div className="scarcity">¡Quedan solo 2 cupos este mes!</div>
+              <a href="#" className="cta-button-large">
+                Agendar Consulta Gratuita Ahora (15 min)
+              </a>
+              <a href="https://wa.me/541112345678" className="whatsapp-cta">
+                <i className="fab fa-whatsapp" /> Chatear por WhatsApp Ahora
+              </a>
+              <div className="payment-badge cta-badge">
+                <i className="fas fa-credit-card" /> Pagá en{' '}
+                <strong>3 cuotas sin interés</strong> con tarjeta de crédito
+              </div>
             </div>
           </div>
         </section>

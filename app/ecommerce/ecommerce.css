@@ -25,7 +25,7 @@ body {
   color: #e5e7eb;
 }
 
-/* MAIN de la landing (asegurate de usar className="ecommerce-page" en <main>) */
+/* MAIN de la landing (usar className="ecommerce-page" en <main>) */
 .ecommerce-page {
   min-height: 100vh;
   background: url("/images/ecommerce/fondotodalapagina.png")
@@ -63,6 +63,12 @@ section {
   background-attachment: fixed;
 }
 
+/* Forzar que el hero SIEMPRE use su propia imagen dentro de ecommerce-page */
+.ecommerce-page .hero {
+  background: url("/images/ecommerce/heroEcommerce.png")
+    center top / cover no-repeat fixed !important;
+}
+
 /* Por si sigue existiendo el div .hero-overlay en el JSX, que no moleste */
 .hero-overlay {
   position: absolute;
@@ -96,7 +102,7 @@ section {
   line-height: 1.05;
   margin-bottom: 20px;
   font-weight: 800;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.02em;
   color: #f9fafb;
   text-shadow: 0 18px 40px rgba(0, 0, 0, 0.9);
 }
@@ -192,6 +198,7 @@ section {
   font-size: 2rem;
   margin-bottom: 12px;
   color: #f9fafb;
+  letter-spacing: 0.02em;
   text-shadow: 0 12px 30px rgba(0, 0, 0, 0.7);
 }
 
@@ -199,6 +206,40 @@ section {
   font-size: 1rem;
   color: #cbd5e1;
   text-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
+}
+
+/* ================= SECTION CARD & COMPACT ================= */
+
+/* Tarjeta de vidrio para textos sueltos (Diseños, ¿Te sentís...? etc.) */
+.section-card {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 32px 40px;
+  background: rgba(10, 15, 40, 0.72);
+  border-radius: 20px;
+  border: 1px solid rgba(99, 102, 241, 0.35);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.section-card .section-header {
+  margin-bottom: 0;
+}
+
+.section-card .section-header h2 {
+  margin-bottom: 10px;
+  font-size: 1.9rem;
+}
+
+.section-card .section-header p {
+  font-size: 1rem;
+  line-height: 1.55;
+}
+
+/* Secciones que tienen poco texto → menos padding vertical */
+.section-compact {
+  padding: 64px 0;
 }
 
 /* ================= TABLA VS ================= */
@@ -439,6 +480,19 @@ section {
   text-align: center;
 }
 
+/* Card vidrio para el bloque CTA final */
+.cta-section-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 32px 40px;
+  background: rgba(10, 15, 40, 0.8);
+  border-radius: 24px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(99, 102, 241, 0.35);
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.9);
+}
+
 .cta-section h2 {
   font-size: 2.1rem;
   margin-bottom: 14px;
@@ -506,6 +560,10 @@ section {
     padding: 72px 0;
   }
 
+  .section-compact {
+    padding: 48px 0;
+  }
+
   .hero-title {
     font-size: 2.3rem;
   }
@@ -521,16 +579,9 @@ section {
   .hero-buttons {
     flex-direction: column;
   }
-}
 
-/* ====== FORZAR QUE EL HERO USE SU PROPIA IMAGEN ====== */
-
-.ecommerce-page {
-  background: url("/images/ecommerce/fondotodalapagina.png")
-    center top / cover no-repeat fixed;
-}
-
-.ecommerce-page .hero {
-  background: url("/images/ecommerce/heroEcommerce.png")
-    center top / cover no-repeat fixed !important;
+  .section-card,
+  .cta-section-inner {
+    padding: 24px 20px;
+  }
 }

@@ -585,3 +585,92 @@ section {
     padding: 24px 20px;
   }
 }
+/* ================= MEJORAS DEFINITIVAS - PEGAR AL FINAL ================= */
+
+/* 1. FONDO ESTRELLAS MEJORADO */
+html, body, .ecommerce-page {
+  background: url("/images/ecommerce/fondotodalapagina.png") center center / cover no-repeat fixed !important;
+  background-color: #000 !important;
+  min-height: 100vh !important;
+}
+
+.hero {
+  background: transparent !important;
+}
+
+/* 2. GLASSMORPHISM FUERTE EN PLANES Y TARJETAS */
+.plan-card, .testimonial-card, .guarantee-item, .section-card, .cta-section-inner {
+  background: rgba(15,23,42,0.55) !important;
+  backdrop-filter: blur(22px) !important;
+  -webkit-backdrop-filter: blur(22px) !important;
+  border: 1px solid rgba(99,102,241,0.35) !important;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.6) !important;
+}
+
+/* 3. TÍTULO HERO CON GRADIENTE BRILLANTE */
+.hero-title {
+  font-size: clamp(3.5rem,8vw,6.5rem) !important;
+  font-weight: 900 !important;
+  background: linear-gradient(135deg,#c3dafe,#818cf8,#6366f1,#a855f7) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  text-align: center !important;
+  line-height: 1.1 !important;
+  margin-bottom: 1rem !important;
+}
+
+/* 4. HOVER LIFT + GLOW EN PLANES */
+.plan-card {
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+}
+
+.plan-card:hover {
+  transform: translateY(-10px) scale(1.02) !important;
+  box-shadow: 0 25px 60px rgba(99,102,241,0.5) !important;
+  border-color: rgba(168,85,247,0.8) !important;
+}
+
+/* 5. SCARCITY PULSANTE MEJORADO */
+.scarcity {
+  animation: scarcityPulse 2s infinite !important;
+  background: linear-gradient(45deg, #dc2626, #ef4444, #dc2626) !important;
+  border: none !important;
+  box-shadow: 0 0 30px rgba(220,38,38,0.7) !important;
+}
+
+@keyframes scarcityPulse {
+  0%, 100% { 
+    transform: scale(1);
+    box-shadow: 0 0 20px rgba(220, 38, 38, 0.7);
+  }
+  50% { 
+    transform: scale(1.05);
+    box-shadow: 0 0 40px rgba(220, 38, 38, 0.9);
+  }
+}
+
+/* 6. BOTONES CTA MEJORADOS */
+.cta-button-large, .btn-primary {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6, #a855f7) !important;
+  border: none !important;
+  position: relative !important;
+  overflow: hidden !important;
+  transition: all 0.3s ease !important;
+}
+
+.cta-button-large:hover, .btn-primary:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 15px 40px rgba(99,102,241,0.6) !important;
+}
+
+/* 7. RESPONSIVE PARA NUEVOS ESTILOS */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: clamp(2.5rem, 8vw, 4rem) !important;
+  }
+  
+  .plan-card:hover {
+    transform: translateY(-5px) scale(1.01) !important;
+  }
+}

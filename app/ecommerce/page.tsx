@@ -383,7 +383,7 @@ export default function EcommercePage() {
         </section>
 
         {/* CTA FINAL / CONTACTO */}
-        <section id="contacto" className="cta-section section-compact">
+           <section id="contacto" className="cta-section section-compact">
           <div className="container">
             <div className="cta-section-inner">
               <h2>¿Lista para Recuperar tu Tiempo y Hacer Crecer tu Negocio?</h2>
@@ -391,11 +391,23 @@ export default function EcommercePage() {
                 No esperes más para dar el salto que tu negocio necesita. Agenda una consulta
                 gratuita y descubrí cómo podemos crear juntos el sistema perfecto para tu marca.
               </p>
-              <div className="scarcity">¡Quedan solo 2 cupos este mes!</div>
-              <a href="#" className="cta-button-large">
-                Agendar Consulta Gratuita Ahora (15 min)
+              <div className="urgency-elegant">
+                <span>Cerrando agenda diciembre · Nuevos proyectos desde enero</span>
+              </div>
+              <a 
+                href={getWhatsAppLink(messages.consulta)} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="cta-button-large cta-premium"
+              >
+                <span>Agendar Consulta Gratuita (15 min)</span>
               </a>
-              <a href="https://wa.me/541112345678" className="whatsapp-cta">
+              <a 
+                href={getWhatsAppLink(messages.consulta)} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="whatsapp-cta"
+              >
                 <i className="fab fa-whatsapp" /> Chatear por WhatsApp Ahora
               </a>
               <div className="payment-badge cta-badge">

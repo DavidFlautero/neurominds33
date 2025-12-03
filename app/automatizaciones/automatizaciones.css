@@ -75,7 +75,7 @@ section {
   pointer-events: none;
   z-index: 1;
   background: radial-gradient(circle at 20% 0, rgba(0, 0, 0, 0.35), transparent 50%),
-              rgba(0, 0, 0, 0.65);
+              rgba(0, 0, 0, 0.25);
 }
 
 /* CONTENIDO DEL HERO */

@@ -8,7 +8,7 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
 /* ====== WHATSAPP HELPERS ====== */
-const WHATSAPP_NUMBER = '541112345678'; // 👈 cambiá esto por tu número real
+const WHATSAPP_NUMBER = '541168322437'; // 👈 cambiá esto por tu número real
 
 const messages = {
   consulta:

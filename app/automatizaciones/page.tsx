@@ -8,7 +8,7 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
 /* ====== WHATSAPP HELPERS ====== */
-const WHATSAPP_NUMBER = '541168322437'; // mismo número
+const WHATSAPP_NUMBER = '541168322437';
 
 const messages = {
   consulta:
@@ -22,7 +22,7 @@ function getWhatsAppLink(message: string) {
 export default function AutomatizacionesPage() {
   useEffect(() => {
     // Smooth scrolling para anchors internos
-    const anchors = document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]');
+    const anchors = document.querySelectorAll('a[href^="#"]');
     const onClick = (e: Event) => {
       const target = e.currentTarget as HTMLAnchorElement;
       const href = target.getAttribute('href');
@@ -46,12 +46,13 @@ export default function AutomatizacionesPage() {
     });
 
     document
-      .querySelectorAll<HTMLElement>('.plan-card, .solution-card, .guarantee-item')
+      .querySelectorAll('.plan-card, .solution-card, .guarantee-item')
       .forEach((el) => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(20px)';
-        el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-        observer.observe(el);
+        const element = el as HTMLElement;
+        element.style.opacity = '0';
+        element.style.transform = 'translateY(20px)';
+        element.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(element);
       });
 
     return () => {
@@ -64,7 +65,6 @@ export default function AutomatizacionesPage() {
     <>
       <Navbar />
 
-      {/* MAIN con fondo global de estrellas o el que uses */}
       <main className="automation-page">
         {/* HERO */}
         <section className="hero">
@@ -74,9 +74,7 @@ export default function AutomatizacionesPage() {
               <span>NEUROMIND33 · SOLUCIONES CON AUTOMATIZACIÓN</span>
             </div>
 
-            <h1 className="hero-title">
-              Hacemos que Tu Casa y Tu Empresa Trabajen Solas
-            </h1>
+            <h1 className="hero-title">Hacemos que Tu Casa y Tu Empresa Trabajen Solas</h1>
 
             <p className="hero-subtitle">
               Integramos domótica, software e inteligencia artificial para automatizar tareas,
@@ -86,8 +84,7 @@ export default function AutomatizacionesPage() {
 
             <div className="hero-badges">
               <div className="payment-badge">
-                <i className="fas fa-bolt" /> Proyectos{' '}
-                <strong>diseñados a medida</strong> según tu realidad
+                <i className="fas fa-bolt" /> Proyectos <strong>diseñados a medida</strong>
               </div>
               <div className="local-badge">
                 <i className="fas fa-map-marker-alt" /> Pensado para PYMES, comercios y hogares
@@ -177,8 +174,8 @@ export default function AutomatizacionesPage() {
                 <div className="solution-item">
                   <h3>Luces, Cartelería y Energía Automática</h3>
                   <p>
-                    Encendido y apagado automático según horarios, sensores o presencia.
-                    Ahorro energético sin que nadie tenga que acordarse de apagar nada.
+                    Encendido y apagado automático según horarios, sensores o presencia. Ahorro
+                    energético sin que nadie tenga que acordarse de apagar nada.
                   </p>
                 </div>
                 <div className="solution-item">
@@ -276,7 +273,7 @@ export default function AutomatizacionesPage() {
           </div>
         </section>
 
-        {/* POR QUÉ NEUROMIND33 VS HACER TODO A MANO / MUCHOS PROVEEDORES */}
+        {/* POR QUÉ NEUROMIND33 VS MUCHOS PROVEEDORES */}
         <section id="vs" className="section-compact">
           <div className="container">
             <div className="section-header">
@@ -382,4 +379,198 @@ export default function AutomatizacionesPage() {
                     Quiero Automatizar Mi Casa
                   </a>
                   <div className="plan-credit-note">
-                    <i className="fas fa-info-circle" /> Proyecto a medid
+                    <i className="fas fa-info-circle" /> Proyecto a medida según tu espacio
+                  </div>
+                </div>
+              </div>
+
+              {/* Plan 2 - Negocio Inteligente */}
+              <div className="plan-card popular">
+                <div className="plan-badge">MÁS ELEGIDO</div>
+                <div className="plan-header">
+                  <h3>Pack Negocio Inteligente</h3>
+                  <p>Automatización física + digital para tu local o PYME</p>
+                </div>
+                <div className="plan-body">
+                  <ul className="plan-features">
+                    <li>
+                      <i className="fas fa-check" /> Todo lo del Pack Hogar Inteligente adaptado
+                      a entorno comercial
+                    </li>
+                    <li>
+                      <i className="fas fa-check" /> Control de luces, cartelería y energía por
+                      horarios o sensores
+                    </li>
+                    <li>
+                      <i className="fas fa-check" /> Control de accesos con QR / tarjetas y
+                      cámaras integradas
+                    </li>
+                    <li>
+                      <i className="fas fa-check" /> Panel web con estado del local en tiempo
+                      real
+                    </li>
+                    <li>
+                      <i className="fas fa-check" /> Bot de WhatsApp para consultas repetitivas
+                      y captación de leads
+                    </li>
+                    <li>
+                      <i className="fas fa-check" /> Reporte mensual con mejoras sugeridas
+                    </li>
+                  </ul>
+                  <a href="#contacto" className="cta-button plan-btn">
+                    Quiero un Negocio Inteligente
+                  </a>
+                  <div className="plan-credit-note">
+                    <i className="fas fa-info-circle" /> Ideal para comercios, gimnasios, salones
+                    y oficinas
+                  </div>
+                </div>
+              </div>
+
+              {/* Plan 3 - Empresa Automatizada */}
+              <div className="plan-card fullservice">
+                <div className="plan-header fullservice-header">
+                  <h3>Pack Empresa Automatizada</h3>
+                  <p>Diseñamos la arquitectura completa de automatización para tu empresa</p>
+                </div>
+                <div className="plan-body">
+                  <ul className="plan-features">
+                    <li>
+                      <i className="fas fa-check" /> Todo lo del Pack Negocio Inteligente
+                    </li>
+                    <li>
+                      <i className="fas fa-check" /> Automatización de procesos internos y
+                      tareas repetitivas
+                    </li>
+                    <li>
+                      <i className="fas fa-check" /> Paneles de control con métricas clave y
+                      alertas inteligentes
+                    </li>
+                    <li>
+                      <i className="fas fa-check" /> Integración con sistemas existentes (CRM,
+                      ERP, e-commerce)
+                    </li>
+                    <li>
+                      <i className="fas fa-check" /> Bots y flujos de trabajo automáticos para
+                      equipos administrativos
+                    </li>
+                    <li>
+                      <i className="fas fa-robot" />{' '}
+                      <strong>
+                        IA aplicada a cámaras, datos y procesos para anticipar problemas
+                      </strong>
+                    </li>
+                    <li>
+                      <i className="fas fa-check" /> Acompañamiento estratégico y roadmap de
+                      evolución
+                    </li>
+                  </ul>
+                  <a href="#contacto" className="cta-button plan-btn fullservice-btn">
+                    Quiero Automatizar Mi Empresa
+                  </a>
+                  <div className="plan-credit-note">
+                    <i className="fas fa-info-circle" /> Proyectos de alto impacto y largo plazo
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* TECNOLOGÍAS */}
+        <section className="tech-section section-compact">
+          <div className="container">
+            <div className="section-card">
+              <p className="tech-text">
+                Combinamos hardware certificado, software a medida e inteligencia artificial
+                para crear sistemas realmente inteligentes y confiables.
+              </p>
+              <div className="tech-logos">
+                {/* logos aquí si querés */}
+              </div>
+              <p className="tech-footnote">
+                Vos no tenés que entender nada técnico. Nosotros diseñamos la arquitectura y
+                coordinamos a todos los proveedores por vos.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* GARANTÍAS */}
+        <section className="section-compact">
+          <div className="container">
+            <div className="section-card">
+              <div className="section-header">
+                <h2>Automatización con Cero Riesgo</h2>
+                <p>
+                  Diagnóstico previo, plan claro y acompañamiento. No instalamos ni activamos
+                  nada hasta que entiendas exactamente qué hace cada parte del sistema.
+                </p>
+              </div>
+              <div className="guarantee-grid">
+                <div className="guarantee-item">
+                  <h3>Diagnóstico Sin Compromiso</h3>
+                  <p>
+                    Analizamos tu casa, local o empresa antes de proponerte nada. Si no encaja,
+                    te lo decimos de frente.
+                  </p>
+                </div>
+                <div className="guarantee-item">
+                  <h3>Arquitectura Transparente</h3>
+                  <p>
+                    Sabés qué se instala, quién lo instala, qué hace cada componente y cómo se
+                    conecta con tu negocio.
+                  </p>
+                </div>
+                <div className="guarantee-item">
+                  <h3>Acompañamiento Real</h3>
+                  <p>
+                    No te dejamos solo con un panel. Te acompañamos en la adopción y ajustamos
+                    la automatización según tu día a día.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* CTA FINAL / CONTACTO */}
+        <section id="contacto" className="cta-section section-compact">
+          <div className="container">
+            <div className="cta-section-inner">
+              <h2>¿Querés que tu Casa o tu Empresa Empiece a Trabajar Sola?</h2>
+              <p>
+                Agenda una consulta gratuita de 15 minutos y vemos juntos qué parte de tu vida,
+                negocio o empresa se puede automatizar primero para que notes el cambio rápido.
+              </p>
+              <div className="urgency-elegant">
+                <span>Agenda limitada · Proyectos nuevos sujetos a diagnóstico previo</span>
+              </div>
+              <a
+                href={getWhatsAppLink(messages.consulta)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="cta-button-large cta-premium"
+              >
+                <span>Agendar Consulta Gratuita (15 min)</span>
+              </a>
+              <a
+                href={getWhatsAppLink(messages.consulta)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="whatsapp-cta"
+              >
+                <i className="fab fa-whatsapp" /> Chatear por WhatsApp Ahora
+              </a>
+              <div className="payment-badge cta-badge">
+                <i className="fas fa-bolt" /> Proyectos a medida · Sin obligación de contratar
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <Footer />
+    </>
+  );
+}

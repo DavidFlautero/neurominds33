@@ -65,121 +65,116 @@ export default function AutomatizacionesPage() {
     <>
       <Navbar />
 
-     <main className="automation-page">
+      <main className="automation-page">
+        {/* ================= HERO ================= */}
+        <section className="hero">
+          {/* 🎥 VIDEO DE FONDO */}
+          <video
+            className="hero-video"
+            src="/videos/automatizacion/hero.mp4"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+          />
 
-  {/* ================= HERO ================= */}
-  <section className="hero">
-    {/* 🎥 VIDEO DE FONDO */}
-    <video
-      className="hero-video"
-      src="/videos/automatizacion/hero.mp4"
-      autoPlay
-      muted
-      loop
-      playsInline
-      preload="auto"
-    />
+          {/* Capa oscura suave */}
+          <div className="hero-overlay" />
 
-    {/* Capa oscura suave */}
-    <div className="hero-overlay" />
+          {/* Contenido arriba del video */}
+          <div className="container hero-inner">
+            <div className="hero-tag">
+              <span>NEUROMIND33 · SOLUCIONES CON AUTOMATIZACIÓN</span>
+            </div>
 
-    {/* Contenido arriba del video */}
-    <div className="container hero-inner">
-      <div className="hero-tag">
-        <span>NEUROMIND33 · SOLUCIONES CON AUTOMATIZACIÓN</span>
-      </div>
+            <h1 className="hero-title">Hacemos que Tu Casa y Tu Empresa Trabajen Solas</h1>
 
-      <h1 className="hero-title">Hacemos que Tu Casa y Tu Empresa Trabajen Solas</h1>
-
-      <p className="hero-subtitle">
-        Integramos domótica, software e inteligencia artificial para automatizar tareas,
-        procesos y sistemas. Desde prender luces y controlar accesos hasta bots que
-        eliminan trabajo manual en tu negocio.
-      </p>
-
-      <div className="hero-badges">
-        <div className="payment-badge">
-          <i className="fas fa-bolt" /> Proyectos <strong>diseñados a medida</strong>
-        </div>
-        <div className="local-badge">
-          <i className="fas fa-map-marker-alt" /> Pensado para PYMES, comercios y hogares
-          en Latinoamérica
-        </div>
-      </div>
-
-      <div className="hero-buttons">
-        <a href="#planes" className="cta-button btn-primary">
-          Quiero Automatizar Mi Mundo
-        </a>
-        <a href="#domotica" className="cta-button btn-secondary">
-          Ver Qué Podemos Automatizar
-        </a>
-      </div>
-    </div>
-  </section>
-
-  {/* ================= INTRO ================= */}
-  <section id="soluciones" className="section-compact">
-    <div className="container">
-      <div className="section-card solution-card">
-        <div className="section-header">
-          <h2>Soluciones con Automatización para Hogares, Negocios y Empresas</h2>
-          <p>
-            No vendemos gadgets sueltos ni scripts aislados. Diseñamos sistemas completos
-            que conectan hardware, software e IA para reducir tiempos, eliminar tareas
-            repetitivas y darte control total desde una app o un panel web.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  {/* ================= DOMÓTICA ================= */}
-  <section id="domotica" className="section-compact">
-    <div className="container">
-      <div className="section-card solution-card">
-        <div className="section-header">
-          <h2>Domótica y Hogares Inteligentes</h2>
-          <p>
-            Convertimos tu casa en un espacio inteligente: luces, clima, seguridad y
-            escenas automáticas que se adaptan a tu día a día.
-          </p>
-        </div>
-
-        <div className="solutions-grid">
-          <div className="solution-item">
-            <h3>Control Total desde tu Celular</h3>
-            <p>
-              Prendé y apagá luces, aire acondicionado, cortinas y portones desde una app
-              o panel web. Escenas como “modo noche”, “modo vacaciones” o “todo apagado”
-              en un solo toque.
+            <p className="hero-subtitle">
+              Integramos domótica, software e inteligencia artificial para automatizar tareas,
+              procesos y sistemas. Desde prender luces y controlar accesos hasta bots que
+              eliminan trabajo manual en tu negocio.
             </p>
+
+            <div className="hero-badges">
+              <div className="payment-badge">
+                <i className="fas fa-bolt" /> Proyectos <strong>diseñados a medida</strong>
+              </div>
+              <div className="local-badge">
+                <i className="fas fa-map-marker-alt" /> Pensado para PYMES, comercios y hogares
+                en Latinoamérica
+              </div>
+            </div>
+
+            <div className="hero-buttons">
+              <a href="#planes" className="cta-button btn-primary">
+                Quiero Automatizar Mi Mundo
+              </a>
+              <a href="#domotica" className="cta-button btn-secondary">
+                Ver Qué Podemos Automatizar
+              </a>
+            </div>
           </div>
+        </section>
 
-          <div className="solution-item">
-            <h3>Seguridad Inteligente</h3>
-            <p>
-              Cámaras, timbres inteligentes, sensores de movimiento y apertura, alarmas
-              conectadas a tu celular con notificaciones en tiempo real.
-            </p>
+        {/* ================= INTRO ================= */}
+        <section id="soluciones" className="section-compact">
+          <div className="container">
+            <div className="section-card solution-card">
+              <div className="section-header">
+                <h2>Soluciones con Automatización para Hogares, Negocios y Empresas</h2>
+                <p>
+                  No vendemos gadgets sueltos ni scripts aislados. Diseñamos sistemas completos
+                  que conectan hardware, software e IA para reducir tiempos, eliminar tareas
+                  repetitivas y darte control total desde una app o un panel web.
+                </p>
+              </div>
+            </div>
           </div>
+        </section>
 
-          <div className="solution-item">
-            <h3>Automatización de Rutinas</h3>
-            <p>
-              Programá horarios, reglas y escenas: luces que se prenden solas al
-              anochecer, clima que se ajusta según la temperatura o alarmas que se activan
-              cuando salís.
-            </p>
+        {/* ================= DOMÓTICA ================= */}
+        <section id="domotica" className="section-compact">
+          <div className="container">
+            <div className="section-card solution-card">
+              <div className="section-header">
+                <h2>Domótica y Hogares Inteligentes</h2>
+                <p>
+                  Convertimos tu casa en un espacio inteligente: luces, clima, seguridad y
+                  escenas automáticas que se adaptan a tu día a día.
+                </p>
+              </div>
+
+              <div className="solutions-grid">
+                <div className="solution-item">
+                  <h3>Control Total desde tu Celular</h3>
+                  <p>
+                    Prendé y apagá luces, aire acondicionado, cortinas y portones desde una app
+                    o panel web. Escenas como “modo noche”, “modo vacaciones” o “todo apagado”
+                    en un solo toque.
+                  </p>
+                </div>
+
+                <div className="solution-item">
+                  <h3>Seguridad Inteligente</h3>
+                  <p>
+                    Cámaras, timbres inteligentes, sensores de movimiento y apertura, alarmas
+                    conectadas a tu celular con notificaciones en tiempo real.
+                  </p>
+                </div>
+
+                <div className="solution-item">
+                  <h3>Automatización de Rutinas</h3>
+                  <p>
+                    Programá horarios, reglas y escenas: luces que se prenden solas al
+                    anochecer, clima que se ajusta según la temperatura o alarmas que se activan
+                    cuando salís.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-</main>
-
+        </section>
 
         {/* NEGOCIOS / EMPRESAS FÍSICAS */}
         <section id="negocios" className="section-compact">

@@ -1069,3 +1069,64 @@ section:not(#vision):not(.nm-section):not(#socios):not(#contacto) .p{
   position: absolute;
   top: 0; left: 0;
 }
+
+footer {
+  position: fixed; /* Fija el footer en la pantalla */
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 40; /* Mismo z-index que el navbar */
+  backdrop-filter: saturate(140%) blur(10px);
+  background: rgba(15,23,42,.92); /* Mismo fondo que el navbar */
+  border-top: 1px solid rgba(148,163,184,.25); /* Borde superior como el navbar */
+  padding: 20px 0;
+  color: #e5e7eb; /* Texto claro como el navbar */
+}
+
+/* Ajustar el contenido del footer para que use el mismo sistema de wrap */
+footer .wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: auto;
+  min-height: 60px;
+}
+
+/* Estilos para el texto y enlaces del footer */
+footer a {
+  color: #e5e7eb;
+  opacity: .78;
+  transition: opacity .18s;
+  text-decoration: none;
+}
+
+footer a:hover {
+  opacity: 1;
+}
+
+/* Ajustar el contenido principal para que no quede oculto detrás del footer */
+body {
+  padding-bottom: 120px; /* Espacio para el footer fijo */
+}
+
+/* Ajustes para dispositivos móviles */
+@media (max-width: 768px) {
+  footer .wrap {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+  }
+  
+  body {
+    padding-bottom: 160px; /* Más espacio en móviles */
+  }
+}
+
+/* Ajustar los botones flotantes para que no se solapen con el footer */
+.wa {
+  bottom: calc(80px + env(safe-area-inset-bottom)); /* Aumentar el bottom para que esté sobre el footer */
+}
+
+.quick {
+  bottom: calc(150px + env(safe-area-inset-bottom)); /* Aumentar el bottom para que esté sobre el footer */
+}

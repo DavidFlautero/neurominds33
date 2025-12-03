@@ -67,8 +67,23 @@ export default function AutomatizacionesPage() {
 
       <main className="automation-page">
         {/* HERO */}
+               {/* HERO */}
         <section className="hero">
+          {/* 🎥 VIDEO DE FONDO */}
+          <video
+            className="hero-video"
+            src="/videos/automatizacion/hero.mp4"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+          />
+
+          {/* capa oscura encima del video */}
           <div className="hero-overlay" />
+
+          {/* contenido encima de todo */}
           <div className="container hero-inner">
             <div className="hero-tag">
               <span>NEUROMIND33 · SOLUCIONES CON AUTOMATIZACIÓN</span>
@@ -102,6 +117,7 @@ export default function AutomatizacionesPage() {
             </div>
           </div>
         </section>
+
 
         {/* INTRO SOLUCIONES CON AUTOMATIZACIÓN */}
         <section id="soluciones" className="section-compact">

@@ -657,3 +657,59 @@ section {
   background-attachment: fixed !important;
 }
 
+/* ================= HERO ================= */
+
+.hero {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 80px);   /* Ajusta según tu navbar */
+  min-height: 720px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* VIDEO */
+.hero-video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100vw;
+  height: 100vh;
+  transform: translate(-50%, -50%); /* CENTRADO REAL */
+  object-fit: cover;
+  object-position: center;
+  z-index: 0;
+}
+
+/* OVERLAY → ahora SUPER suave */
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    rgba(0, 0, 0, 0.15),
+    rgba(0, 0, 0, 0.20)
+  );   /* Ya no arruina el color del video */
+  z-index: 1;
+}
+
+/* CONTENIDO */
+.hero-inner {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 0 20px;
+  color: #fff;
+}
+
+/* ===== MEJORA DE LEGIBILIDAD ===== */
+.hero-title,
+.hero-subtitle,
+.hero-tag span,
+.hero-badges div,
+.hero-buttons a {
+  text-shadow: 
+    0 0 22px rgba(0, 0, 0, 0.55),
+    0 0 42px rgba(0, 0, 0, 0.35);
+}

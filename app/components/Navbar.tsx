@@ -36,8 +36,11 @@ export default function Navbar() {
           <a href="#vision">Visión</a>
           <a href="#servicios">Servicios</a>
 
-          {/* 🔹 Nuevo: link a la landing de E-commerce */}
+          {/* Landing de E-commerce */}
           <Link href="/ecommerce">E-commerce</Link>
+
+          {/* 🔹 NUEVO: Automatizaciones */}
+          <Link href="/automatizaciones">Automatizaciones</Link>
 
           <a href="#empresas">Empresas</a>
           <a href="#pymes">PYMES</a>
@@ -77,8 +80,11 @@ export default function Navbar() {
           <a href="#vision">Visión</a>
           <a href="#servicios">Servicios</a>
 
-          {/* 🔹 Nuevo también en móvil */}
+          {/* E-commerce */}
           <Link href="/ecommerce">E-commerce</Link>
+
+          {/* 🔹 NUEVO: Automatizaciones también en mobile */}
+          <Link href="/automatizaciones">Automatizaciones</Link>
 
           <a href="#empresas">Empresas</a>
           <a href="#pymes">PYMES</a>

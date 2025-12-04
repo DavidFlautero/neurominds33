@@ -1291,40 +1291,6 @@ footer a:hover {
   background: rgba(15, 23, 42, 0.9);
 }
 
-/* ====== BOTONES ====== */
-
-.btn {
-  padding: 0.4rem 0.9rem;
-  border-radius: 999px;
-  border: 1px solid rgba(148, 163, 184, 0.7);
-  font-size: 0.85rem;
-  text-decoration: none;
-  color: #e5e7eb;
-  background: transparent;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.35rem;
-  transition: background 0.15s ease-out, border-color 0.15s ease-out,
-    transform 0.08s ease-out;
-}
-
-.btn:hover {
-  background: rgba(15, 23, 42, 0.9);
-  border-color: #e5e7eb;
-  transform: translateY(-1px);
-}
-
-.btn.primary {
-  border: none;
-  background: linear-gradient(135deg, #22c55e, #0ea5e9);
-  color: #020617;
-  font-weight: 600;
-}
-
-.btn.primary:hover {
-  filter: brightness(1.06);
-}
 
 /* ====== BURGER (MOBILE) ====== */
 

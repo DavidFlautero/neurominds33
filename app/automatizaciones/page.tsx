@@ -71,7 +71,7 @@ export default function AutomatizacionesPage() {
           {/* 🎥 VIDEO DE FONDO */}
           <video
             className="hero-video"
-            src="/videos/automatizacion/hero.mp4"
+            src="./videos/automatizacion/hero.mp4"
             autoPlay
             muted
             loop

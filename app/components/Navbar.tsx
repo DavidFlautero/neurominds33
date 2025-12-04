@@ -14,10 +14,12 @@ export default function Navbar() {
     return () => window.removeEventListener("resize", onResize);
   }, []);
 
+  const closeMobile = () => setOpen(false);
+
   return (
     <div className="nav" role="navigation">
       <div className="wrap row">
-        {/* BRAND NUEVA */}
+        {/* BRAND */}
         <Link href="/" className="brand" aria-label="NeuroMind33">
           <div className="brand-logo">
             <Image
@@ -32,22 +34,73 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop */}
-        <nav className="menu desktop" aria-label="Principal">
-          <a href="#vision">Visión</a>
-          <a href="#servicios">Servicios</a>
+        <nav className="menu desktop" aria-label="Menú principal">
+          {/* Inicio */}
+          <Link href="/">Inicio</Link>
 
-          {/* Landing de E-commerce */}
-          <Link href="/ecommerce">E-commerce</Link>
+          {/* SOLUCIONES (desplegable) */}
+          <div className="menu-item has-dropdown">
+            <button
+              type="button"
+              className="menu-trigger"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              Soluciones
+              <span className="chevron" aria-hidden="true">▾</span>
+            </button>
+            <div className="dropdown">
+              <Link href="/#software-ia">Software &amp; IA</Link>
+              <Link href="/ecommerce">Web &amp; E-commerce</Link>
+              <Link href="/automatizaciones">Automatización &amp; Domótica</Link>
+            </div>
+          </div>
 
-          {/* 🔹 NUEVO: Automatizaciones */}
-          <Link href="/automatizaciones">Automatizaciones</Link>
+          {/* SECTORES (desplegable) */}
+          <div className="menu-item has-dropdown">
+            <button
+              type="button"
+              className="menu-trigger"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              Sectores
+              <span className="chevron" aria-hidden="true">▾</span>
+            </button>
+            <div className="dropdown">
+              <Link href="/#empresas">Empresas</Link>
+              <Link href="/#pymes">PYMES</Link>
+              <Link href="/#comercios">Comercios</Link>
+              <Link href="/#restaurantes">Restaurantes</Link>
+              <Link href="/#gimnasios">Gimnasios</Link>
+              <Link href="/#alquileres">Alquileres temporarios</Link>
+            </div>
+          </div>
 
-          <a href="#empresas">Empresas</a>
-          <a href="#pymes">PYMES</a>
-          <a href="#socios">Socios</a>
+          {/* NOSOTROS (desplegable) */}
+          <div className="menu-item has-dropdown">
+            <button
+              type="button"
+              className="menu-trigger"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              Nosotros
+              <span className="chevron" aria-hidden="true">▾</span>
+            </button>
+            <div className="dropdown">
+              <Link href="/#vision">Visión</Link>
+              <Link href="/#equipo">Equipo</Link>
+              <Link href="/#socios">Socios / Partners</Link>
+            </div>
+          </div>
+
+          {/* Área cliente */}
           <Link href="/login" className="btn">
-            Login / Área cliente
+            Área cliente
           </Link>
+
+          {/* WhatsApp / contacto */}
           <a href="#contacto" className="btn primary" id="openModalTop">
             Hablar ahora
           </a>
@@ -69,7 +122,7 @@ export default function Navbar() {
       {/* Drawer mobile */}
       <div
         className={`drawer ${open ? "open" : ""}`}
-        onClick={() => setOpen(false)}
+        onClick={closeMobile}
         aria-hidden={!open}
       >
         <nav
@@ -77,22 +130,68 @@ export default function Navbar() {
           aria-label="Menú móvil"
           onClick={(e) => e.stopPropagation()}
         >
-          <a href="#vision">Visión</a>
-          <a href="#servicios">Servicios</a>
-
-          {/* E-commerce */}
-          <Link href="/ecommerce">E-commerce</Link>
-
-          {/* 🔹 NUEVO: Automatizaciones también en mobile */}
-          <Link href="/automatizaciones">Automatizaciones</Link>
-
-          <a href="#empresas">Empresas</a>
-          <a href="#pymes">PYMES</a>
-          <a href="#socios">Socios</a>
-          <Link href="/login" className="btn">
-            Login / Área cliente
+          {/* Inicio */}
+          <Link href="/" onClick={closeMobile}>
+            Inicio
           </Link>
-          <a href="#contacto" className="btn primary" id="openModalTop">
+
+          {/* Bloque SOLUCIONES */}
+          <p className="drawer-section-label">Soluciones</p>
+          <Link href="/#software-ia" onClick={closeMobile}>
+            Software &amp; IA
+          </Link>
+          <Link href="/ecommerce" onClick={closeMobile}>
+            Web &amp; E-commerce
+          </Link>
+          <Link href="/automatizaciones" onClick={closeMobile}>
+            Automatización &amp; Domótica
+          </Link>
+
+          {/* Bloque SECTORES */}
+          <p className="drawer-section-label">Sectores</p>
+          <Link href="/#empresas" onClick={closeMobile}>
+            Empresas
+          </Link>
+          <Link href="/#pymes" onClick={closeMobile}>
+            PYMES
+          </Link>
+          <Link href="/#comercios" onClick={closeMobile}>
+            Comercios
+          </Link>
+          <Link href="/#restaurantes" onClick={closeMobile}>
+            Restaurantes
+          </Link>
+          <Link href="/#gimnasios" onClick={closeMobile}>
+            Gimnasios
+          </Link>
+          <Link href="/#alquileres" onClick={closeMobile}>
+            Alquileres temporarios
+          </Link>
+
+          {/* Bloque NOSOTROS */}
+          <p className="drawer-section-label">Nosotros</p>
+          <Link href="/#vision" onClick={closeMobile}>
+            Visión
+          </Link>
+          <Link href="/#equipo" onClick={closeMobile}>
+            Equipo
+          </Link>
+          <Link href="/#socios" onClick={closeMobile}>
+            Socios / Partners
+          </Link>
+
+          {/* Área cliente */}
+          <Link href="/login" className="btn" onClick={closeMobile}>
+            Área cliente
+          </Link>
+
+          {/* Contacto */}
+          <a
+            href="#contacto"
+            className="btn primary"
+            id="openModalTop"
+            onClick={closeMobile}
+          >
             Hablar ahora
           </a>
         </nav>

@@ -4,8 +4,7 @@ import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import { SWRConfig } from "swr";
 import { getUser, getTeamForUser } from "@/lib/db/queries";
-import { SalesAgentWidget } from "@/ia/Agentes/sales-agent-widget"; // <- NUEVO
-
+import { SalesAgentWidget } from "@/ia/Agentes/sales-agent-widget"; // <- Agente IA flotante
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.neuromind33.online"),
@@ -143,6 +142,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }}
         >
           {children}
+
+          {/* Agente IA de ventas global (botón flotante + panel) */}
+          <SalesAgentWidget />
         </SWRConfig>
       </body>
     </html>

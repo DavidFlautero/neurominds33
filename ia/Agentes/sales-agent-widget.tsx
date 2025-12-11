@@ -23,9 +23,15 @@ export function SalesAgentWidget() {
   ]);
   const [input, setInput] = useState("");
   const [isSending, setIsSending] = useState(false);
+  const [hasError, setHasError] = useState(false);
 
-  const robotState: RobotState =
-    isSending ? "thinking" : messages.length > 1 ? "answer" : "idle";
+  const robotState: RobotState = hasError
+    ? "error"
+    : isSending
+    ? "thinking"
+    : messages.length > 1
+    ? "answer"
+    : "idle";
 
   async function handleSend() {
     const trimmed = input.trim();
@@ -40,6 +46,7 @@ export function SalesAgentWidget() {
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
     setIsSending(true);
+    setHasError(false);
 
     try {
       const res = await fetch("/api/agent-sales", {
@@ -69,6 +76,7 @@ export function SalesAgentWidget() {
       };
 
       setMessages((prev) => [...prev, assistantMessage]);
+      setHasError(false);
     } catch (err) {
       console.error(err);
       const errorMessage: Message = {
@@ -78,6 +86,7 @@ export function SalesAgentWidget() {
           "Hubo un problema conectando con el modelo de IA. Probá de nuevo en unos segundos o hablá directo por WhatsApp.",
       };
       setMessages((prev) => [...prev, errorMessage]);
+      setHasError(true);
     } finally {
       setIsSending(false);
     }
@@ -124,6 +133,7 @@ export function SalesAgentWidget() {
             bg-slate-950/95 backdrop-blur-xl
             shadow-[0_25px_80px_rgba(15,23,42,0.9)]
             flex flex-col
+            transition-transform transition-opacity duration-200
           "
         >
           {/* Header */}

@@ -1,286 +1,215 @@
 "use client";
 
-import { useState } from "react";
-import type { AgentResponsePayload } from "@/ia/agent-sales-config";
+import React, { useState } from "react";
+import { RobotAssistant, type RobotState } from "@/components/assistant/RobotAssistant";
 
-type ChatMessage = {
-  role: "user" | "assistant";
+type Role = "user" | "assistant";
+
+interface Message {
+  id: string;
+  role: Role;
   content: string;
-};
-
-const STEPS: Array<AgentResponsePayload["step"]> = [
-  "descubrimiento",
-  "diagnostico",
-  "propuesta",
-  "cierre",
-];
+}
 
 export function SalesAgentWidget() {
-  const [open, setOpen] = useState(false);
-  const [messages, setMessages] = useState<ChatMessage[]>([
+  const [isOpen, setIsOpen] = useState(false);
+  const [messages, setMessages] = useState<Message[]>([
     {
+      id: "welcome",
       role: "assistant",
       content:
-        "Hola, soy el agente IA de NeuroMind33. Contame en pocas palabras de qué va tu negocio y qué querés mejorar (ventas, automatización, tienda online, etc.).",
+        "Soy N33, el asistente IA de NeuroMind33. Contame de tu negocio y te propongo cómo podemos ayudarte con software, IA y automatización.",
     },
   ]);
   const [input, setInput] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [agentData, setAgentData] = useState<AgentResponsePayload | null>(null);
+  const [isSending, setIsSending] = useState(false);
 
-  const sendMessage = async () => {
-    if (!input.trim() || loading) return;
+  const robotState: RobotState =
+    isSending ? "thinking" : messages.length > 1 ? "answer" : "idle";
 
-    const newMessages: ChatMessage[] = [
-      ...messages,
-      { role: "user", content: input.trim() },
-    ];
+  async function handleSend() {
+    const trimmed = input.trim();
+    if (!trimmed || isSending) return;
 
-    setMessages(newMessages);
+    const userMessage: Message = {
+      id: crypto.randomUUID(),
+      role: "user",
+      content: trimmed,
+    };
+
+    setMessages((prev) => [...prev, userMessage]);
     setInput("");
-    setLoading(true);
+    setIsSending(true);
 
     try {
       const res = await fetch("/api/agent-sales", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: newMessages }),
+        body: JSON.stringify({
+          messages: [
+            ...messages.map((m) => ({
+              role: m.role,
+              content: m.content,
+            })),
+            { role: "user", content: trimmed },
+          ],
+        }),
       });
 
-      if (!res.ok) {
-        throw new Error("Error en el agente IA");
-      }
+      if (!res.ok) throw new Error("Error en la API del asistente");
 
-      const data: AgentResponsePayload = await res.json();
-      setAgentData(data);
+      const data = await res.json();
 
-      setMessages((prev) => [
-        ...prev,
-        { role: "assistant", content: data.reply },
-      ]);
-    } catch (error) {
-      console.error(error);
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: "assistant",
-          content:
-            "Se complicó un poco analizar eso. Probá contármelo de nuevo con otras palabras o más simple.",
-        },
-      ]);
+      const assistantMessage: Message = {
+        id: crypto.randomUUID(),
+        role: "assistant",
+        content:
+          data.reply ??
+          "Tengo una propuesta, pero no pude formatearla bien. Probá de nuevo.",
+      };
+
+      setMessages((prev) => [...prev, assistantMessage]);
+    } catch (err) {
+      console.error(err);
+      const errorMessage: Message = {
+        id: crypto.randomUUID(),
+        role: "assistant",
+        content:
+          "Hubo un problema conectando con el modelo de IA. Probá de nuevo en unos segundos o hablá directo por WhatsApp.",
+      };
+      setMessages((prev) => [...prev, errorMessage]);
     } finally {
-      setLoading(false);
+      setIsSending(false);
     }
-  };
+  }
 
   return (
     <>
-      {/* Botón flotante tipo WhatsApp */}
+      {/* Botón flotante Asesor IA */}
       <button
-        onClick={() => setOpen(true)}
+        type="button"
+        onClick={() => setIsOpen((prev) => !prev)}
         className="
-          fixed bottom-6 right-6 z-40
+          fixed bottom-6 right-24 z-[9500]
           flex items-center gap-2
-          rounded-full px-4 py-3
-          shadow-xl
-          bg-sky-500 text-white
-          hover:bg-sky-600 hover:scale-[1.03]
+          rounded-full px-4 py-2.5
+          bg-slate-900 text-slate-50
+          shadow-xl shadow-sky-500/40
+          border border-slate-700/60
+          hover:bg-slate-800 hover:scale-[1.03]
           transition
         "
       >
-        <i className="fa-solid fa-robot text-sm" />
-        <span className="hidden sm:inline text-sm font-medium">
+        <span
+          className="
+            inline-flex items-center justify-center
+            w-7 h-7 rounded-2xl
+            bg-gradient-to-br from-sky-500 via-indigo-500 to-purple-500
+          "
+        >
+          <i className="fa-solid fa-robot text-xs text-white" />
+        </span>
+        <span className="text-xs font-semibold tracking-wide">
           Asesor IA
         </span>
       </button>
 
-      {/* Overlay + panel lateral */}
-      {open && (
-        <div className="fixed inset-0 z-50 flex justify-end bg-black/40">
-          <div
-            className="
-              h-full w-full max-w-3xl
-              bg-slate-950 text-slate-50
-              flex flex-col shadow-2xl
-            "
-          >
-            {/* Header */}
-            <div className="flex items-center justify-between px-4 py-3 border-b border-slate-800">
-              <div>
-                <div className="text-[11px] uppercase text-sky-400 tracking-wide">
-                  NeuroMind33 · Agente IA
+      {/* Panel del Asesor IA */}
+      {isOpen && (
+        <div
+          className="
+            fixed bottom-24 right-4 z-[9400]
+            w-[360px] max-w-[95vw]
+            rounded-3xl border border-slate-800
+            bg-slate-950/95 backdrop-blur-xl
+            shadow-[0_25px_80px_rgba(15,23,42,0.9)]
+            flex flex-col
+          "
+        >
+          {/* Header */}
+          <div className="flex items-center justify-between px-4 pt-3 pb-2 border-b border-slate-800/80">
+            <div className="flex flex-col">
+              <span className="text-xs font-semibold text-slate-100">
+                Asesor IA de NeuroMind33
+              </span>
+              <span className="text-[11px] text-slate-400">
+                Te ayudo a pensar tu proyecto y opciones de trabajo juntos.
+              </span>
+            </div>
+            <button
+              type="button"
+              onClick={() => setIsOpen(false)}
+              className="
+                inline-flex items-center justify-center
+                w-7 h-7 rounded-full
+                bg-slate-900 hover:bg-slate-800
+                border border-slate-700/70
+                text-slate-300 hover:text-slate-100
+                transition
+              "
+            >
+              <i className="fa-solid fa-xmark text-xs" />
+            </button>
+          </div>
+
+          {/* Contenido */}
+          <div className="flex flex-col px-4 pt-2 pb-3 h-[360px]">
+            {/* Robot */}
+            <RobotAssistant state={robotState} />
+
+            {/* Mensajes */}
+            <div className="flex-1 overflow-y-auto space-y-2 pr-1 mt-1">
+              {messages.map((m) => (
+                <div
+                  key={m.id}
+                  className={`
+                    max-w-[90%] rounded-2xl px-3 py-2 text-xs leading-relaxed
+                    ${
+                      m.role === "assistant"
+                        ? "bg-slate-900/80 text-slate-100 border border-slate-700/80 self-start"
+                        : "bg-sky-500 text-white self-end ml-auto"
+                    }
+                  `}
+                >
+                  {m.content}
                 </div>
-                <div className="text-sm font-semibold">
-                  Diseñamos tu solución de software en tiempo real
-                </div>
-                <div className="text-[11px] text-slate-400">
-                  Te hago preguntas concretas y te propongo un plan accionable.
-                </div>
-              </div>
-              <button
-                onClick={() => setOpen(false)}
-                className="p-2 rounded-full hover:bg-slate-800 transition"
-              >
-                <i className="fa-solid fa-xmark text-sm" />
-              </button>
+              ))}
             </div>
 
-            {/* Cuerpo: chat + resumen */}
-            <div className="flex-1 flex flex-col md:flex-row">
-              {/* Columna chat */}
-              <div className="flex-1 flex flex-col border-b md:border-b-0 md:border-r border-slate-800">
-                <div className="flex-1 overflow-auto p-4 space-y-3">
-                  {messages.map((m, idx) => (
-                    <div
-                      key={idx}
-                      className={`flex ${
-                        m.role === "user" ? "justify-end" : "justify-start"
-                      }`}
-                    >
-                      <div
-                        className={`
-                          max-w-[80%] rounded-2xl px-3 py-2 text-sm
-                          ${
-                            m.role === "user"
-                              ? "bg-sky-600 text-white"
-                              : "bg-slate-800 text-slate-50"
-                          }
-                        `}
-                      >
-                        {m.content}
-                      </div>
-                    </div>
-                  ))}
-
-                  {loading && (
-                    <div className="text-[11px] text-slate-400">
-                      Analizando tu caso y pensando propuestas…
-                    </div>
-                  )}
-                </div>
-
-                {/* Input */}
-                <div className="border-t border-slate-800 p-3">
-                  <div className="flex gap-2">
-                    <input
-                      value={input}
-                      onChange={(e) => setInput(e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter" && !e.shiftKey) {
-                          e.preventDefault();
-                          sendMessage();
-                        }
-                      }}
-                      placeholder="Contame de tu negocio o qué querés mejorar…"
-                      className="
-                        flex-1 bg-slate-900 border border-slate-700
-                        rounded-xl px-3 py-2 text-sm
-                        focus:outline-none focus:ring-2 focus:ring-sky-500
-                      "
-                    />
-                    <button
-                      onClick={sendMessage}
-                      disabled={loading}
-                      className="
-                        rounded-xl px-4 py-2 text-sm font-medium
-                        bg-sky-500 text-white
-                        disabled:opacity-50
-                      "
-                    >
-                      {loading ? "Analizando…" : "Enviar"}
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              {/* Columna resumen / funnel */}
-              <div className="w-full md:w-80 p-4 flex flex-col gap-3 bg-slate-900/60">
-                {/* Estado del proceso */}
-                <div>
-                  <div className="text-[11px] uppercase text-slate-400">
-                    Estado del proceso
-                  </div>
-                  <div className="mt-1 flex flex-wrap gap-1 text-[11px]">
-                    {STEPS.map((step) => {
-                      const active =
-                        agentData?.step === step ||
-                        (!agentData && step === "descubrimiento");
-                      return (
-                        <span
-                          key={step}
-                          className={`
-                            px-2 py-1 rounded-full
-                            ${
-                              active
-                                ? "bg-sky-500/90 text-white"
-                                : "bg-slate-800 text-slate-300"
-                            }
-                          `}
-                        >
-                          {step}
-                        </span>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                {/* Resumen del negocio */}
-                <div className="border border-slate-800 rounded-xl p-3">
-                  <div className="text-[11px] uppercase text-slate-400 mb-1">
-                    Resumen del negocio (IA)
-                  </div>
-                  <div className="space-y-1 text-[12px] text-slate-200">
-                    <p>
-                      <span className="text-slate-400">Tipo:</span>{" "}
-                      {agentData?.summary.tipoNegocio ?? "Pendiente"}
-                    </p>
-                    <p>
-                      <span className="text-slate-400">Ubicación:</span>{" "}
-                      {agentData?.summary.ubicacion ?? "Pendiente"}
-                    </p>
-                    <p>
-                      <span className="text-slate-400">Facturación:</span>{" "}
-                      {agentData?.summary.facturacionAprox ?? "Pendiente"}
-                    </p>
-                    <p>
-                      <span className="text-slate-400">Dolor:</span>{" "}
-                      {agentData?.summary.dolorPrincipal ?? "Pendiente"}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Oportunidades */}
-                <div className="border border-slate-800 rounded-xl p-3">
-                  <div className="text-[11px] uppercase text-slate-400 mb-1">
-                    Oportunidades detectadas
-                  </div>
-                  <ul className="list-disc list-inside text-[12px] text-slate-200 space-y-1">
-                    {agentData?.summary.oportunidadesClave?.length
-                      ? agentData.summary.oportunidadesClave.map((o, i) => (
-                          <li key={i}>{o}</li>
-                        ))
-                      : (
-                        <li>La IA está analizando tu caso…</li>
-                        )}
-                  </ul>
-                </div>
-
-                {/* Próximos pasos */}
-                <div className="border border-slate-800 rounded-xl p-3">
-                  <div className="text-[11px] uppercase text-slate-400 mb-1">
-                    Próximos pasos sugeridos
-                  </div>
-                  <ul className="list-disc list-inside text-[12px] text-slate-200 space-y-1">
-                    {agentData?.nextActions?.length
-                      ? agentData.nextActions.map((a, i) => <li key={i}>{a}</li>)
-                      : (
-                        <li>
-                          Seguí chateando y te propongo un plan concreto para tu negocio.
-                        </li>
-                        )}
-                  </ul>
-                </div>
-              </div>
+            {/* Input */}
+            <div className="mt-2 flex items-center gap-2">
+              <input
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    handleSend();
+                  }
+                }}
+                placeholder="Contame de tu negocio, ideas o dudas..."
+                className="
+                  flex-1 rounded-2xl border border-slate-700/70
+                  bg-slate-900/80 text-xs text-slate-100
+                  px-3 py-2 outline-none
+                  placeholder:text-slate-500
+                  focus:border-sky-500
+                "
+              />
+              <button
+                type="button"
+                onClick={handleSend}
+                disabled={isSending || !input.trim()}
+                className="
+                  inline-flex items-center justify-center
+                  rounded-2xl px-3 py-2
+                  bg-sky-500 text-white text-xs font-semibold
+                  disabled:opacity-50 disabled:cursor-not-allowed
+                  hover:bg-sky-600 transition
+                "
+              >
+                {isSending ? "Enviando..." : "Enviar"}
+              </button>
             </div>
           </div>
         </div>

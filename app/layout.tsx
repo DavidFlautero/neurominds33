@@ -4,7 +4,7 @@ import { Plus_Jakarta_Sans } from "next/font/google";
 import { SWRConfig } from "swr";
 import { getUser, getTeamForUser } from "@/lib/db/queries";
 import { SalesAgentWidget } from "@/ia/Agentes/sales-agent-widget";
-import { WhatsAppFloatingButton } from "@/components/WhatsAppFloatingButton";
+import VoiceAgentClient from "@/ia/agents/voice-agent/VoiceAgentClient";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.neuromind33.online"),
@@ -112,7 +112,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="es" className={`${font.className} scroll-smooth`}>
       <head>
-        {/* Font Awesome para íconos */}
         <link
           rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
@@ -120,18 +119,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           referrerPolicy="no-referrer"
         />
 
-        {/* Google Fonts Satoshi + Inter (landing e-commerce) */}
         <link
           href="https://fonts.googleapis.com/css2?family=Satoshi:wght@400;500;700;900&family=Inter:wght@400;500;600;700&display=swap"
           rel="stylesheet"
         />
 
-        {/* JSON-LD estructurado para Google */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
         />
       </head>
+
       <body className="min-h-[100dvh] bg-gray-50 text-black dark:bg-slate-950 dark:text-white antialiased">
         <SWRConfig
           value={{
@@ -143,9 +141,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         >
           {children}
 
-          {/* Botones flotantes globales */}
+          {/* Agente IA de ventas global (botón flotante + panel) */}
           <SalesAgentWidget />
-          <WhatsAppFloatingButton />
+
+          {/* Agente por voz (click-to-talk + fallback texto) */}
+          <VoiceAgentClient />
         </SWRConfig>
       </body>
     </html>

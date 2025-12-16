@@ -1,10 +1,10 @@
+// app/layout.tsx
 import "./globals.css";
 import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import { SWRConfig } from "swr";
 import { getUser, getTeamForUser } from "@/lib/db/queries";
-import { SalesAgentWidget } from "@/ia/Agentes/sales-agent-widget";
-import VoiceAgentClient from "@/ia/agents/voice-agent/VoiceAgentClient";
+import { SalesAgentWidget } from "@/ia/Agentes/sales-agent-widget"; // <- Agente IA flotante
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.neuromind33.online"),
@@ -118,12 +118,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           crossOrigin="anonymous"
           referrerPolicy="no-referrer"
         />
-
         <link
           href="https://fonts.googleapis.com/css2?family=Satoshi:wght@400;500;700;900&family=Inter:wght@400;500;600;700&display=swap"
           rel="stylesheet"
         />
-
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
@@ -140,12 +138,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }}
         >
           {children}
-
-          {/* Agente IA de ventas global (botón flotante + panel) */}
           <SalesAgentWidget />
-
-          {/* Agente por voz (click-to-talk + fallback texto) */}
-          <VoiceAgentClient />
         </SWRConfig>
       </body>
     </html>

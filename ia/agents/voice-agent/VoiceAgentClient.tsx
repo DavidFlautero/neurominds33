@@ -2,15 +2,19 @@
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { VOICE_AGENT } from "./config";
-import type { AgentSalesRequest, AgentSalesResponse, VoiceAgentMessage, VoiceAgentState } from "./types";
+import type { VoiceAgentMessage, VoiceAgentState } from "./types";
 import { createSpeechRecognition, hasSpeechRecognition, speak, uid } from "./utils";
 
-function pickResponseText(data: AgentSalesResponse): string {
+type AgentSalesMsg = { role: "user" | "assistant"; content: string };
+
+// Tu API /api/agent-sales devuelve un JSON con fields tipo: { reply, step, summary, ... }
+function pickAgentReply(data: any): string {
   return (
-    data.text ||
-    data.message ||
-    data.output ||
-    "Listo. ¿Quieres que lo hagamos paso a paso?"
+    data?.reply ||
+    data?.text ||
+    data?.message ||
+    data?.output ||
+    "Listo. ¿Qué necesitas exactamente?"
   );
 }
 
@@ -28,8 +32,8 @@ export default function VoiceAgentClient() {
   const listenTimeoutRef = useRef<any>(null);
 
   const canSTT = useMemo(() => hasSpeechRecognition(), []);
+  const greetedRef = useRef(false);
 
-  // Exponer un "bridge" para que después lo dispares desde el agente 3D
   useEffect(() => {
     (window as any).__N33VoiceAgent = {
       open: () => {
@@ -58,15 +62,26 @@ export default function VoiceAgentClient() {
     setMessages((prev) => [...prev, { id: uid(role), role, text, ts: Date.now() }]);
   }
 
-  async function callAgent(message: string) {
+  function buildAgentSalesMessages(userText: string): AgentSalesMsg[] {
+    // Convertimos tu historial a lo que tu API espera: { role, content }
+    const history: AgentSalesMsg[] = messages
+      .slice(-10)
+      .map((m) => ({
+        role: m.role === "user" ? "user" : "assistant",
+        content: m.text,
+      }));
+
+    // Añadimos el mensaje actual del user al final
+    history.push({ role: "user", content: userText });
+
+    return history;
+  }
+
+  async function callAgent(userText: string) {
     setState("thinking");
 
-    const payload: AgentSalesRequest = {
-      message,
-      context: {
-        channel: "voice",
-        history: messages.slice(-8).map((m) => ({ role: m.role, text: m.text })),
-      },
+    const payload = {
+      messages: buildAgentSalesMessages(userText),
     };
 
     const res = await fetch(VOICE_AGENT.apiEndpoint, {
@@ -75,29 +90,35 @@ export default function VoiceAgentClient() {
       body: JSON.stringify(payload),
     });
 
+    // Si falla, lee el error para que no quedes a ciegas
     if (!res.ok) {
-      throw new Error(`API error ${res.status}`);
+      let detail = "";
+      try {
+        const j = await res.json();
+        detail = j?.error ? ` (${j.error})` : "";
+      } catch {}
+      throw new Error(`API error ${res.status}${detail}`);
     }
 
-    const data: AgentSalesResponse = await res.json();
-    const text = pickResponseText(data);
+    const data = await res.json();
+    const reply = pickAgentReply(data);
 
-    pushMessage("assistant", text);
+    pushMessage("assistant", reply);
 
     if (voiceEnabled) {
       setState("speaking");
-      await speak(text, VOICE_AGENT.lang);
+      await speak(reply, VOICE_AGENT.lang);
     }
 
     setState("ready");
 
-    // Conversación fluida: si está activo, re-escucha un rato
+    // Conversación fluida opcional
     if (autoContinue && canSTT) {
       clearTimeout(listenTimeoutRef.current);
       listenTimeoutRef.current = setTimeout(() => {
         startListening();
       }, 250);
-      // opcional: cortar re-escucha después de X segundos si no habla
+
       setTimeout(() => {
         stopListening();
       }, VOICE_AGENT.autoContinueSeconds * 1000);
@@ -120,13 +141,12 @@ export default function VoiceAgentClient() {
 
   function startListening() {
     if (!canSTT) {
-      // fallback: no STT, abrimos panel para texto
       setOpen(true);
       setState("ready");
+      pushMessage("assistant", "Este navegador no soporta reconocimiento de voz. Puedes escribir y funciona igual.");
       return;
     }
 
-    // Si ya está escuchando, no reiniciar
     if (recRef.current) return;
 
     setOpen(true);
@@ -148,9 +168,9 @@ export default function VoiceAgentClient() {
 
       try {
         await callAgent(transcript);
-      } catch (e) {
+      } catch (e: any) {
         setState("error");
-        pushMessage("assistant", "Hubo un error consultando la IA. Intenta de nuevo.");
+        pushMessage("assistant", `Hubo un error consultando la IA. ${e?.message || ""}`.trim());
         setState("ready");
       }
     };
@@ -163,7 +183,6 @@ export default function VoiceAgentClient() {
     };
 
     rec.onend = () => {
-      // si terminó por silencio, dejamos listo
       if (recRef.current) stopListening();
     };
 
@@ -177,10 +196,14 @@ export default function VoiceAgentClient() {
     }
   }
 
-  async function greetAndOpen() {
+  async function greetOnce() {
+    if (greetedRef.current) return;
+    greetedRef.current = true;
+
     setOpen(true);
     setState("opening");
     pushMessage("assistant", `${personaName}: ${VOICE_AGENT.initialGreeting}`);
+
     if (voiceEnabled) {
       await speak(VOICE_AGENT.initialGreeting, VOICE_AGENT.lang);
     }
@@ -192,17 +215,18 @@ export default function VoiceAgentClient() {
     const text = input.trim();
     if (!text) return;
     setInput("");
+
     pushMessage("user", text);
+
     try {
       await callAgent(text);
-    } catch (e) {
+    } catch (e: any) {
       setState("error");
-      pushMessage("assistant", "Hubo un error consultando la IA. Intenta de nuevo.");
+      pushMessage("assistant", `Hubo un error consultando la IA. ${e?.message || ""}`.trim());
       setState("ready");
     }
   }
 
-  // UI helpers
   const badge =
     state === "listening"
       ? "Escuchando..."
@@ -220,7 +244,7 @@ export default function VoiceAgentClient() {
       <button
         type="button"
         onClick={() => {
-          if (!open) greetAndOpen();
+          if (!open) greetOnce();
           else setOpen(false);
           stopListening();
         }}
@@ -228,11 +252,9 @@ export default function VoiceAgentClient() {
         aria-label={`Abrir agente ${personaName}`}
         title={`Agente ${personaName}`}
       >
-        {/* “Orb” simple premium */}
         <span className="relative block h-7 w-7 rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 shadow-[0_0_25px_rgba(168,85,247,0.55)]" />
       </button>
 
-      {/* Panel */}
       {open && (
         <div className="fixed bottom-24 right-6 z-[9999] w-[360px] max-w-[calc(100vw-2rem)] rounded-2xl bg-slate-950 text-white border border-white/10 shadow-2xl overflow-hidden">
           <div className="p-4 border-b border-white/10 bg-gradient-to-r from-slate-900 to-slate-950">
@@ -304,10 +326,7 @@ export default function VoiceAgentClient() {
               </div>
             ) : (
               messages.map((m) => (
-                <div
-                  key={m.id}
-                  className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
-                >
+                <div key={m.id} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
                   <div
                     className={`max-w-[85%] rounded-2xl px-3 py-2 text-sm leading-relaxed ${
                       m.role === "user"

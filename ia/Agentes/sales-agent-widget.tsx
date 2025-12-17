@@ -1,487 +1,560 @@
 "use client";
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { RobotAssistant, type RobotState } from "@/components/assistant/RobotAssistant";
 
-type ChatRole = "user" | "assistant";
-type ChatMsg = { role: ChatRole; content: string; ts: number };
+type Role = "user" | "assistant";
 
-type AgentPayload = {
-  reply: string;
-  step?: string;
-  leadScore?: number;
-  summary?: any;
-  nextActions?: string[];
-};
-
-declare global {
-  interface Window {
-    webkitSpeechRecognition?: any;
-    SpeechRecognition?: any;
-  }
+interface Message {
+  id: string;
+  role: Role;
+  content: string;
 }
 
-function isBrowser() {
-  return typeof window !== "undefined";
+type VoiceStatus = "off" | "starting" | "listening" | "speaking" | "error";
+
+function getSpeechRecognition(): any | null {
+  // Chrome / Edge / Android (webkitSpeechRecognition)
+  // Firefox/Safari: normalmente no soporta SpeechRecognition
+  // @ts-ignore
+  return typeof window !== "undefined"
+    ? // @ts-ignore
+      window.SpeechRecognition || // @ts-ignore
+      window.webkitSpeechRecognition || null
+    : null;
 }
 
-function getSpeechRecognitionCtor(): any | null {
-  if (!isBrowser()) return null;
-  return window.SpeechRecognition || window.webkitSpeechRecognition || null;
-}
+function pickBestSpanishFemaleVoice(): SpeechSynthesisVoice | null {
+  if (typeof window === "undefined" || !("speechSynthesis" in window)) return null;
+  const voices = window.speechSynthesis.getVoices();
 
-function pickSpanishVoice(voices: SpeechSynthesisVoice[], preference: "female" | "male") {
-  const es = voices.filter((v) => (v.lang || "").toLowerCase().startsWith("es"));
-  if (!es.length) return null;
+  // Heurística: preferir voces ES con nombres comunes femeninos (varía por SO/navegador)
+  const preferred = voices.find(
+    (v) =>
+      v.lang?.toLowerCase().startsWith("es") &&
+      /female|mujer|helena|laura|luciana|sofia|catalina|paulina|roxane/i.test(v.name)
+  );
 
-  // Heurísticas simples (no todos los navegadores traen nombres consistentes)
-  const femaleHints = ["helena", "sabrina", "laura", "female", "mujer"];
-  const maleHints = ["pablo", "jorge", "male", "hombre"];
-
-  const pool = preference === "female" ? femaleHints : maleHints;
-
-  const byName = es.find((v) => pool.some((h) => (v.name || "").toLowerCase().includes(h)));
-  return byName || es[0];
+  const anyEs = voices.find((v) => v.lang?.toLowerCase().startsWith("es")) ?? null;
+  return preferred ?? anyEs;
 }
 
 export function SalesAgentWidget() {
-  // UI
-  const [open, setOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
-  // Chat
-  const [messages, setMessages] = useState<ChatMsg[]>([
+  const [messages, setMessages] = useState<Message[]>([
     {
+      id: "welcome",
       role: "assistant",
-      content: "Hola. Soy Roxane. ¿En qué puedo ayudarte hoy?",
-      ts: Date.now(),
+      content:
+        "Soy N33, el asistente IA de NeuroMind33. Contame de tu negocio y te propongo cómo podemos ayudarte con software, IA y automatización.",
     },
   ]);
+
   const [input, setInput] = useState("");
-  const [busy, setBusy] = useState(false);
-  const [errorHint, setErrorHint] = useState<string | null>(null);
+  const [isSending, setIsSending] = useState(false);
+  const [hasError, setHasError] = useState(false);
 
-  // Voice
-  const [voiceEnabled, setVoiceEnabled] = useState(false); // conversación continua
-  const [voicePreference, setVoicePreference] = useState<"female" | "male">("female");
-  const [voiceStatus, setVoiceStatus] = useState<"idle" | "listening" | "thinking" | "speaking" | "blocked" | "unsupported">("idle");
+  // ---- VOZ (integrada, sin UI nueva) ----
+  const [voiceEnabled, setVoiceEnabled] = useState(false);
+  const [voiceStatus, setVoiceStatus] = useState<VoiceStatus>("off");
+  const greetedRef = useRef(false);
 
-  const recogRef = useRef<any | null>(null);
-  const restartingRef = useRef(false);
-  const lastUserUtteranceRef = useRef<string>("");
+  const recognitionRef = useRef<any | null>(null);
+  const isMountedRef = useRef(true);
+  const speakingRef = useRef(false);
+  const lastHeardAtRef = useRef<number>(0);
 
-  const panelRef = useRef<HTMLDivElement | null>(null);
+  const robotState: RobotState = hasError
+    ? "error"
+    : isSending
+    ? "thinking"
+    : messages.length > 1
+    ? "answer"
+    : "idle";
 
-  const voiceSupported = useMemo(() => !!getSpeechRecognitionCtor() && isBrowser(), []);
+  const canUseVoice = useMemo(() => {
+    if (typeof window === "undefined") return false;
+    const Rec = getSpeechRecognition();
+    const hasTTS = "speechSynthesis" in window;
+    return Boolean(Rec && hasTTS);
+  }, []);
 
-  // Autoscroll cuando llega mensaje
-  useEffect(() => {
-    if (!open) return;
-    const el = panelRef.current;
-    if (!el) return;
-    el.scrollTop = el.scrollHeight;
-  }, [open, messages.length]);
-
-  function addMsg(role: ChatRole, content: string) {
-    setMessages((prev) => [...prev, { role, content, ts: Date.now() }]);
+  function stopRecognition() {
+    try {
+      if (recognitionRef.current) {
+        recognitionRef.current.onresult = null;
+        recognitionRef.current.onerror = null;
+        recognitionRef.current.onend = null;
+        recognitionRef.current.stop?.();
+      }
+    } catch {}
+    recognitionRef.current = null;
   }
 
-  async function callAgent(nextMessages: ChatMsg[]): Promise<AgentPayload> {
-    const res = await fetch("/api/agent-sales", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      // Tu API espera {messages:[{role,content}]}
-      body: JSON.stringify({
-        messages: nextMessages.map((m) => ({ role: m.role, content: m.content })),
-      }),
-    });
-
-    if (!res.ok) {
-      const txt = await res.text().catch(() => "");
-      throw new Error(`Agent error ${res.status}: ${txt}`);
-    }
-
-    return (await res.json()) as AgentPayload;
-  }
-
-  async function handleUserText(text: string) {
-    const clean = (text || "").trim();
-    if (!clean || busy) return;
-
-    setErrorHint(null);
-    setBusy(true);
-
-    const next = [...messages, { role: "user" as const, content: clean, ts: Date.now() }];
-    setMessages(next);
+  function speak(text: string) {
+    if (!voiceEnabled) return;
 
     try {
-      const payload = await callAgent(next);
-      const reply = (payload?.reply || "").trim() || "Listo. ¿Qué más te gustaría ajustar?";
-      addMsg("assistant", reply);
+      if (!("speechSynthesis" in window)) return;
+      window.speechSynthesis.cancel();
 
-      // Si voz está activa: hablar y luego reanudar escucha
-      if (voiceEnabled) {
-        await speak(reply);
-        safeRestartListening();
-      }
-    } catch (e: any) {
-      console.error(e);
-      addMsg("assistant", "Hubo un error consultando la IA. Intenta de nuevo.");
-      setErrorHint(
-        e?.message?.includes("GEMINI_API_KEY")
-          ? "Parece faltar GEMINI_API_KEY/GEMINI_MODEL en Vercel."
-          : "Revisá logs de Vercel y el endpoint /api/agent-sales."
-      );
-      // Si falla, no “loop infinito” de voz
-      setVoiceStatus((s) => (s === "listening" ? "idle" : s));
-    } finally {
-      setBusy(false);
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = "es-ES";
+      utter.rate = 1.0;
+      utter.pitch = 1.1;
+      utter.volume = 1.0;
+
+      const voice = pickBestSpanishFemaleVoice();
+      if (voice) utter.voice = voice;
+
+      utter.onstart = () => {
+        speakingRef.current = true;
+        if (isMountedRef.current) setVoiceStatus("speaking");
+      };
+
+      utter.onend = () => {
+        speakingRef.current = false;
+        if (isMountedRef.current && voiceEnabled) {
+          // Al terminar de hablar, reanudamos escucha si está habilitada
+          setVoiceStatus("listening");
+          startRecognition(); // safe re-start
+        }
+      };
+
+      utter.onerror = () => {
+        speakingRef.current = false;
+        if (isMountedRef.current) setVoiceStatus("error");
+      };
+
+      window.speechSynthesis.speak(utter);
+    } catch {
+      setVoiceStatus("error");
     }
   }
 
-  function stopAllSpeech() {
-    if (!isBrowser()) return;
+  function startRecognition() {
+    if (!voiceEnabled) return;
+    if (!canUseVoice) {
+      setVoiceStatus("error");
+      return;
+    }
+    if (speakingRef.current) return; // no escuchamos mientras hablamos
+
+    const Rec = getSpeechRecognition();
+    if (!Rec) {
+      setVoiceStatus("error");
+      return;
+    }
+
+    // Si ya hay una instancia, evitamos duplicados
+    if (recognitionRef.current) {
+      try {
+        recognitionRef.current.start?.();
+        setVoiceStatus("listening");
+        return;
+      } catch {
+        // si falla, recreamos
+        stopRecognition();
+      }
+    }
+
+    try {
+      const rec = new Rec();
+      rec.lang = "es-ES";
+      rec.continuous = true;
+      rec.interimResults = false;
+      rec.maxAlternatives = 1;
+
+      rec.onresult = async (event: any) => {
+        // Evitar dobles disparos seguidos
+        const now = Date.now();
+        if (now - lastHeardAtRef.current < 800) return;
+        lastHeardAtRef.current = now;
+
+        const last = event.results?.[event.results.length - 1];
+        const transcript = (last?.[0]?.transcript ?? "").trim();
+        if (!transcript) return;
+
+        // Pausamos reconocimiento mientras enviamos y mientras el TTS habla
+        stopRecognition();
+        if (!isMountedRef.current) return;
+
+        // Enviar como si el usuario lo hubiera escrito
+        await handleSend(transcript, { fromVoice: true });
+      };
+
+      rec.onerror = () => {
+        if (!isMountedRef.current) return;
+        setVoiceStatus("error");
+      };
+
+      rec.onend = () => {
+        // Chrome corta a veces. Si voz sigue activa y no estamos hablando, relanzamos.
+        if (!isMountedRef.current) return;
+        if (voiceEnabled && !speakingRef.current) {
+          try {
+            rec.start?.();
+            setVoiceStatus("listening");
+          } catch {
+            // Ignorar
+          }
+        }
+      };
+
+      recognitionRef.current = rec;
+      rec.start?.();
+      setVoiceStatus("listening");
+    } catch {
+      setVoiceStatus("error");
+    }
+  }
+
+  async function enableVoiceAndStart() {
+    if (!canUseVoice) {
+      setVoiceStatus("error");
+      return;
+    }
+
+    setVoiceEnabled(true);
+    setVoiceStatus("starting");
+
+    // Forzar carga de voces (algunos navegadores la cargan async)
+    try {
+      window.speechSynthesis.getVoices();
+    } catch {}
+
+    // Pedir permiso mic en interacción del usuario (este click)
+    try {
+      await navigator.mediaDevices.getUserMedia({ audio: true });
+    } catch {
+      setVoiceStatus("error");
+      setVoiceEnabled(false);
+      return;
+    }
+
+    // Saludo hablado una sola vez por sesión abierta
+    if (!greetedRef.current) {
+      greetedRef.current = true;
+      speak("Hola. ¿En qué puedo ayudarte hoy?");
+      // speak() al terminar re-lanza startRecognition()
+      return;
+    }
+
+    startRecognition();
+  }
+
+  function disableVoice() {
+    setVoiceEnabled(false);
+    setVoiceStatus("off");
     try {
       window.speechSynthesis?.cancel?.();
     } catch {}
+    stopRecognition();
   }
 
-  async function speak(text: string) {
-    if (!isBrowser() || !window.speechSynthesis) return;
-    stopAllSpeech();
+  async function handleSend(textOverride?: string, opts?: { fromVoice?: boolean }) {
+    const trimmed = (textOverride ?? input).trim();
+    if (!trimmed || isSending) return;
 
-    const voices = await new Promise<SpeechSynthesisVoice[]>((resolve) => {
-      const v = window.speechSynthesis.getVoices();
-      if (v && v.length) return resolve(v);
-
-      // Algunos navegadores cargan voces async
-      const on = () => {
-        const vv = window.speechSynthesis.getVoices();
-        resolve(vv || []);
-        window.speechSynthesis.removeEventListener("voiceschanged", on);
-      };
-      window.speechSynthesis.addEventListener("voiceschanged", on);
-      setTimeout(() => {
-        const vv = window.speechSynthesis.getVoices();
-        resolve(vv || []);
-        window.speechSynthesis.removeEventListener("voiceschanged", on);
-      }, 500);
-    });
-
-    const chosen = pickSpanishVoice(voices, voicePreference);
-
-    await new Promise<void>((resolve) => {
-      const u = new SpeechSynthesisUtterance(text);
-      u.lang = "es-ES";
-      u.rate = 1.02;
-      u.pitch = voicePreference === "female" ? 1.05 : 0.98;
-      u.volume = 1.0;
-      if (chosen) u.voice = chosen;
-
-      u.onstart = () => setVoiceStatus("speaking");
-      u.onend = () => {
-        setVoiceStatus("idle");
-        resolve();
-      };
-      u.onerror = () => {
-        setVoiceStatus("idle");
-        resolve();
-      };
-
-      window.speechSynthesis.speak(u);
-    });
-  }
-
-  function ensureRecognition() {
-    if (!voiceSupported) return null;
-    if (recogRef.current) return recogRef.current;
-
-    const Ctor = getSpeechRecognitionCtor();
-    if (!Ctor) return null;
-
-    const r = new Ctor();
-    r.continuous = true;
-    r.interimResults = false;
-    r.lang = "es-ES";
-
-    r.onresult = async (event: any) => {
-      try {
-        const last = event.results?.[event.results.length - 1];
-        const transcript = (last?.[0]?.transcript || "").trim();
-
-        // Evitar duplicados por re-emisión
-        if (!transcript) return;
-        if (transcript === lastUserUtteranceRef.current) return;
-        lastUserUtteranceRef.current = transcript;
-
-        // Pausar escucha mientras procesamos
-        try { r.stop(); } catch {}
-
-        setVoiceStatus("thinking");
-        await handleUserText(transcript);
-      } catch (err) {
-        console.error(err);
-        safeRestartListening();
-      }
+    const userMessage: Message = {
+      id: crypto.randomUUID(),
+      role: "user",
+      content: trimmed,
     };
 
-    r.onerror = (event: any) => {
-      console.error("[voice] recognition error:", event?.error);
-      if (event?.error === "not-allowed" || event?.error === "service-not-allowed") {
-        setVoiceStatus("blocked");
-        setVoiceEnabled(false);
-        addMsg("assistant", "No pude acceder al micrófono o el navegador bloqueó el reconocimiento.");
-        return;
-      }
-      safeRestartListening();
-    };
+    // Nota: usamos el snapshot actual para construir el payload
+    const nextMessagesForPayload = [
+      ...messages.map((m) => ({ role: m.role, content: m.content })),
+      { role: "user" as const, content: trimmed },
+    ];
 
-    r.onend = () => {
-      // Si está activo, reintentar (pero controlado)
-      if (!voiceEnabled) return;
-      safeRestartListening();
-    };
-
-    recogRef.current = r;
-    return r;
-  }
-
-  function startListeningFromUserGesture() {
-    if (!voiceSupported) {
-      setVoiceStatus("unsupported");
-      addMsg("assistant", "Tu navegador no soporta reconocimiento de voz. Usá el chat.");
-      return;
-    }
-
-    const r = ensureRecognition();
-    if (!r) {
-      setVoiceStatus("unsupported");
-      addMsg("assistant", "No pude inicializar el reconocimiento de voz. Usá el chat.");
-      return;
-    }
+    setMessages((prev) => [...prev, userMessage]);
+    if (!opts?.fromVoice) setInput("");
+    setIsSending(true);
+    setHasError(false);
 
     try {
-      setVoiceStatus("listening");
-      r.start();
-    } catch (e) {
-      // En algunos navegadores start() falla si ya está iniciado
-      safeRestartListening();
+      const res = await fetch("/api/agent-sales", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: nextMessagesForPayload }),
+      });
+
+      if (!res.ok) throw new Error("Error en la API del asistente");
+
+      const data = await res.json();
+
+      const assistantMessage: Message = {
+        id: crypto.randomUUID(),
+        role: "assistant",
+        content:
+          data.reply ??
+          "Tengo una propuesta, pero no pude formatearla bien. Probá de nuevo.",
+      };
+
+      setMessages((prev) => [...prev, assistantMessage]);
+      setHasError(false);
+
+      // Hablar la respuesta si voz está activa
+      if (voiceEnabled) {
+        // Cortamos escucha antes del TTS para evitar que capture su propia voz
+        stopRecognition();
+        speak(assistantMessage.content);
+      }
+    } catch (err) {
+      console.error(err);
+      const errorMessage: Message = {
+        id: crypto.randomUUID(),
+        role: "assistant",
+        content:
+          "Hubo un problema conectando con el modelo de IA. Probá de nuevo en unos segundos o hablá directo por WhatsApp.",
+      };
+      setMessages((prev) => [...prev, errorMessage]);
+      setHasError(true);
+
+      if (voiceEnabled) {
+        stopRecognition();
+        speak("Hubo un error consultando la IA. Intenta de nuevo.");
+      }
+    } finally {
+      setIsSending(false);
+
+      // Si voz activa y no estamos hablando, reanudamos escucha
+      if (voiceEnabled && !speakingRef.current) {
+        startRecognition();
+      }
     }
   }
 
-  function safeRestartListening() {
-    if (!voiceEnabled) return;
-    if (!voiceSupported) return;
-
-    if (restartingRef.current) return;
-    restartingRef.current = true;
-
-    setTimeout(() => {
-      restartingRef.current = false;
-      const r = ensureRecognition();
-      if (!r) return;
+  // Limpieza al desmontar
+  useEffect(() => {
+    return () => {
+      isMountedRef.current = false;
       try {
-        setVoiceStatus("listening");
-        r.start();
+        window.speechSynthesis?.cancel?.();
       } catch {}
-    }, 350);
-  }
-
-  function stopListening() {
-    stopAllSpeech();
-    const r = recogRef.current;
-    if (r) {
-      try { r.onresult = null; } catch {}
-      try { r.onerror = null; } catch {}
-      try { r.onend = null; } catch {}
-      try { r.stop(); } catch {}
-      recogRef.current = null;
-    }
-    setVoiceStatus("idle");
-    lastUserUtteranceRef.current = "";
-  }
-
-  function onToggleOpen() {
-    const nextOpen = !open;
-    setOpen(nextOpen);
-
-    // Requisito: activar voz SOLO por gesto del usuario (click)
-    // Enfoque pedido: click en botón flotante => abre y activa voz
-    if (nextOpen) {
-      setVoiceEnabled(true);
-      setErrorHint(null);
-      setTimeout(() => startListeningFromUserGesture(), 50);
-    }
-  }
-
-  function onToggleVoice() {
-    const next = !voiceEnabled;
-    setVoiceEnabled(next);
-
-    if (next) {
-      setErrorHint(null);
-      // Debe arrancar por click (gesture)
-      startListeningFromUserGesture();
-    } else {
-      stopListening();
-    }
-  }
-
-  // Si el usuario cambia de “mujer/hombre” no tocamos historial, solo voz
-  useEffect(() => {
-    // si está hablando, no interrumpimos; aplica en la próxima respuesta
-  }, [voicePreference]);
-
-  // Si se apaga voz, cortar recognition
-  useEffect(() => {
-    if (!voiceEnabled) stopListening();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [voiceEnabled]);
-
-  const statusLabel =
-    voiceStatus === "listening"
-      ? "Escuchando…"
-      : voiceStatus === "thinking"
-      ? "Pensando…"
-      : voiceStatus === "speaking"
-      ? "Hablando…"
-      : voiceStatus === "blocked"
-      ? "Mic bloqueado"
-      : voiceStatus === "unsupported"
-      ? "Voz no soportada"
-      : "Listo";
+      stopRecognition();
+    };
+  }, []);
 
   return (
     <>
-      {/* Botón flotante único */}
+      {/* Botón flotante Asesor IA (MISMO UI) */}
       <button
-        onClick={onToggleOpen}
-        className="fixed bottom-6 right-6 z-[60] h-14 w-14 rounded-full shadow-2xl bg-slate-900 text-white border border-white/10 hover:bg-slate-800 transition flex items-center justify-center"
-        aria-label="Abrir agente"
-        title="Roxane"
+        type="button"
+        onClick={() => {
+          setIsOpen((prev) => {
+            const next = !prev;
+
+            // Activar voz SOLO al abrir (si el navegador soporta)
+            // Esto ocurre dentro del mismo click (requisito para permisos)
+            if (next && canUseVoice) {
+              enableVoiceAndStart();
+            }
+
+            // Si cierra el panel, NO apagamos voz automáticamente (chat puede minimizarse y seguir hablando)
+            // El usuario controla con el icono de micrófono.
+            return next;
+          });
+        }}
+        className="
+          fixed bottom-6 right-24 z-[9500]
+          flex items-center gap-2
+          rounded-full px-4 py-2.5
+          bg-slate-900 text-slate-50
+          shadow-xl shadow-sky-500/40
+          border border-slate-700/60
+          hover:bg-slate-800 hover:scale-[1.03]
+          transition
+        "
       >
-        <span className="text-lg">R</span>
+        <span
+          className="
+            inline-flex items-center justify-center
+            w-7 h-7 rounded-2xl
+            bg-gradient-to-br from-sky-500 via-indigo-500 to-purple-500
+          "
+        >
+          <i className="fa-solid fa-robot text-xs text-white" />
+        </span>
+        <span className="text-xs font-semibold tracking-wide">Asesor IA</span>
       </button>
 
-      {/* Panel */}
-      {open && (
-        <div className="fixed bottom-24 right-6 z-[60] w-[360px] max-w-[92vw] rounded-2xl overflow-hidden border border-white/10 bg-slate-950 text-white shadow-2xl">
+      {/* Panel del Asesor IA (MISMO UI) */}
+      {isOpen && (
+        <div
+          className="
+            fixed bottom-24 right-4 z-[9400]
+            w-[360px] max-w-[95vw]
+            rounded-3xl border border-slate-800
+            bg-slate-950/95 backdrop-blur-xl
+            shadow-[0_25px_80px_rgba(15,23,42,0.9)]
+            flex flex-col
+            transition-transform transition-opacity duration-200
+          "
+        >
           {/* Header */}
-          <div className="px-4 py-3 border-b border-white/10 bg-gradient-to-r from-slate-900 to-slate-950">
-            <div className="flex items-center justify-between gap-3">
-              <div className="min-w-0">
-                <div className="flex items-center gap-2">
-                  <div className="font-semibold truncate">Roxane</div>
-                  <span className="text-xs text-white/60">• {statusLabel}</span>
-                </div>
-                <div className="text-xs text-white/50">
-                  Chat + Voz (misma conversación)
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2">
-                {/* Toggle voz */}
-                <button
-                  onClick={onToggleVoice}
-                  className={`h-9 w-9 rounded-lg border border-white/10 flex items-center justify-center transition ${
-                    voiceEnabled ? "bg-emerald-600/20" : "bg-white/5 hover:bg-white/10"
-                  }`}
-                  title={voiceEnabled ? "Desactivar micrófono" : "Activar micrófono"}
-                >
-                  {voiceEnabled ? <span>🎙️</span> : <span>🎤</span>}
-                </button>
-
-                <button
-                  onClick={() => setOpen(false)}
-                  className="h-9 w-9 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 transition"
-                  title="Cerrar"
-                >
-                  ✕
-                </button>
-              </div>
+          <div className="flex items-center justify-between px-4 pt-3 pb-2 border-b border-slate-800/80">
+            <div className="flex flex-col">
+              <span className="text-xs font-semibold text-slate-100">
+                Asesor IA de NeuroMind33
+              </span>
+              <span className="text-[11px] text-slate-400">
+                Te ayudo a pensar tu proyecto y opciones de trabajo juntos.
+              </span>
             </div>
 
-            {/* Preferencia de voz */}
-            <div className="mt-2 flex items-center justify-between gap-2">
-              <div className="text-xs text-white/60">Voz:</div>
-              <div className="flex gap-2">
-                <button
-                  className={`px-3 py-1 rounded-lg text-xs border border-white/10 transition ${
-                    voicePreference === "female" ? "bg-violet-600/20" : "bg-white/5 hover:bg-white/10"
-                  }`}
-                  onClick={() => setVoicePreference("female")}
-                  type="button"
-                >
-                  Mujer (Roxane)
-                </button>
-                <button
-                  className={`px-3 py-1 rounded-lg text-xs border border-white/10 transition ${
-                    voicePreference === "male" ? "bg-violet-600/20" : "bg-white/5 hover:bg-white/10"
-                  }`}
-                  onClick={() => setVoicePreference("male")}
-                  type="button"
-                >
-                  Hombre (Cosmos)
-                </button>
-              </div>
-            </div>
+            <div className="flex items-center gap-2">
+              {/* Mic toggle (chico y profesional, sin romper UI) */}
+              <button
+                type="button"
+                title={
+                  !canUseVoice
+                    ? "Voz no disponible en este navegador"
+                    : voiceEnabled
+                    ? "Desactivar voz"
+                    : "Activar voz"
+                }
+                onClick={async () => {
+                  if (!canUseVoice) return;
 
-            {errorHint && (
-              <div className="mt-2 text-xs text-amber-300/90">
-                {errorHint}
+                  if (voiceEnabled) {
+                    disableVoice();
+                    return;
+                  }
+
+                  // Activación manual con permiso mic
+                  await enableVoiceAndStart();
+                }}
+                className={`
+                  inline-flex items-center justify-center
+                  w-7 h-7 rounded-full
+                  border border-slate-700/70
+                  transition
+                  ${
+                    !canUseVoice
+                      ? "bg-slate-900 text-slate-600 cursor-not-allowed"
+                      : voiceEnabled
+                      ? "bg-sky-500 text-white hover:bg-sky-600"
+                      : "bg-slate-900 text-slate-300 hover:text-slate-100 hover:bg-slate-800"
+                  }
+                `}
+              >
+                <i
+                  className={`fa-solid ${
+                    voiceEnabled ? "fa-microphone" : "fa-microphone-slash"
+                  } text-xs`}
+                />
+              </button>
+
+              {/* Close */}
+              <button
+                type="button"
+                onClick={() => setIsOpen(false)}
+                className="
+                  inline-flex items-center justify-center
+                  w-7 h-7 rounded-full
+                  bg-slate-900 hover:bg-slate-800
+                  border border-slate-700/70
+                  text-slate-300 hover:text-slate-100
+                  transition
+                "
+              >
+                <i className="fa-solid fa-xmark text-xs" />
+              </button>
+            </div>
+          </div>
+
+          {/* Contenido */}
+          <div className="flex flex-col px-4 pt-2 pb-3 h-[360px]">
+            {/* Robot */}
+            <RobotAssistant state={robotState} />
+
+            {/* Indicador de voz (sutil, sin UI nueva) */}
+            {voiceEnabled && (
+              <div className="mt-1 text-[11px] text-slate-400 flex items-center gap-2">
+                <span
+                  className={`inline-block w-2 h-2 rounded-full ${
+                    voiceStatus === "listening"
+                      ? "bg-emerald-400 animate-pulse"
+                      : voiceStatus === "speaking"
+                      ? "bg-sky-400 animate-pulse"
+                      : voiceStatus === "starting"
+                      ? "bg-yellow-400 animate-pulse"
+                      : voiceStatus === "error"
+                      ? "bg-red-400"
+                      : "bg-slate-600"
+                  }`}
+                />
+                <span>
+                  {voiceStatus === "starting"
+                    ? "Activando voz…"
+                    : voiceStatus === "listening"
+                    ? "Voz activa: escuchando"
+                    : voiceStatus === "speaking"
+                    ? "Voz activa: hablando"
+                    : voiceStatus === "error"
+                    ? "No pude acceder al micrófono o el navegador bloqueó la voz"
+                    : "Voz desactivada"}
+                </span>
               </div>
             )}
-          </div>
 
-          {/* Body */}
-          <div ref={panelRef} className="max-h-[320px] overflow-y-auto p-3 space-y-2">
-            {messages.map((m, i) => {
-              const mine = m.role === "user";
-              return (
-                <div key={m.ts + "-" + i} className={`flex ${mine ? "justify-end" : "justify-start"}`}>
-                  <div
-                    className={`max-w-[85%] rounded-2xl px-3 py-2 text-sm border ${
-                      mine
-                        ? "bg-violet-600/20 border-violet-500/20"
-                        : "bg-white/5 border-white/10"
-                    }`}
-                  >
-                    <div className="whitespace-pre-wrap">{m.content}</div>
-                    <div className="mt-1 text-[11px] text-white/40">
-                      {new Date(m.ts).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
-                    </div>
-                  </div>
+            {/* Mensajes */}
+            <div className="flex-1 overflow-y-auto space-y-2 pr-1 mt-1">
+              {messages.map((m) => (
+                <div
+                  key={m.id}
+                  className={`
+                    max-w-[90%] rounded-2xl px-3 py-2 text-xs leading-relaxed
+                    ${
+                      m.role === "assistant"
+                        ? "bg-slate-900/80 text-slate-100 border border-slate-700/80 self-start"
+                        : "bg-sky-500 text-white self-end ml-auto"
+                    }
+                  `}
+                >
+                  {m.content}
                 </div>
-              );
-            })}
-          </div>
+              ))}
+            </div>
 
-          {/* Footer */}
-          <form
-            className="p-3 border-t border-white/10 bg-slate-950 flex gap-2"
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleUserText(input);
-              setInput("");
-            }}
-          >
-            <input
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="Escribí acá… (o hablá con el mic)"
-              className="flex-1 rounded-xl bg-white/5 border border-white/10 px-3 py-2 text-sm outline-none focus:border-violet-400/40"
-              disabled={busy}
-            />
-            <button
-              type="submit"
-              className="rounded-xl px-3 py-2 text-sm bg-violet-600/30 border border-violet-500/20 hover:bg-violet-600/40 transition disabled:opacity-60"
-              disabled={busy || !input.trim()}
-              title="Enviar"
-            >
-              {busy ? "…" : "Enviar"}
-            </button>
-          </form>
-
-          <div className="px-3 pb-3 text-[11px] text-white/40">
-            Tip: si minimizás el panel, la voz puede seguir activa mientras no la apagues.
+            {/* Input */}
+            <div className="mt-2 flex items-center gap-2">
+              <input
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    handleSend();
+                  }
+                }}
+                placeholder="Contame de tu negocio, ideas o dudas."
+                className="
+                  flex-1 rounded-2xl border border-slate-700/70
+                  bg-slate-900/80 text-xs text-slate-100
+                  px-3 py-2 outline-none
+                  placeholder:text-slate-500
+                  focus:border-sky-500
+                "
+              />
+              <button
+                type="button"
+                onClick={() => handleSend()}
+                disabled={isSending || !input.trim()}
+                className="
+                  inline-flex items-center justify-center
+                  rounded-2xl px-3 py-2
+                  bg-sky-500 text-white text-xs font-semibold
+                  disabled:opacity-50 disabled:cursor-not-allowed
+                  hover:bg-sky-600 transition
+                "
+              >
+                {isSending ? "Enviando..." : "Enviar"}
+              </button>
+            </div>
           </div>
         </div>
       )}

@@ -343,20 +343,12 @@ export function SalesAgentWidget() {
       {/* Botón flotante Asesor IA (MISMO UI) */}
       <button
         type="button"
-        onClick={() => {
-          setIsOpen((prev) => {
-            const next = !prev;
-
-            // Activar voz SOLO al abrir (si el navegador soporta)
-            // Esto ocurre dentro del mismo click (requisito para permisos)
-            if (next && canUseVoice) {
-              enableVoiceAndStart();
-            }
-
-            // Si cierra el panel, NO apagamos voz automáticamente (chat puede minimizarse y seguir hablando)
-            // El usuario controla con el icono de micrófono.
-            return next;
-          });
+        onClick={async () => {
+          const next = !isOpen;
+          setIsOpen(next);
+          if (next && canUseVoice) {
+            await enableVoiceAndStart();
+          }
         }}
         className="
           fixed bottom-6 right-24 z-[9500]

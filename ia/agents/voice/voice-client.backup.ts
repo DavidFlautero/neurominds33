@@ -77,13 +77,7 @@ export async function speak(text: string, voicePreference: "female" | "male" = "
   const chosen =
     es.find((v) => hints.some((h) => (v.name || "").toLowerCase().includes(h))) || es[0] || null;
 
-  // Agregar timeout para evitar bloqueos
-  return new Promise<void>((resolve) => {
-    const timeoutId = setTimeout(() => {
-      console.warn("speak timeout");
-      resolve();
-    }, 10000); // Timeout de 10 segundos
-
+  await new Promise<void>((resolve) => {
     const u = new SpeechSynthesisUtterance(text);
     u.lang = "es-ES";
     u.rate = 1.02;
@@ -91,15 +85,8 @@ export async function speak(text: string, voicePreference: "female" | "male" = "
     u.volume = 1.0;
     if (chosen) u.voice = chosen;
 
-    u.onend = () => {
-      clearTimeout(timeoutId);
-      resolve();
-    };
-    u.onerror = (e) => {
-      console.error("Error en speechSynthesis:", e);
-      clearTimeout(timeoutId);
-      resolve();
-    };
+    u.onend = () => resolve();
+    u.onerror = () => resolve();
 
     window.speechSynthesis.speak(u);
   });

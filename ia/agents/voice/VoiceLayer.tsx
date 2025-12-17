@@ -28,24 +28,58 @@ export function VoiceLayer({
   const restarting = useRef(false);
 
   // start/stop recognition
-  const start = () => {
-    if (!enabled || !active) return;
+  const start = async () => {
+    console.log("VoiceLayer: start llamado", { enabled, active, recRef: !!recRef.current });
+    
+    if (!enabled || !active) {
+      console.log("VoiceLayer: no se inicia: enabled=", enabled, "active=", active);
+      return;
+    }
+    
     if (!isVoiceSupported()) {
+      console.log("VoiceLayer: voice no soportado");
       setStatus("unsupported");
       return;
     }
+    
+    // Intentar obtener permiso de micrófono primero
+    try {
+      console.log("VoiceLayer: solicitando permiso de micrófono");
+      const stream = await navigator.mediaDevices.getUserMedia({ 
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          sampleRate: 44100
+        }
+      });
+      
+      // Detener el stream inmediatamente (solo necesitamos el permiso)
+      stream.getTracks().forEach(track => {
+        track.stop();
+        console.log("VoiceLayer: track detenido");
+      });
+      
+      console.log("VoiceLayer: permiso de micrófono otorgado");
+    } catch (error) {
+      console.error("VoiceLayer: Error al solicitar permiso de micrófono:", error);
+      setStatus("blocked");
+      return;
+    }
+    
+    // Crear reconocimiento si no existe
     if (!recRef.current) {
+      console.log("VoiceLayer: creando nuevo reconocimiento");
       recRef.current = createRecognition({
         lang: "es-ES",
         onText: async (text) => {
+          console.log("VoiceLayer: texto reconocido:", text);
           try { recRef.current?.stop?.(); } catch {}
           setStatus("thinking");
           await onUserText(text);
-          // el widget hablará la respuesta si tú llamas speak ahí;
-          // si NO, aquí no forzamos nada para no romper tu UI.
           safeRestart();
         },
-        onError: (kind) => {
+        onError: (kind, raw) => {
+          console.error("VoiceLayer: error en reconocimiento:", kind, raw);
           if (kind === "blocked") {
             setStatus("blocked");
           } else {
@@ -53,19 +87,25 @@ export function VoiceLayer({
           }
         },
         onEnd: () => {
+          console.log("VoiceLayer: reconocimiento terminado");
           safeRestart();
         },
       });
     }
+    
+    // Iniciar reconocimiento
     try {
+      console.log("VoiceLayer: iniciando reconocimiento");
       setStatus("listening");
       recRef.current.start();
-    } catch {
+    } catch (error) {
+      console.error("VoiceLayer: error al iniciar reconocimiento:", error);
       safeRestart();
     }
   };
 
   const stop = () => {
+    console.log("VoiceLayer: stop llamado");
     try { window.speechSynthesis?.cancel?.(); } catch {}
     try { recRef.current?.stop?.(); } catch {}
     recRef.current = null;
@@ -73,39 +113,54 @@ export function VoiceLayer({
   };
 
   const safeRestart = () => {
-    if (!enabled || !active) return;
-    if (restarting.current) return;
+    console.log("VoiceLayer: safeRestart llamado");
+    if (!enabled || !active) {
+      console.log("VoiceLayer: no restart - enabled:", enabled, "active:", active);
+      return;
+    }
+    if (restarting.current) {
+      console.log("VoiceLayer: ya está reiniciando");
+      return;
+    }
     restarting.current = true;
+    console.log("VoiceLayer: programando reinicio en 350ms");
     setTimeout(() => {
       restarting.current = false;
+      console.log("VoiceLayer: ejecutando reinicio");
       start();
     }, 350);
   };
 
-  // Cuando abres el panel (user gesture), saluda por voz y arranca escucha
+  // Efecto principal que maneja active y enabled
   useEffect(() => {
-    if (!active) return;
-    if (!enabled) return;
+    if (!active || !enabled) {
+      stop();
+      return;
+    }
 
     (async () => {
       if (!isVoiceSupported()) {
         setStatus("unsupported");
         return;
       }
+      
+      // Esperar un momento para asegurar que el DOM esté listo
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
       setStatus("speaking");
       await speak(greeting, voicePreference);
       setStatus("idle");
       onAssistantSpoken?.();
+      
+      // Iniciar reconocimiento después del saludo
+      await new Promise(resolve => setTimeout(resolve, 300));
       start();
     })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [active]);
 
-  // si apagas mic, cortar todo
-  useEffect(() => {
-    if (!enabled) stop();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [enabled]);
+    return () => {
+      stop();
+    };
+  }, [active, enabled, greeting, voicePreference, onAssistantSpoken, setStatus]);
 
   // cleanup
   useEffect(() => () => stop(), []);

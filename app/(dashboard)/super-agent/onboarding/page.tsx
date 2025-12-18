@@ -1,5 +1,7 @@
 "use client";
 
+export const dynamic = "force-dynamic";
+
 import { useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
@@ -45,7 +47,7 @@ export default function OnboardingPage() {
     <div className="max-w-2xl mx-auto py-10 space-y-6">
       <h1 className="text-2xl font-bold">Configuración inicial</h1>
       <p className="text-sm text-muted-foreground">
-        Este asistente alimenta al comité IA. Sin esto, el plan sería genérico.
+        Este asistente define la estrategia inicial del agente.
       </p>
 
       <div className="text-sm text-muted-foreground">
@@ -54,12 +56,13 @@ export default function OnboardingPage() {
 
       {!projectId && (
         <div className="rounded-lg border bg-yellow-50 p-4 text-sm">
-          Falta <b>projectId</b> en la URL. Volvé a /super-agent y elegí un proyecto.
+          Falta <b>projectId</b>. Volvé al dashboard y elegí un proyecto.
         </div>
       )}
 
       {step === 0 && (
-        <select className="w-full border p-2 rounded bg-white" onChange={e => setContext({ ...context, stage: e.target.value })}>
+        <select className="w-full border p-2 rounded bg-white"
+          onChange={e => setContext({ ...context, stage: e.target.value })}>
           <option value="">¿Cuánto tiempo lleva tu tienda?</option>
           <option value="0_30">0–30 días</option>
           <option value="1_3m">1–3 meses</option>
@@ -69,7 +72,8 @@ export default function OnboardingPage() {
       )}
 
       {step === 1 && (
-        <select className="w-full border p-2 rounded bg-white" onChange={e => setContext({ ...context, goal: e.target.value })}>
+        <select className="w-full border p-2 rounded bg-white"
+          onChange={e => setContext({ ...context, goal: e.target.value })}>
           <option value="">Objetivo principal</option>
           <option value="sales">Ventas</option>
           <option value="leads">Leads</option>
@@ -79,7 +83,8 @@ export default function OnboardingPage() {
       )}
 
       {step === 2 && (
-        <select className="w-full border p-2 rounded bg-white" onChange={e => setContext({ ...context, budgetMonthly: e.target.value })}>
+        <select className="w-full border p-2 rounded bg-white"
+          onChange={e => setContext({ ...context, budgetMonthly: e.target.value })}>
           <option value="">Presupuesto mensual</option>
           <option value="lt_300">&lt; 300 USD</option>
           <option value="300_1000">300–1.000 USD</option>
@@ -88,7 +93,8 @@ export default function OnboardingPage() {
       )}
 
       {step === 3 && (
-        <select className="w-full border p-2 rounded bg-white" onChange={e => setContext({ ...context, adsExperience: e.target.value })}>
+        <select className="w-full border p-2 rounded bg-white"
+          onChange={e => setContext({ ...context, adsExperience: e.target.value })}>
           <option value="">Experiencia en Ads</option>
           <option value="none">Ninguna</option>
           <option value="basic">Básica</option>
@@ -97,7 +103,8 @@ export default function OnboardingPage() {
       )}
 
       {step === 4 && (
-        <select className="w-full border p-2 rounded bg-white" onChange={e => setContext({ ...context, marketCompetesOn: e.target.value })}>
+        <select className="w-full border p-2 rounded bg-white"
+          onChange={e => setContext({ ...context, competeOn: e.target.value })}>
           <option value="">¿En qué compiten?</option>
           <option value="price">Precio</option>
           <option value="brand">Marca</option>
@@ -106,15 +113,19 @@ export default function OnboardingPage() {
         </select>
       )}
 
-      {err && <div className="rounded-lg border bg-red-50 p-3 text-sm text-red-700">{err}</div>}
+      {err && (
+        <div className="rounded-lg border bg-red-50 p-3 text-sm text-red-700">
+          {err}
+        </div>
+      )}
 
       <div className="flex justify-between">
-        {step > 0 && <button className="text-sm" onClick={prev}>Atrás</button>}
-        {step < steps.length - 1 && <button className="text-sm" onClick={next}>Siguiente</button>}
+        {step > 0 && <button onClick={prev}>Atrás</button>}
+        {step < steps.length - 1 && <button onClick={next}>Siguiente</button>}
         {step === steps.length - 1 && (
           <button
             disabled={saving || !projectId}
-            className="bg-black text-white px-4 py-2 rounded text-sm disabled:opacity-60"
+            className="bg-black text-white px-4 py-2 rounded disabled:opacity-60"
             onClick={finish}
           >
             {saving ? "Guardando…" : "Finalizar"}

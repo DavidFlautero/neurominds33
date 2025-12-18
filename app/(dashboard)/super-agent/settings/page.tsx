@@ -70,7 +70,7 @@ export default function SuperAgentSettings() {
 
         <div className="grid gap-3 md:grid-cols-2">
           <label className="space-y-1">
-            <div className="text-xs text-muted-foreground">Project ID</div>
+            <div className="text-xs text-slate-600 dark:text-slate-400">Project ID</div>
             <input
               className="w-full rounded-md border p-2"
               value={form.projectId}
@@ -79,7 +79,7 @@ export default function SuperAgentSettings() {
           </label>
 
           <label className="space-y-1">
-            <div className="text-xs text-muted-foreground">Site URL</div>
+            <div className="text-xs text-slate-600 dark:text-slate-400">Site URL</div>
             <input
               className="w-full rounded-md border p-2"
               value={form.siteUrl}
@@ -88,7 +88,7 @@ export default function SuperAgentSettings() {
           </label>
 
           <label className="space-y-1 md:col-span-2">
-            <div className="text-xs text-muted-foreground">Objetivo primario</div>
+            <div className="text-xs text-slate-600 dark:text-slate-400">Objetivo primario</div>
             <input
               className="w-full rounded-md border p-2"
               value={form.goalsPrimary}
@@ -97,7 +97,7 @@ export default function SuperAgentSettings() {
           </label>
 
           <label className="space-y-1 md:col-span-2">
-            <div className="text-xs text-muted-foreground">Objetivos secundarios (coma)</div>
+            <div className="text-xs text-slate-600 dark:text-slate-400">Objetivos secundarios (coma)</div>
             <input
               className="w-full rounded-md border p-2"
               value={form.goalsSecondary}
@@ -112,7 +112,7 @@ export default function SuperAgentSettings() {
 
         <div className="grid gap-3 md:grid-cols-2">
           <label className="space-y-1">
-            <div className="text-xs text-muted-foreground">Budget mensual (USD)</div>
+            <div className="text-xs text-slate-600 dark:text-slate-400">Budget mensual (USD)</div>
             <input
               type="number"
               className="w-full rounded-md border p-2"
@@ -122,7 +122,7 @@ export default function SuperAgentSettings() {
           </label>
 
           <label className="space-y-1">
-            <div className="text-xs text-muted-foreground">Budget diario (USD)</div>
+            <div className="text-xs text-slate-600 dark:text-slate-400">Budget diario (USD)</div>
             <input
               type="number"
               className="w-full rounded-md border p-2"
@@ -132,7 +132,7 @@ export default function SuperAgentSettings() {
           </label>
 
           <label className="space-y-1">
-            <div className="text-xs text-muted-foreground">CAC máximo (USD)</div>
+            <div className="text-xs text-slate-600 dark:text-slate-400">CAC máximo (USD)</div>
             <input
               type="number"
               className="w-full rounded-md border p-2"
@@ -142,7 +142,7 @@ export default function SuperAgentSettings() {
           </label>
 
           <label className="space-y-1">
-            <div className="text-xs text-muted-foreground">Aprobación si gasto &gt; (USD)</div>
+            <div className="text-xs text-slate-600 dark:text-slate-400">Aprobación si gasto &gt; (USD)</div>
             <input
               type="number"
               className="w-full rounded-md border p-2"
@@ -176,7 +176,7 @@ export default function SuperAgentSettings() {
           </label>
 
           <label className="space-y-1 md:col-span-2">
-            <div className="text-xs text-muted-foreground">Tono</div>
+            <div className="text-xs text-slate-600 dark:text-slate-400">Tono</div>
             <select
               className="w-full rounded-md border p-2"
               value={form.tone}

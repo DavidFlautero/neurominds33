@@ -1,10 +1,12 @@
+import { Suspense } from "react";
 import ProjectSwitcher from "./_components/ProjectSwitcher";
 import { Card, Pill } from "./_components/ui";
 
 async function fetchOverview(projectId: string) {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/super-agent/overview?projectId=${encodeURIComponent(projectId)}`, {
-    cache: "no-store",
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_APP_URL}/api/super-agent/overview?projectId=${encodeURIComponent(projectId)}`,
+    { cache: "no-store" }
+  );
   if (!res.ok) return null;
   return res.json();
 }
@@ -16,7 +18,11 @@ function toneFromStatus(status: string) {
   return { tone: "gray" as const, label: status };
 }
 
-export default async function SuperAgentHome({ searchParams }: { searchParams: { projectId?: string } }) {
+export default async function SuperAgentHome({
+  searchParams,
+}: {
+  searchParams: { projectId?: string };
+}) {
   const projectId = searchParams.projectId || "";
   const data = projectId ? await fetchOverview(projectId) : null;
 
@@ -45,10 +51,15 @@ export default async function SuperAgentHome({ searchParams }: { searchParams: {
           <h1 className="text-2xl font-bold">Super Agent</h1>
           <div className="flex items-center gap-2">
             <Pill label={badge.label} tone={badge.tone} />
-            {projectId ? <span className="text-xs text-muted-foreground">projectId: {projectId}</span> : null}
+            {projectId ? (
+              <span className="text-xs text-muted-foreground">projectId: {projectId}</span>
+            ) : null}
           </div>
         </div>
-        <ProjectSwitcher />
+
+        <Suspense fallback={<div className="text-sm text-muted-foreground">Cargando proyectos…</div>}>
+          <ProjectSwitcher />
+        </Suspense>
       </div>
 
       <div className="grid md:grid-cols-3 gap-4">
@@ -76,7 +87,7 @@ export default async function SuperAgentHome({ searchParams }: { searchParams: {
               {ctaLabel}
             </a>
             <p className="text-xs text-muted-foreground mt-2">
-              El flujo es: Sync → Contexto → Integraciones → Plan IA → Aprobaciones → Ejecución → Validación.
+              Flujo: Sync → Contexto → Integraciones → Plan IA → Aprobaciones → Ejecución → Validación.
             </p>
           </div>
         </Card>
@@ -120,7 +131,7 @@ export default async function SuperAgentHome({ searchParams }: { searchParams: {
             </div>
           </div>
           <p className="text-xs text-muted-foreground mt-3">
-            En cuanto conectes Google Ads/GA4, estos widgets se llenan automáticamente.
+            Con Google Ads/GA4 conectado, estos widgets se llenan automáticamente.
           </p>
         </Card>
       </div>

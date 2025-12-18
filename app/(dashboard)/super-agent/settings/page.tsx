@@ -142,7 +142,7 @@ export default function SuperAgentSettings() {
           </label>
 
           <label className="space-y-1">
-            <div className="text-xs text-muted-foreground">Aprobación si gasto > (USD)</div>
+            <div className="text-xs text-muted-foreground">Aprobación si gasto &gt; (USD)</div>
             <input
               type="number"
               className="w-full rounded-md border p-2"

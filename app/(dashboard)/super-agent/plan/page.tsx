@@ -1,25 +1,33 @@
 import { requireReady } from "@/lib/super-agent/requireReady";
 
-export default async function PlanPage() {
-  const projectId = "demo-project"; // luego dinámico
+export default async function PlanPage({ searchParams }: { searchParams: { projectId?: string } }) {
+  const projectId = searchParams.projectId || "";
+  if (!projectId) {
+    return <div className="p-10">Falta projectId. Volvé a /super-agent.</div>;
+  }
+
   const gate = await requireReady(projectId);
 
   if (!gate.ok) {
     return (
-      <div className="p-10 text-center">
+      <div className="p-10 space-y-2">
         <h2 className="text-xl font-bold">Acceso bloqueado</h2>
         <p className="text-muted-foreground">
-          Debes completar la configuración inicial antes de generar un plan.
+          Primero completá la configuración inicial (wizard). Estado actual: <b>{gate.reason}</b>
         </p>
+        <a className="inline-flex rounded-lg bg-black text-white px-4 py-2 text-sm"
+           href={`/super-agent/onboarding?projectId=${encodeURIComponent(projectId)}`}>
+          Ir al wizard
+        </a>
       </div>
     );
   }
 
   return (
-    <div className="p-10">
+    <div className="p-10 space-y-2">
       <h1 className="text-2xl font-bold">Plan IA – Semana 1</h1>
       <p className="text-muted-foreground">
-        (Aquí va el comité IA)
+        Siguiente paso: implementar comité IA y generar recomendaciones reales.
       </p>
     </div>
   );

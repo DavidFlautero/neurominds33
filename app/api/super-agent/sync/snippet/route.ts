@@ -1,35 +1,33 @@
 import { NextResponse } from "next/server";
-import { upsertProject } from "@/ia/super-agent/state/projectState";
+import { prisma } from "@/lib/prisma";
 
 export const runtime = "nodejs";
 
 export async function POST(req: Request) {
-  const { projectId, siteUrl } = await req.json();
+  try {
+    const body = await req.json();
+    const projectId = String(body.projectId || "").trim();
+    const siteUrl = String(body.siteUrl || "").trim();
 
-  upsertProject({
-    projectId,
-    siteUrl,
-    status: "snippet_ready",
-  });
+    if (!projectId) return NextResponse.json({ ok: false, error: "projectId required" }, { status: 400 });
+    if (!siteUrl) return NextResponse.json({ ok: false, error: "siteUrl required" }, { status: 400 });
 
-  const baseUrl =
-    process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") || "";
+    const project = await prisma.nmProject.upsert({
+      where: { id: projectId },
+      create: { id: projectId, siteUrl, status: "snippet_issued" },
+      update: { siteUrl, status: "snippet_issued" },
+      select: { id: true },
+    });
 
-  if (!baseUrl) {
-    return NextResponse.json(
-      { error: "Missing NEXT_PUBLIC_APP_URL env var" },
-      { status: 500 }
-    );
-  }
+    const base = process.env.NEXT_PUBLIC_APP_URL || "";
+    const endpoint = `${base.replace(/\/$/, "")}/api/super-agent/sync/event`;
 
-  const endpoint = `${baseUrl}/api/super-agent/sync/event`;
-
-  const snippet = `<script>
+    const snippet = `<script>
 (function(){
-  var pid = "${projectId}";
+  var pid = ${JSON.stringify(project.id)};
   function send(){
     try{
-      fetch("${endpoint}", {
+      fetch(${JSON.stringify(endpoint)}, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -47,5 +45,8 @@ export async function POST(req: Request) {
 })();
 </script>`;
 
-  return NextResponse.json({ snippet, endpoint });
+    return NextResponse.json({ snippet, endpoint });
+  } catch (e: any) {
+    return NextResponse.json({ ok: false, error: e?.message || "error" }, { status: 500 });
+  }
 }

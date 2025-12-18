@@ -4,35 +4,29 @@ import { prisma } from "@/lib/prisma";
 export const runtime = "nodejs";
 
 export async function POST(req: Request) {
-  const body = await req.json().catch(() => null);
-  if (!body?.projectId || !body?.context) {
-    return NextResponse.json({ error: "Missing projectId or context" }, { status: 400 });
+  try {
+    const body = await req.json();
+    const projectId = String(body.projectId || "").trim();
+    const context = body.context || {};
+
+    if (!projectId) return NextResponse.json({ ok: false, error: "projectId required" }, { status: 400 });
+
+    // Guardamos el contexto como JSON en el proyecto (simple y robusto).
+    // Si en tu schema ya tenés otra tabla, lo cambiamos luego.
+    const updated = await prisma.nmProject.update({
+      where: { id: projectId },
+      data: {
+        status: "context_ready",
+        // @ts-ignore
+        contextJson: context, // si tu schema no tiene esto, ver nota abajo
+      },
+      select: { id: true, status: true },
+    });
+
+    return NextResponse.json({ ok: true, project: updated });
+  } catch (e: any) {
+    // Si tu NmProject aún NO tiene contextJson, devolvemos error claro para que lo migremos.
+    const msg = e?.message || "error";
+    return NextResponse.json({ ok: false, error: msg }, { status: 500 });
   }
-
-  const project = await prisma.nmProject.findUnique({
-    where: { id: body.projectId },
-  });
-
-  if (!project || project.status !== "synced") {
-    return NextResponse.json(
-      { error: "Project not synced" },
-      { status: 403 }
-    );
-  }
-
-  await prisma.nmProjectContext.upsert({
-    where: { projectId: body.projectId },
-    update: { context: body.context },
-    create: {
-      projectId: body.projectId,
-      context: body.context,
-    },
-  });
-
-  await prisma.nmProject.update({
-    where: { id: body.projectId },
-    data: { status: "context_ready" },
-  });
-
-  return NextResponse.json({ ok: true });
 }

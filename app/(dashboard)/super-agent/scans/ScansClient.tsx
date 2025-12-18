@@ -66,9 +66,7 @@ export default function ScansClient() {
     let alive = true;
 
     const tick = async () => {
-      try {
-        await refreshStatus();
-      } catch {}
+      try { await refreshStatus(); } catch {}
       if (alive) setTimeout(tick, 2000);
     };
 
@@ -109,16 +107,6 @@ export default function ScansClient() {
     }
   }
 
-  const diagnostics = useMemo(() => {
-    const issues: string[] = [];
-    if (!projectId) issues.push("Falta projectId en la URL.");
-    if (siteUrl && !/^https?:\/\//i.test(siteUrl)) issues.push("siteUrl debe empezar con https://");
-    if (endpoint && endpoint.includes("www.") === false) {
-      // no es error, solo hint
-    }
-    return issues;
-  }, [projectId, siteUrl, endpoint]);
-
   return (
     <div className="p-6 space-y-6 bg-slate-50 min-h-screen">
       <div className="flex items-center justify-between">
@@ -129,11 +117,7 @@ export default function ScansClient() {
             {projectId ? <span className="text-xs text-muted-foreground">projectId: {projectId}</span> : null}
           </div>
         </div>
-
-        <a
-          className="text-sm underline"
-          href={projectId ? `/super-agent?projectId=${encodeURIComponent(projectId)}` : "/super-agent"}
-        >
+        <a className="text-sm underline" href={projectId ? `/super-agent?projectId=${encodeURIComponent(projectId)}` : "/super-agent"}>
           Volver al overview
         </a>
       </div>
@@ -150,12 +134,7 @@ export default function ScansClient() {
 
           <label className="grid gap-1">
             <span className="text-xs text-muted-foreground">URL del sitio</span>
-            <input
-              className="border rounded-md p-2"
-              value={siteUrl}
-              onChange={(e) => setSiteUrl(e.target.value)}
-              placeholder="https://tusitio.com"
-            />
+            <input className="border rounded-md p-2" value={siteUrl} onChange={(e) => setSiteUrl(e.target.value)} />
           </label>
 
           <button
@@ -166,74 +145,37 @@ export default function ScansClient() {
             {loadingSnippet ? "Generando…" : "Generar snippet"}
           </button>
 
-          {diagnostics.length > 0 && (
-            <div className="rounded-lg border bg-yellow-50 p-3 text-sm">
-              <div className="font-semibold mb-1">Revisar</div>
-              <ul className="list-disc pl-5">
-                {diagnostics.map((x) => <li key={x}>{x}</li>)}
-              </ul>
-            </div>
-          )}
-
-          {err && (
-            <div className="rounded-lg border bg-red-50 p-3 text-sm text-red-700">{err}</div>
-          )}
+          {err && <div className="rounded-lg border bg-red-50 p-3 text-sm text-red-700">{err}</div>}
         </div>
 
         <div className="rounded-xl border bg-white p-5 shadow-sm space-y-4">
-          <h2 className="font-semibold">2) Pegar en tu web y verificar</h2>
+          <h2 className="font-semibold">2) Pegar y verificar</h2>
 
           <div className="rounded-lg border bg-slate-50 p-3 text-sm">
             <div className="font-semibold mb-1">Asistente</div>
             <div>{siriTextFor(status.status, status.lastEventAt)}</div>
           </div>
 
-          {endpoint ? (
-            <div className="text-xs text-muted-foreground">
-              Endpoint: <span className="font-mono">{endpoint}</span>
-            </div>
-          ) : null}
+          {endpoint ? <div className="text-xs text-muted-foreground">Endpoint: <span className="font-mono">{endpoint}</span></div> : null}
 
           {snippet ? (
             <>
               <div className="flex items-center gap-2">
-                <button
-                  onClick={copySnippet}
-                  className="rounded-lg border px-3 py-2 text-sm"
-                >
+                <button onClick={copySnippet} className="rounded-lg border px-3 py-2 text-sm">
                   {copied ? "Copiado" : "Copiar snippet"}
                 </button>
-
-                <button
-                  onClick={() => refreshStatus().catch(() => {})}
-                  className="rounded-lg border px-3 py-2 text-sm"
-                >
+                <button onClick={() => refreshStatus().catch(() => {})} className="rounded-lg border px-3 py-2 text-sm">
                   Refrescar estado
                 </button>
-
-                {projectId && (
-                  <a
-                    className="rounded-lg bg-black text-white px-3 py-2 text-sm"
-                    href={`/super-agent/onboarding?projectId=${encodeURIComponent(projectId)}`}
-                  >
-                    Ir al wizard
-                  </a>
-                )}
               </div>
 
-              <textarea
-                className="w-full h-56 border rounded-md p-3 font-mono text-xs"
-                value={snippet}
-                readOnly
-              />
+              <textarea className="w-full h-56 border rounded-md p-3 font-mono text-xs" value={snippet} readOnly />
               <div className="text-xs text-muted-foreground">
-                Pegalo en el <b>&lt;head&gt;</b> o antes de cerrar <b>&lt;/body&gt;</b>. Luego abrí la web y navegá 1–2 páginas.
+                Pegalo en el head o antes de cerrar body. Luego abrí la web y navegá 1–2 páginas.
               </div>
             </>
           ) : (
-            <div className="text-sm text-muted-foreground">
-              Generá el snippet para ver el código aquí.
-            </div>
+            <div className="text-sm text-muted-foreground">Generá el snippet para ver el código aquí.</div>
           )}
         </div>
       </div>

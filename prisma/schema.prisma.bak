@@ -1,0 +1,42 @@
+
+/// --- Super Agent (Sync + Context) ---
+
+model NmProject {
+  id          String   @id
+  siteUrl     String   @map("site_url")
+  status      String   @default("created")
+  lastEventAt DateTime? @map("last_event_at")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  events      NmSyncEvent[]
+  context     NmProjectContext?
+
+  @@map("nm_projects")
+}
+
+model NmSyncEvent {
+  id        BigInt   @id @default(autoincrement())
+  projectId String   @map("project_id")
+  type      String
+  url       String?
+  ref       String?
+  ua        String?
+  origin    String?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  project   NmProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+  @@map("nm_sync_events")
+}
+
+model NmProjectContext {
+  projectId String  @id @map("project_id")
+  context   Json    @default("{}")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  project   NmProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@map("nm_project_context")
+}

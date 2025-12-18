@@ -1,41 +1,26 @@
-"use client";
+import { requireReady } from "@/lib/super-agent/requireReady";
 
-import { useEffect, useState } from "react";
+export default async function PlanPage() {
+  const projectId = "demo-project"; // luego dinámico
+  const gate = await requireReady(projectId);
 
-export default function PlanPage() {
-  const [lastScan, setLastScan] = useState<any>(null);
-
-  useEffect(() => {
-    const raw = localStorage.getItem("nm_super_agent_last_scan");
-    if (raw) setLastScan(JSON.parse(raw));
-  }, []);
+  if (!gate.ok) {
+    return (
+      <div className="p-10 text-center">
+        <h2 className="text-xl font-bold">Acceso bloqueado</h2>
+        <p className="text-muted-foreground">
+          Debes completar la configuración inicial antes de generar un plan.
+        </p>
+      </div>
+    );
+  }
 
   return (
-    <div className="space-y-4">
-      <h2 className="text-lg font-semibold">Plan semanal</h2>
-      <p className="text-sm text-muted-foreground">
-        MVP: se alimenta del último scan. Luego lo persistimos en DB y lo calculamos semanalmente.
+    <div className="p-10">
+      <h1 className="text-2xl font-bold">Plan IA – Semana 1</h1>
+      <p className="text-muted-foreground">
+        (Aquí va el comité IA)
       </p>
-
-      {!lastScan && (
-        <div className="rounded-xl border p-4 text-sm">
-          Todavía no hay plan generado. Corré un scan en <a className="underline" href="/super-agent/scans">Scans</a>.
-        </div>
-      )}
-
-      {lastScan?.recommendations?.length ? (
-        <div className="space-y-3">
-          {lastScan.recommendations.slice(0, 5).map((r: any, idx: number) => (
-            <div key={idx} className="rounded-xl border p-4 space-y-1">
-              <div className="font-medium">{r.title}</div>
-              <div className="text-sm text-muted-foreground">{r.description}</div>
-              <div className="text-xs text-muted-foreground">
-                Tipo: {r.type} — Impacto: {r.expectedImpact?.kpi} {r.expectedImpact?.estimate} — Riesgo: {r.risk} — Esfuerzo: {r.effort}
-              </div>
-            </div>
-          ))}
-        </div>
-      ) : null}
     </div>
   );
 }

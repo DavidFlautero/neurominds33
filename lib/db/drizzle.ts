@@ -1,13 +1,12 @@
-import { drizzle } from 'drizzle-orm/postgres-js';
-import postgres from 'postgres';
-import * as schema from './schema';
-import dotenv from 'dotenv';
+import { drizzle } from "drizzle-orm/postgres-js";
+import postgres from "postgres";
 
-dotenv.config();
+// En Next/Vercel, usa DATABASE_URL desde .env/.env.local (Next lo carga solo)
+const connectionString = process.env.DATABASE_URL;
 
-if (!process.env.POSTGRES_URL) {
-  throw new Error('POSTGRES_URL environment variable is not set');
+if (!connectionString) {
+  throw new Error("Missing DATABASE_URL env var");
 }
 
-export const client = postgres(process.env.POSTGRES_URL);
-export const db = drizzle(client, { schema });
+const client = postgres(connectionString, { ssl: "require" });
+export const db = drizzle(client);

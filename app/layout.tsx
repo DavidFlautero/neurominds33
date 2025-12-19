@@ -140,7 +140,30 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {children}
           <SalesAgentWidget />
         </SWRConfig>
+		<script>
+(function(){
+  var pid = "demo-project";
+  function send(){
+    try{
+      fetch("https://www.neuromind33.online/api/super-agent/sync/event", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          projectId: pid,
+          type: "page_view",
+          url: location.href,
+          ref: document.referrer || null,
+          ua: navigator.userAgent
+        })
+      });
+    }catch(e){}
+  }
+  if (document.readyState === "complete") send();
+  else window.addEventListener("load", send);
+})();
+</script>
       </body>
+	  
     </html>
   );
 }

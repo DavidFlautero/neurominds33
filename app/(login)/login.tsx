@@ -1,24 +1,51 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { CircleIcon, Loader2 } from 'lucide-react';
 import { signIn, signUp } from './actions';
-import { ActionState } from '@/lib/auth/middleware';
+import type { ActionState } from '@/lib/auth/middleware';
 
 export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
   const searchParams = useSearchParams();
-  const redirect = searchParams.get('redirect');
-  const priceId = searchParams.get('priceId');
-  const inviteId = searchParams.get('inviteId');
-  const [state, formAction, pending] = useActionState<ActionState, FormData>(
-    mode === 'signin' ? signIn : signUp,
-    { error: '' }
-  );
+  const redirect = searchParams.get('redirect') ?? '';
+  const priceId = searchParams.get('priceId') ?? '';
+  const inviteId = searchParams.get('inviteId') ?? '';
+
+  const [pending, startTransition] = useTransition();
+  const [state, setState] = useState<ActionState>({
+    error: '',
+    email: '',
+    password: ''
+  } as any);
+
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+
+    startTransition(async () => {
+      try {
+        const action = mode === 'signin' ? signIn : signUp;
+        const res: any = await action(formData);
+
+        // Muchos templates devuelven ActionState con { error, email, password } (u otros campos)
+        if (res && typeof res === 'object') {
+          setState(res as ActionState);
+        } else {
+          setState((prev: any) => ({ ...prev, error: '' }));
+        }
+      } catch (err: any) {
+        setState((prev: any) => ({
+          ...prev,
+          error: err?.message ?? 'Unexpected error'
+        }));
+      }
+    });
+  }
 
   return (
     <div className="min-h-[100dvh] flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 bg-gray-50">
@@ -27,22 +54,18 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
           <CircleIcon className="h-12 w-12 text-orange-500" />
         </div>
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-          {mode === 'signin'
-            ? 'Sign in to your account'
-            : 'Create your account'}
+          {mode === 'signin' ? 'Sign in to your account' : 'Create your account'}
         </h2>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <form className="space-y-6" action={formAction}>
-          <input type="hidden" name="redirect" value={redirect || ''} />
-          <input type="hidden" name="priceId" value={priceId || ''} />
-          <input type="hidden" name="inviteId" value={inviteId || ''} />
+        <form className="space-y-6" onSubmit={onSubmit}>
+          <input type="hidden" name="redirect" value={redirect} />
+          <input type="hidden" name="priceId" value={priceId} />
+          <input type="hidden" name="inviteId" value={inviteId} />
+
           <div>
-            <Label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <Label htmlFor="email" className="block text-sm font-medium text-gray-700">
               Email
             </Label>
             <div className="mt-1">
@@ -51,7 +74,7 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
                 name="email"
                 type="email"
                 autoComplete="email"
-                defaultValue={state.email}
+                defaultValue={(state as any)?.email ?? ''}
                 required
                 maxLength={50}
                 className="appearance-none rounded-full relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-orange-500 focus:border-orange-500 focus:z-10 sm:text-sm"
@@ -61,10 +84,7 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
           </div>
 
           <div>
-            <Label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <Label htmlFor="password" className="block text-sm font-medium text-gray-700">
               Password
             </Label>
             <div className="mt-1">
@@ -72,10 +92,8 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
                 id="password"
                 name="password"
                 type="password"
-                autoComplete={
-                  mode === 'signin' ? 'current-password' : 'new-password'
-                }
-                defaultValue={state.password}
+                autoComplete={mode === 'signin' ? 'current-password' : 'new-password'}
+                defaultValue={(state as any)?.password ?? ''}
                 required
                 minLength={8}
                 maxLength={100}
@@ -85,8 +103,8 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
             </div>
           </div>
 
-          {state?.error && (
-            <div className="text-red-500 text-sm">{state.error}</div>
+          {(state as any)?.error && (
+            <div className="text-red-500 text-sm">{(state as any).error}</div>
           )}
 
           <div>
@@ -116,24 +134,21 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
             </div>
             <div className="relative flex justify-center text-sm">
               <span className="px-2 bg-gray-50 text-gray-500">
-                {mode === 'signin'
-                  ? 'New to our platform?'
-                  : 'Already have an account?'}
+                {mode === 'signin' ? 'New to our platform?' : 'Already have an account?'}
               </span>
             </div>
           </div>
 
-          <div className="mt-6">
-            <Link
-              href={`${mode === 'signin' ? '/sign-up' : '/sign-in'}${
-                redirect ? `?redirect=${redirect}` : ''
-              }${priceId ? `&priceId=${priceId}` : ''}`}
-              className="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-full shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
-            >
-              {mode === 'signin'
-                ? 'Create an account'
-                : 'Sign in to existing account'}
-            </Link>
+          <div className="mt-6 text-center text-sm">
+            {mode === 'signin' ? (
+              <Link className="font-medium text-orange-600 hover:text-orange-500" href="/signup">
+                Create an account
+              </Link>
+            ) : (
+              <Link className="font-medium text-orange-600 hover:text-orange-500" href="/login">
+                Sign in instead
+              </Link>
+            )}
           </div>
         </div>
       </div>

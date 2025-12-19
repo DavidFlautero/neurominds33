@@ -5,10 +5,8 @@
 
 /* Dark mode por clase .dark en <html> */
 @custom-variant dark (&:is(.dark *));
-@variant dark (&:is(.dark *));
 
 /* Animaciones extra del repo (si las usabas) */
-@import "tw-animate-css";
 
 /* ------------------------------
    Mapeo de tokens Tailwind -> CSS vars

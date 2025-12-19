@@ -1,258 +1,213 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { getJSON, postJSON } from "@/lib/super-agent/client";
+import Link from "next/link";
 
-type SnippetResp = { snippet: string; endpoint: string };
-type StatusResp = { status: "created" | "synced"; lastEventAt: number | null };
-
-function CosmicOrb({ status }: { status: "idle" | "waiting" | "synced" | "error" }) {
-  const label =
-    status === "idle" ? "Listo para sincronizar" :
-    status === "waiting" ? "Esperando conexión…" :
-    status === "synced" ? "Sincronización finalizada" :
-    "Error de conexión";
-
-  const glow =
-    status === "synced" ? "rgba(74,222,128,.18)" :
-    status === "error" ? "rgba(255,107,107,.18)" :
-    "rgba(124,156,255,.18)";
-
-  return (
-    <div style={{ display: "flex", alignItems: "center", gap: 16, marginTop: 18 }}>
-      <div
-        style={{
-          width: 44,
-          height: 44,
-          borderRadius: 999,
-          background: `radial-gradient(circle at 30% 30%, rgba(255,255,255,.35), ${glow})`,
-          border: "1px solid var(--panel-border)",
-          boxShadow: `0 0 40px ${glow}`,
-        }}
-      />
-      <div>
-        <div style={{ fontWeight: 600 }}>{label}</div>
-        <div style={{ color: "var(--muted)", fontSize: 12 }}>
-          No avanzamos al diagnóstico hasta confirmar eventos reales.
-        </div>
-      </div>
-    </div>
-  );
-}
+type StatusResp = {
+  status?: string;
+  lastEventAt?: number | null;
+  error?: string;
+};
 
 export default function ConnectPage() {
+  const [projectId, setProjectId] = useState("demo-project");
   const [siteUrl, setSiteUrl] = useState("");
-  const [projectId, setProjectId] = useState("");
-  const [snippet, setSnippet] = useState<SnippetResp | null>(null);
-  const [phase, setPhase] = useState<"idle" | "waiting" | "synced" | "error">("idle");
+  const [snippet, setSnippet] = useState<string | null>(null);
+  const [endpoint, setEndpoint] = useState<string | null>(null);
+
   const [status, setStatus] = useState<StatusResp | null>(null);
-  const [err, setErr] = useState<string | null>(null);
+  const [polling, setPolling] = useState(false);
+  const [loadingSnippet, setLoadingSnippet] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const canGenerate = useMemo(() => {
-    try {
-      const u = new URL(siteUrl);
-      return !!projectId && (u.protocol === "http:" || u.protocol === "https:");
-    } catch {
-      return false;
-    }
-  }, [siteUrl, projectId]);
+    return projectId.trim().length >= 3 && /^https?:\/\//i.test(siteUrl.trim());
+  }, [projectId, siteUrl]);
 
-  async function generate() {
-    setErr(null);
+  async function generateSnippet() {
+    setError(null);
     setSnippet(null);
-    setStatus(null);
-    setPhase("idle");
+    setEndpoint(null);
+    setLoadingSnippet(true);
 
     try {
-      // 1) Crear el proyecto (si tu API actual ya lo crea al pedir snippet, perfecto)
-      const s = await postJSON<SnippetResp>("/api/super-agent/sync/snippet", {
-        projectId,
-        siteUrl,
+      const res = await fetch("/api/super-agent/sync/snippet", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ projectId: projectId.trim(), siteUrl: siteUrl.trim() }),
       });
-      setSnippet(s);
-      setPhase("waiting");
+      const data = await res.json();
+      if (!res.ok) throw new Error(data?.error || "No se pudo generar snippet");
+      setSnippet(data.snippet);
+      setEndpoint(data.endpoint);
     } catch (e: any) {
-      setErr(e?.message || "Error generando snippet");
-      setPhase("error");
+      setError(e?.message || "Error");
+    } finally {
+      setLoadingSnippet(false);
     }
   }
 
-  // Polling status cuando ya hay snippet
-  useEffect(() => {
-    if (!snippet || !projectId) return;
-
-    let cancelled = false;
-    let t: any = null;
-
-    async function tick() {
-      try {
-        const st = await getJSON<StatusResp>(`/api/super-agent/sync/status?projectId=${encodeURIComponent(projectId)}`);
-        if (cancelled) return;
-        setStatus(st);
-
-        if (st.status === "synced" && st.lastEventAt) {
-          setPhase("synced");
-          return; // stop polling
-        }
-      } catch (e: any) {
-        if (!cancelled) {
-          setErr(e?.message || "Error consultando estado");
-          setPhase("error");
-        }
-      }
-      t = setTimeout(tick, 1500);
+  async function fetchStatus() {
+    setError(null);
+    try {
+      const res = await fetch(`/api/super-agent/sync/status?projectId=${encodeURIComponent(projectId.trim())}`, {
+        method: "GET",
+      });
+      const data = await res.json();
+      setStatus(data);
+    } catch (e: any) {
+      setError(e?.message || "Error status");
     }
+  }
 
-    tick();
+  useEffect(() => {
+    // status inicial si ya existe el projectId
+    fetchStatus();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-    return () => {
-      cancelled = true;
-      if (t) clearTimeout(t);
-    };
-  }, [snippet, projectId]);
+  useEffect(() => {
+    if (!polling) return;
+    const id = setInterval(() => {
+      fetchStatus();
+    }, 1500);
+    return () => clearInterval(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [polling, projectId]);
+
+  const synced = status?.status === "synced" && !!status?.lastEventAt;
 
   return (
-    <div className="sa-card" style={{ maxWidth: 920, margin: "40px auto" }}>
-      <h1 className="sa-title">Conectar tu sitio</h1>
-      <p className="sa-subtitle">
-        Primero conectamos tu web para capturar eventos reales. Sin esto, el asistente no puede
-        auditar ni planificar como una agencia profesional.
-      </p>
-
-      <div style={{ display: "grid", gridTemplateColumns: "1.1fr .9fr", gap: 18, marginTop: 24 }}>
-        <div className="sa-card" style={{ padding: 18 }}>
-          <div style={{ fontWeight: 600, marginBottom: 10 }}>Datos del proyecto</div>
-
-          <label className="sa-subtitle">URL del sitio</label>
-          <input
-            value={siteUrl}
-            onChange={(e) => setSiteUrl(e.target.value)}
-            type="url"
-            placeholder="https://tusitio.com"
-            style={{
-              marginTop: 8,
-              width: "100%",
-              padding: 14,
-              borderRadius: 12,
-              background: "#0b0d10",
-              border: "1px solid #1e2430",
-              color: "white",
-            }}
-          />
-
-          <div style={{ marginTop: 18 }}>
-            <label className="sa-subtitle">Project ID (interno)</label>
-            <input
-              value={projectId}
-              onChange={(e) => setProjectId(e.target.value)}
-              type="text"
-              placeholder="mi-tienda-online"
-              style={{
-                marginTop: 8,
-                width: "100%",
-                padding: 14,
-                borderRadius: 12,
-                background: "#0b0d10",
-                border: "1px solid #1e2430",
-                color: "white",
-              }}
-            />
-            <div style={{ color: "var(--muted)", fontSize: 12, marginTop: 8 }}>
-              Recomendación: minúsculas + guiones. Ej: <code>panales-online-ar</code>
+    <div className="min-h-screen bg-[#0b0d10] text-white">
+      <div className="mx-auto max-w-5xl px-6 py-10">
+        <div className="rounded-2xl border border-white/10 bg-white/5 p-7">
+          <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+            <div>
+              <h1 className="text-xl font-semibold tracking-tight">Conectar sitio (Sync)</h1>
+              <p className="mt-1 text-sm text-white/60">
+                Paso 1 obligatorio. Sin sync no se habilitan métricas, scan, ni plan.
+              </p>
             </div>
-          </div>
 
-          <div style={{ marginTop: 22, display: "flex", gap: 12 }}>
-            <button className="sa-btn" disabled={!canGenerate} onClick={generate}>
-              Generar snippet
-            </button>
-            <a href="/super-agent/onboarding">
-              <button className="sa-btn secondary" type="button">Volver</button>
-            </a>
-          </div>
-
-          {err && (
-            <div style={{ marginTop: 16, color: "var(--danger)" }}>
-              {err}
-            </div>
-          )}
-
-          <CosmicOrb status={phase} />
-
-          {status && (
-            <div style={{ marginTop: 10, color: "var(--muted)", fontSize: 12 }}>
-              Estado: <b>{status.status}</b>
-              {" · "}
-              lastEventAt: <b>{status.lastEventAt ? new Date(status.lastEventAt).toLocaleString() : "—"}</b>
-            </div>
-          )}
-
-          {phase === "synced" && (
-            <div style={{ marginTop: 18 }}>
-              <a href={`/super-agent/wizard?projectId=${encodeURIComponent(projectId)}`}>
-                <button className="sa-btn">Continuar al brief (wizard)</button>
-              </a>
-            </div>
-          )}
-        </div>
-
-        <div className="sa-card" style={{ padding: 18 }}>
-          <div style={{ fontWeight: 600, marginBottom: 10 }}>Código de conexión</div>
-          <div style={{ color: "var(--muted)", fontSize: 13, marginBottom: 12 }}>
-            Pegá este script en tu sitio (antes de cerrar <code>{"</body>"}</code>).
-            Cuando recibamos eventos, se habilita el siguiente paso.
-          </div>
-
-          <textarea
-            readOnly
-            value={snippet?.snippet || ""}
-            placeholder="Generá el snippet para verlo aquí…"
-            style={{
-              width: "100%",
-              minHeight: 320,
-              padding: 12,
-              borderRadius: 12,
-              background: "#0b0d10",
-              border: "1px solid #1e2430",
-              color: "white",
-              fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
-              fontSize: 12,
-              whiteSpace: "pre",
-            }}
-          />
-
-          {snippet?.snippet && (
-            <div style={{ display: "flex", gap: 10, marginTop: 12 }}>
+            <div className="flex flex-wrap gap-2">
+              <span className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-2 py-1 text-xs text-white/70">
+                Estado: {synced ? "SYNced" : status?.status || "—"}
+              </span>
               <button
-                className="sa-btn secondary"
-                onClick={async () => {
-                  try {
-                    await navigator.clipboard.writeText(snippet.snippet);
-                  } catch {}
-                }}
+                onClick={fetchStatus}
+                className="rounded-xl border border-white/10 bg-white/10 px-3 py-2 text-xs font-semibold hover:bg-white/15"
               >
-                Copiar
-              </button>
-
-              <button
-                className="sa-btn secondary"
-                onClick={async () => {
-                  setErr(null);
-                  setPhase("waiting");
-                  try {
-                    const st = await getJSON<StatusResp>(`/api/super-agent/sync/status?projectId=${encodeURIComponent(projectId)}`);
-                    setStatus(st);
-                    if (st.status === "synced" && st.lastEventAt) setPhase("synced");
-                  } catch (e: any) {
-                    setErr(e?.message || "Error consultando estado");
-                    setPhase("error");
-                  }
-                }}
-              >
-                Reintentar status
+                Refrescar
               </button>
             </div>
-          )}
+          </div>
+
+          <div className="mt-6 grid gap-4 md:grid-cols-2">
+            <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+              <h2 className="text-sm font-semibold text-white/80">1) Datos del proyecto</h2>
+
+              <label className="mt-4 block text-xs text-white/70">Project ID</label>
+              <input
+                value={projectId}
+                onChange={(e) => setProjectId(e.target.value)}
+                className="mt-1 w-full rounded-xl border border-white/10 bg-black/30 px-4 py-3 text-sm outline-none focus:border-white/20"
+                placeholder="demo-project"
+              />
+              <p className="mt-2 text-xs text-white/50">
+                Identificador interno. Luego lo hacemos “selector de proyecto”.
+              </p>
+
+              <label className="mt-4 block text-xs text-white/70">URL del sitio (donde pegás el snippet)</label>
+              <input
+                value={siteUrl}
+                onChange={(e) => setSiteUrl(e.target.value)}
+                className="mt-1 w-full rounded-xl border border-white/10 bg-black/30 px-4 py-3 text-sm outline-none focus:border-white/20"
+                placeholder="https://tu-tienda.com"
+              />
+              <p className="mt-2 text-xs text-white/50">
+                Debe ser pública y responder con HTTP 200.
+              </p>
+
+              <div className="mt-5 flex flex-wrap gap-2">
+                <button
+                  onClick={generateSnippet}
+                  disabled={!canGenerate || loadingSnippet}
+                  className="rounded-xl border border-white/10 bg-white/10 px-4 py-3 text-sm font-semibold hover:bg-white/15 disabled:opacity-50"
+                >
+                  {loadingSnippet ? "Generando…" : "Generar snippet"}
+                </button>
+
+                <button
+                  onClick={() => setPolling((v) => !v)}
+                  className="rounded-xl border border-white/10 bg-transparent px-4 py-3 text-sm font-semibold text-white/70 hover:bg-white/5"
+                >
+                  {polling ? "Detener polling" : "Iniciar polling"}
+                </button>
+              </div>
+
+              {error ? <p className="mt-3 text-sm text-red-300">{error}</p> : null}
+            </div>
+
+            <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+              <h2 className="text-sm font-semibold text-white/80">2) Instalar snippet</h2>
+
+              {!snippet ? (
+                <div className="mt-4 rounded-xl border border-white/10 bg-white/5 p-4 text-sm text-white/70">
+                  Generá el snippet y pegalo en tu web (ideal: antes de <code>{"</head>"}</code> o al final del{" "}
+                  <code>{"<body>"}</code>).
+                </div>
+              ) : (
+                <>
+                  <p className="mt-4 text-xs text-white/60">Pegá este snippet en tu web:</p>
+                  <textarea
+                    readOnly
+                    value={snippet}
+                    className="mt-2 h-52 w-full rounded-xl border border-white/10 bg-black/40 p-3 font-mono text-xs text-white/80 outline-none"
+                  />
+                  <div className="mt-3 text-xs text-white/50">
+                    Endpoint de eventos: <span className="text-white/70">{endpoint}</span>
+                  </div>
+                </>
+              )}
+
+              <div className="mt-5 rounded-xl border border-white/10 bg-white/5 p-4">
+                <p className="text-xs font-semibold text-white/70">3) Confirmar conexión</p>
+                <p className="mt-1 text-sm text-white/70">
+                  Cuando el snippet se ejecute, el estado cambia a <span className="text-white">synced</span>.
+                </p>
+
+                <div className="mt-3 flex flex-wrap items-center gap-2">
+                  <span className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-2 py-1 text-xs text-white/70">
+                    status: {status?.status || "—"}
+                  </span>
+                  <span className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-2 py-1 text-xs text-white/70">
+                    lastEventAt: {status?.lastEventAt ? new Date(status.lastEventAt).toLocaleString() : "—"}
+                  </span>
+                </div>
+
+                <div className="mt-4 flex gap-2">
+                  <Link
+                    href="/super-agent/overview"
+                    className={`rounded-xl border px-4 py-3 text-sm font-semibold ${
+                      synced
+                        ? "border-white/10 bg-white/10 hover:bg-white/15"
+                        : "border-white/10 bg-white/5 text-white/40 pointer-events-none"
+                    }`}
+                  >
+                    Ir a Scan / Overview
+                  </Link>
+                  <span className="text-xs text-white/50 self-center">
+                    {synced ? "Listo." : "Bloqueado hasta sync."}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-6 text-xs text-white/50">
+            Nota: si estás probando desde el mismo dominio, el evento debería llegar al cargar la página. Si no llega, revisá
+            que el snippet apunte al dominio correcto del backend (NEXT_PUBLIC_APP_URL).
+          </div>
         </div>
       </div>
     </div>

@@ -1,35 +1,40 @@
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
-export const fetchCache = "force-no-store";
-
 import { NextResponse } from "next/server";
 
-export async function GET() {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL;
+export const dynamic = "force-dynamic";
 
-  if (!baseUrl) {
-    return NextResponse.json(
-      { error: "Missing NEXT_PUBLIC_APP_URL env var" },
-      { status: 500 }
-    );
-  }
+export async function POST(req: Request) {
+  const body = await req.json().catch(() => ({}));
+  const projectId = String(body.projectId || "").trim();
+  const siteUrl = String(body.siteUrl || "").trim();
 
-  const endpoint = `${baseUrl}/api/super-agent/sync/event`;
+  if (!projectId) return NextResponse.json({ ok: false, error: "projectId requerido" }, { status: 400 });
+  if (!/^https?:\/\//i.test(siteUrl)) return NextResponse.json({ ok: false, error: "siteUrl inválida" }, { status: 400 });
 
-  const snippet = `(function () {
-  var endpoint = ${JSON.stringify(endpoint)};
-  function post(payload) {
-    try {
-      fetch(endpoint, {
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  const endpoint = `${appUrl.replace(/\/$/, "")}/api/super-agent/sync/event`;
+
+  const snippet = `<script>
+(function(){
+  var pid = ${JSON.stringify(projectId)};
+  function send(){
+    try{
+      fetch(${JSON.stringify(endpoint)}, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-        keepalive: true
+        body: JSON.stringify({
+          projectId: pid,
+          type: "page_view",
+          url: location.href,
+          ref: document.referrer || null,
+          ua: navigator.userAgent
+        })
       });
-    } catch (e) {}
+    }catch(e){}
   }
-  window.__N33_SUPER_AGENT_SYNC__ = { post: post, endpoint: endpoint };
-})();`;
+  if (document.readyState === "complete") send();
+  else window.addEventListener("load", send);
+})();
+</script>`;
 
   return NextResponse.json({ snippet, endpoint });
 }

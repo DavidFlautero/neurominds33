@@ -1,14 +1,14 @@
+import { Shell } from "../_components/Shell";
+
 export default function CompetitorsPage() {
   return (
-    <div className="space-y-2">
-      <h2 className="text-lg font-semibold">Competencia</h2>
-      <p className="text-sm text-muted-foreground">
-        War room: competidores, cambios de precio/promos y alertas.
-      </p>
-
-      <div className="rounded-xl border p-4 text-sm">
-        Próximo: CRUD de competidores + botón “Revisar ahora” (scrape/controlado) + alertas.
+    <Shell title="Competencia" subtitle="War room (fase 1: estructura).">
+      <div className="sa-panel">
+        <div className="sa-h">Comparación</div>
+        <div className="sa-help">
+          En fase 2: URLs de competencia + snapshots + diferencias de oferta/UX/copy para acciones rápidas.
+        </div>
       </div>
-    </div>
+    </Shell>
   );
 }

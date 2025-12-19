@@ -1,13 +1,3 @@
-import "./styles.css";
-
-export default function SuperAgentLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="sa-shell">
-      {children}
-    </div>
-  );
+export default function SuperAgentLayout({ children }: { children: React.ReactNode }) {
+  return <div style={{ padding: 20 }}>{children}</div>;
 }

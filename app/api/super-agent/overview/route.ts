@@ -1,46 +1,21 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
-export const runtime = "nodejs";
-
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const projectId = searchParams.get("projectId");
-  if (!projectId) return NextResponse.json({ error: "Missing projectId" }, { status: 400 });
+  if (!projectId) return NextResponse.json({ ok: false, error: "missing_projectId" }, { status: 400 });
 
-  const project = await prisma.nmProject.findUnique({
-    where: { id: projectId },
-    include: { context: true },
-  });
-
-  if (!project) return NextResponse.json({ error: "Project not found" }, { status: 404 });
-
-  const eventsCount = await prisma.nmSyncEvent.count({ where: { projectId } });
-
-  // KPIs mock por ahora (hasta Ads/GA4)
-  const kpis = {
-    spend: null,
-    roas: null,
-    cvr: null,
-    aov: null,
-  };
-
-  const checklist = {
-    synced: project.status === "synced" || project.status === "context_ready",
-    contextReady: project.status === "context_ready",
-    integrationsReady: false,
-  };
+  const project = await prisma.nmProject.findUnique({ where: { id: projectId } });
+  if (!project) return NextResponse.json({ ok: false, error: "project_not_found" }, { status: 404 });
 
   return NextResponse.json({
-    project: {
-      id: project.id,
-      siteUrl: project.siteUrl,
-      status: project.status,
-      lastEventAt: project.lastEventAt,
-      updatedAt: project.updatedAt,
+    ok: true,
+    project,
+    readiness: {
+      canScan: true,
+      canPlan: project.status === "synced",
+      reason: project.status === "synced" ? undefined : "sync_required",
     },
-    eventsCount,
-    checklist,
-    kpis,
   });
 }

@@ -10,16 +10,8 @@ datasource db {
 model NmProject {
   id          String   @id
   siteUrl     String
-  status      String
+  status      String   // "created" | "synced" | "paused"
   lastEventAt DateTime?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-}
-
-model NmSyncEvent {
-  id        String   @id @default(cuid())
-  projectId String
-  type      String
-  payload   Json?
-  createdAt DateTime @default(now())
 }

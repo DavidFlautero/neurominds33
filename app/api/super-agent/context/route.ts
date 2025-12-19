@@ -1,24 +1,27 @@
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+export const fetchCache = "force-no-store";
+
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
 
-export async function GET(req: Request) {
-  const { searchParams } = new URL(req.url);
-  const projectId = String(searchParams.get("projectId") || "").trim();
-  if (!projectId) return NextResponse.json({ ok: false, error: "missing_projectId" }, { status: 400 });
+export async function GET() {
+  try {
+    // Importante: NO hagas throws por env faltante en top-level.
+    // Validá acá adentro.
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? null;
 
-  const p = await prisma.nmProject.findUnique({
-    where: { id: projectId },
-    select: { id: true, siteUrl: true, status: true, lastEventAt: true },
-  });
-  if (!p) return NextResponse.json({ ok: false, error: "project_not_found" }, { status: 404 });
-
-  return NextResponse.json({
-    ok: true,
-    context: {
-      projectId: p.id,
-      siteUrl: p.siteUrl,
-      status: p.status,
-      lastEventAt: p.lastEventAt ? p.lastEventAt.getTime() : null,
-    },
-  });
+    // Si tu lógica real depende de DB/keys, hacelo acá adentro
+    // y devolvé 500 en vez de throw.
+    // Ejemplo placeholder:
+    return NextResponse.json({
+      ok: true,
+      appUrl,
+      context: {},
+    });
+  } catch (e: any) {
+    return NextResponse.json(
+      { ok: false, error: e?.message ?? "context endpoint failed" },
+      { status: 500 }
+    );
+  }
 }

@@ -11,18 +11,22 @@
   },
   "dependencies": {
     "@prisma/client": "^5.7.0",
+    "@radix-ui/react-slot": "^1.2.4",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
     "next": "14.0.0",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "tailwind-merge": "^3.4.0"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "prisma": "^5.7.0",
-    "typescript": "^5",
     "eslint": "^8",
-    "eslint-config-next": "14.0.0"
+    "eslint-config-next": "14.0.0",
+    "prisma": "^5.7.0",
+    "typescript": "^5"
   },
   "prisma": {
     "schema": "prisma/schema.prisma"

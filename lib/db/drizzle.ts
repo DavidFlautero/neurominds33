@@ -1,7 +1,7 @@
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
+import * as schema from "./schema";
 
-// En Next/Vercel, usa DATABASE_URL desde .env/.env.local (Next lo carga solo)
 const connectionString = process.env.DATABASE_URL;
 
 if (!connectionString) {
@@ -9,4 +9,6 @@ if (!connectionString) {
 }
 
 const client = postgres(connectionString, { ssl: "require" });
-export const db = drizzle(client);
+
+// Habilita db.query.<table> tipado (ej: db.query.teamMembers)
+export const db = drizzle(client, { schema });

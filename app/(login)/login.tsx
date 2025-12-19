@@ -30,7 +30,7 @@ export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
     startTransition(async () => {
       try {
         const action = mode === 'signin' ? signIn : signUp;
-        const res: any = await action(formData);
+        const res: any = await action(state as any, formData);
 
         // Muchos templates devuelven ActionState con { error, email, password } (u otros campos)
         if (res && typeof res === 'object') {

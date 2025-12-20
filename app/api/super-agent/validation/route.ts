@@ -31,9 +31,9 @@ export async function POST(req: Request) {
     ...tasks[taskIdx],
     state:
       validation.status === "OK"
-        ? "VALIDATED_OK"
+        ? "validated_ok"
         : validation.status === "PARTIAL"
-        ? "VALIDATED_PARTIAL"
+        ? "validated_partial"
         : "VALIDATED_FAILED",
     deliveredAt: new Date().toISOString(),
     validation,

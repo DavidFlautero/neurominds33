@@ -1,63 +1,28 @@
-import { CommitteeInput, CommitteeOpinion, SAAction } from "@/ia/super-agent/types/core";
-import { rollbackForCategory } from "@/ia/super-agent/guardrails/rollback";
+import type { RecommendationCategory, RiskLevel } from "../../types";
+import type { RoleDraft } from "../consensus";
 
-function id(prefix: string) {
-  return prefix + "_" + Math.random().toString(16).slice(2) + "_" + Date.now().toString(16);
-}
-
-export function optimizerOpinion(input: CommitteeInput): CommitteeOpinion {
-  const scan = input.scan || {};
-  const ctx = input.context || {};
-  const actions: SAAction[] = [];
-
-  // If Ads readiness not OK, recommend sequencing.
-  const apt = scan?.adsReadiness?.apt;
-
-  actions.push({
-    id: id("act"),
-    title: "Secuencia tipo agencia: Fundamentos → Landing → Oferta → Ads (safe mode)",
-    category: "ADS_READY",
-    priority: 1,
-    effort: "S",
-    advantage: "Evita quemar presupuesto; construye base de conversión primero.",
-    risk: { level: "low", notes: "Riesgo bajo; mejora consistencia." },
-    expected: { metric: "CPA", delta: "Menos desperdicio 10–30%", timeframe: "2–4 semanas" },
-    requiresApproval: false,
-    why: ["Si la landing está floja, Ads solo amplifica el problema."],
-    how: [
-      "Semana 1: tracking + copy base",
-      "Semana 2: UX + oferta",
-      "Semana 3: tests",
-      "Semana 4: Ads audit/import (sin ejecutar)"
-    ],
-    rollback: rollbackForCategory("ADS_READY"),
-  });
-
-  // Ads safe mode analysis approach (no execution)
-  actions.push({
-    id: id("act"),
-    title: "Ads audit SAFE MODE: analizar campañas (sin ejecutar cambios) y proponer ajustes",
-    category: "ADS_READY",
-    priority: apt === true ? 2 : 3,
-    effort: "M",
-    advantage: "Detecta desperdicio en keywords/copy/estructura sin riesgo financiero.",
-    risk: { level: "low", notes: "No ejecuta nada; solo reporta." },
-    expected: { metric: "ROAS", delta: "+5% a +20% (si se aplica)", timeframe: "2–6 semanas" },
-    requiresApproval: true,
-    why: ["Primero se audita, luego se pide permiso y se ejecuta."],
-    how: ["Import CSV/Export", "Analizar keyword intent", "Comparar con landing", "Proponer negativas/RSAs"],
-    rollback: rollbackForCategory("ADS_READY"),
-  });
-
-  const redFlags: string[] = [];
-  if (!ctx?.budget) redFlags.push("Budget not defined: need weekly/monthly caps for safe planning.");
-  if (ctx?.experienceLevel === "none") redFlags.push("Client is new to Ads: require education + approvals by default.");
+export async function roleOptimizer(prompts: any): Promise<RoleDraft> {
+  const actions: RoleDraft["actions"] = [
+    {
+      title: "Definir estructura de campañas (Search/PMAX) con límites y plan de escalamiento semanal",
+      why: "Estructura correcta evita derroche y acelera ROAS.",
+      category: "ADS" as RecommendationCategory,
+      risk: "high" as RiskLevel,
+      expected: "ROAS objetivo inicial 1.5–2.5x según margen y ticket.",
+      requiresApproval: true,
+    },
+    {
+      title: "Configurar guardrails: pausa si CPA sube X% o si gasto diario supera límite",
+      why: "Previene quemar presupuesto durante exploración.",
+      category: "ADS" as RecommendationCategory,
+      risk: "low" as RiskLevel,
+      expected: "Menos pérdida por exploración mal calibrada.",
+      requiresApproval: false,
+    },
+  ];
 
   return {
-    role: "optimizer",
-    score: { impact: 7, risk: 7, confidence: 6, effort: 6 },
-    notes: ["Plan must be executable; keep actions limited and measurable."],
-    suggestedActions: actions,
-    redFlags,
+    note: `Optimizador: foco en ROI y simulación simple. Brief:\n${prompts?.brief ?? ""}`,
+    actions,
   };
 }

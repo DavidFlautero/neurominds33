@@ -1,57 +1,56 @@
-import { CommitteeConsensus, CommitteeInput, SAPlan } from "@/ia/super-agent/types/core";
-import { buildConsensus, computeScore } from "@/ia/super-agent/committee/consensus";
+import type { ProjectConfig, Recommendation, ScanArtifact, WeeklyPlan } from "../types";
 
-export function buildPlanFromCommittee(input: CommitteeInput, opinions: any[]): SAPlan {
-  const consensus: CommitteeConsensus = buildConsensus(opinions);
-  const score = computeScore(opinions, consensus);
+function id(prefix = "id") {
+  return `${prefix}_${Math.random().toString(16).slice(2)}_${Date.now().toString(16)}`;
+}
 
-  const siteUrl = input.project?.siteUrl || input.context?.siteUrl || "";
-  const hasSync = Boolean(siteUrl) && Boolean(input.projectId);
-  const hasContext = Boolean(input.context);
-  const hasScan = Boolean(input.scan);
+export function auditorSynthesizePlan(args: {
+  cfg: ProjectConfig;
+  scan: ScanArtifact;
+  consensus: { actions: WeeklyPlan["actions"] };
+  roleNotes: { analyst: string; creator: string; optimizer: string };
+}): { plan: WeeklyPlan; recommendations: Recommendation[]; auditorNote: string } {
+  const { cfg, scan, consensus, roleNotes } = args;
 
-  const status =
-    !hasSync ? "needs_sync" :
-    !hasContext ? "needs_context" :
-    !hasScan ? "needs_scan" : "ready";
+  const weekStart = new Date();
+  // normalize to YYYY-MM-DD (local)
+  const iso = new Date(weekStart.getTime() - weekStart.getTimezoneOffset() * 60000).toISOString();
+  const weekStartStr = iso.slice(0, 10);
 
-  const adsReadiness =
-    input.scan?.adsReadiness?.apt === true ? "ok" :
-    input.scan?.adsReadiness?.apt === false ? "no" : "partial";
+  const summary =
+    `Plan semanal generado desde el diagnóstico inicial (Scan v1). ` +
+    `Prioriza impacto rápido y bajo riesgo antes de escalar Ads.`;
 
-  const headline =
-    status !== "ready"
-      ? "Completa el flujo para generar un plan serio."
-      : adsReadiness === "ok"
-        ? "Tu base está lista para campañas, pero primero ejecutemos quick wins."
-        : adsReadiness === "no"
-          ? "No está listo para Ads aún: arreglamos tracking/landing primero."
-          : "Listo para optimizar: priorizamos conversión y fundamentos.";
-
-  // Week slicing: simple strategy
-  const top = consensus.topActions;
-  const week1 = top.slice(0, 4);
-  const week2 = top.slice(4, 8);
-  const week3 = top.slice(8, 12);
-
-  return {
-    projectId: input.projectId,
-    generatedAt: Date.now(),
-    summary: {
-      status,
-      score,
-      adsReadiness,
-      headline,
-    },
-    weeks: [
-      { week: 1, goals: ["Corregir fundamentos y quick wins"], actions: week1 },
-      { week: 2, goals: ["Optimización de oferta y landing/UX"], actions: week2 },
-      { week: 3, goals: ["Preparar tests y escalamiento controlado"], actions: week3 },
-      { week: 4, goals: ["Consolidar aprendizaje y siguiente ciclo"], actions: [] },
-    ],
-    committee: {
-      opinions,
-      consensus,
+  const plan: WeeklyPlan = {
+    projectId: cfg.projectId,
+    weekStart: weekStartStr,
+    summary,
+    actions: consensus.actions,
+    committeeNotes: {
+      analyst: roleNotes.analyst,
+      creator: roleNotes.creator,
+      optimizer: roleNotes.optimizer,
+      auditor: "Aprobé un plan conservador→agresivo: primero base (tracking/UX), luego escala Ads.",
     },
   };
+
+  const recommendations: Recommendation[] = consensus.actions.map((a) => ({
+    id: id("rec"),
+    projectId: cfg.projectId,
+    category: a.category,
+    title: a.title,
+    detail: a.why,
+    advantage: "Mejora directa en performance/claridad y reduce fricción.",
+    risk: a.risk === "high" ? "Puede afectar conversiones si se aplica sin validar." : "Riesgo controlable con validación.",
+    expected: a.expected,
+    priority: a.risk === "high" ? 3 : a.risk === "medium" ? 2 : 1,
+    action: a.title,
+    createdAt: Date.now(),
+  }));
+
+  const auditorNote =
+    `Auditor: scan seoScore=${scan.seoScore ?? "?"}, uxScore=${scan.uxScore ?? "?"}, adsReady=${scan.adsReady ?? "?"}. ` +
+    `Se generan ${recommendations.length} acciones priorizadas.`;
+
+  return { plan, recommendations, auditorNote };
 }

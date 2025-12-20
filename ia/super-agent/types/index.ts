@@ -63,12 +63,7 @@ export interface ProjectConfig {
   competitors?: { name: string; url: string }[];
 
   // Integrations (placeholders for now)
-  integrations?: {
-    ga4?: {
-      enabled?: boolean;
-      propertyId?: string;
-      credentialsJson?: string;
-    };
+  integrations?: any;
     searchConsole?: {
       enabled?: boolean;
       site?: string;

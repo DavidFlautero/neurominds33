@@ -1,46 +1,43 @@
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
-export const fetchCache = "force-no-store";
-
 import { NextResponse } from "next/server";
-import { ProjectConfigSchema } from "../_schemas";
-import { runFullSuperAgentScan } from "@/ia/super-agent";
-import { store } from "../_store";
-import { requestApproval } from "@/ia/super-agent/workflows/approvals";
-import { createTask } from "@/ia/super-agent/workflows/tasks";
+import { z } from "zod";
+import { scanV1 } from "@/lib/super-agent/scan/scanV1";
+import { recordProposal } from "@/lib/super-agent/learning/engine";
+
+export const dynamic = "force-dynamic";
+
+const Schema = z.object({
+  projectId: z.string().min(2),
+  url: z.string().url(),
+});
 
 export async function POST(req: Request) {
-  const body = await req.json();
-  const cfg = ProjectConfigSchema.parse(body);
-
-  // persist competitors list (dev store)
-  store.competitorsByProject.set(cfg.projectId, cfg.competitors);
-
-  const result = await runFullSuperAgentScan(cfg);
-
-  store.lastScanByProject.set(cfg.projectId, result.scan);
-  store.recommendationsByProject.set(cfg.projectId, result.recommendations);
-
-  // Auto-create approvals & tasks skeletons (MVP)
-  const approvals = store.approvalsByProject.get(cfg.projectId) ?? [];
-  const tasks = store.tasksByProject.get(cfg.projectId) ?? [];
-
-  for (const r of result.recommendations) {
-    if (r.requiresApproval) approvals.push(requestApproval(cfg.projectId, r));
-    // Always create a task draft (you can refine: only for CREATE_TASK / ADD_TO_QUOTE)
-    tasks.push(createTask(cfg.projectId, r));
+  const body = await req.json().catch(() => ({}));
+  const parsed = Schema.safeParse(body);
+  if (!parsed.success) {
+    return NextResponse.json({ ok: false, error: "invalid payload", issues: parsed.error.issues }, { status: 400 });
   }
 
-  store.approvalsByProject.set(cfg.projectId, approvals);
-  store.tasksByProject.set(cfg.projectId, tasks);
+  const report = await scanV1(parsed.data.url);
 
-  return NextResponse.json(result);
-}
+  // Convertimos findings -> recommendations para el learning
+  const proposalId = `scan_${Date.now()}`;
+  await recordProposal({
+    type: "proposal",
+    projectId: parsed.data.projectId,
+    proposalId,
+    createdAt: Date.now(),
+    source: "scan_v1",
+    confidence: 0.72,
+    recommendations: report.findings.map((f) => ({
+      key: f.key,
+      title: f.title,
+      advantage: f.advantage,
+      risk: f.risk,
+      expectedResult: f.expectedResult,
+      priority: f.priority,
+      effort: f.effort,
+    })),
+  });
 
-export async function GET(req: Request) {
-  const url = new URL(req.url);
-  const projectId = url.searchParams.get("projectId") || "local";
-  const scan = store.lastScanByProject.get(projectId) ?? null;
-  const recommendations = store.recommendationsByProject.get(projectId) ?? [];
-  return NextResponse.json({ scan, recommendations });
+  return NextResponse.json({ ok: true, proposalId, report });
 }

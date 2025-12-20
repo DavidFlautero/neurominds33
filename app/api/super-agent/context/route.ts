@@ -1,27 +1,43 @@
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
-export const fetchCache = "force-no-store";
-
 import { NextResponse } from "next/server";
+import { getContext, getProject, setContext, upsertProject, logEvent } from "@/lib/super-agent/store";
 
-export async function GET() {
-  try {
-    // Importante: NO hagas throws por env faltante en top-level.
-    // Validá acá adentro.
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? null;
+export const dynamic = "force-dynamic";
 
-    // Si tu lógica real depende de DB/keys, hacelo acá adentro
-    // y devolvé 500 en vez de throw.
-    // Ejemplo placeholder:
-    return NextResponse.json({
-      ok: true,
-      appUrl,
-      context: {},
-    });
-  } catch (e: any) {
-    return NextResponse.json(
-      { ok: false, error: e?.message ?? "context endpoint failed" },
-      { status: 500 }
-    );
-  }
+export async function GET(req: Request) {
+  const url = new URL(req.url);
+  const projectId = url.searchParams.get("projectId") || "";
+  if (!projectId) return NextResponse.json({ ok: false, error: "missing projectId" }, { status: 400 });
+
+  const project = getProject(projectId);
+  const context = getContext(projectId);
+
+  return NextResponse.json({ ok: true, project, context });
+}
+
+export async function POST(req: Request) {
+  const body = await req.json().catch(() => null);
+  if (!body?.projectId) return NextResponse.json({ ok: false, error: "missing projectId" }, { status: 400 });
+
+  upsertProject({ id: body.projectId, name: body.projectName, siteUrl: body.siteUrl });
+
+  setContext(body.projectId, {
+    projectName: body.projectName || null,
+    siteUrl: body.siteUrl || null,
+    objective: body.objective || null,
+    experienceLevel: body.experienceLevel || "none",
+    country: body.country || "AR",
+    budget: {
+      weeklyUsd: Number(body?.budget?.weeklyUsd ?? 0) || 0,
+      monthlyUsd: Number(body?.budget?.monthlyUsd ?? 0) || 0,
+      approvalOverUsd: Number(body?.budget?.approvalOverUsd ?? 25) || 25,
+    },
+    offer: body.offer || null,
+    industry: body.industry || null,
+    competitors: Array.isArray(body.competitors) ? body.competitors.slice(0, 5) : [],
+    createdAt: Date.now(),
+  });
+
+  logEvent(body.projectId, { type: "context_saved" });
+
+  return NextResponse.json({ ok: true });
 }

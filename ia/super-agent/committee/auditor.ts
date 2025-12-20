@@ -1,68 +1,57 @@
-import { randomUUID } from "crypto";
-import type { ProjectConfig, Recommendation } from "../types";
-import { defaultRollbackPlan } from "../guardrails/rollback";
-import { enforceBasicGuardrails, requiresApprovalForRecommendation } from "../guardrails/policies";
+import { CommitteeConsensus, CommitteeInput, SAPlan } from "@/ia/super-agent/types/core";
+import { buildConsensus, computeScore } from "@/ia/super-agent/committee/consensus";
 
-function riskScore(risk: string) {
-  if (risk === "low") return 0;
-  if (risk === "medium") return 1;
-  return 2;
-}
-function effortScore(effort: string) {
-  if (effort === "S") return 0;
-  if (effort === "M") return 1;
-  return 2;
-}
+export function buildPlanFromCommittee(input: CommitteeInput, opinions: any[]): SAPlan {
+  const consensus: CommitteeConsensus = buildConsensus(opinions);
+  const score = computeScore(opinions, consensus);
 
-export function auditorFinalize(cfg: ProjectConfig, recs: Recommendation[]): Recommendation[] {
-  const fixed = recs.map((r) => {
-    const id = r.id || randomUUID();
-    const rollback = r.rollback?.trigger ? r.rollback : defaultRollbackPlan();
+  const siteUrl = input.project?.siteUrl || input.context?.siteUrl || "";
+  const hasSync = Boolean(siteUrl) && Boolean(input.projectId);
+  const hasContext = Boolean(input.context);
+  const hasScan = Boolean(input.scan);
 
-    const patched: Recommendation = {
-      ...r,
-      id,
-      rollback,
-      requiresApproval: requiresApprovalForRecommendation(cfg.guardrails, r),
-    };
+  const status =
+    !hasSync ? "needs_sync" :
+    !hasContext ? "needs_context" :
+    !hasScan ? "needs_scan" : "ready";
 
-    // Respect preferences
-    if (cfg.preferences?.noPricingChanges) {
-      const text = `${patched.title} ${patched.description}`.toLowerCase();
-      if (text.includes("precio") || text.includes("pricing") || text.includes("descuento")) {
-        return enforceBasicGuardrails({
-          ...patched,
-          type: "TECH",
-          risk: "high",
-          requiresApproval: true,
-          nextAction: "CREATE_TASK",
-          description:
-            patched.description +
-            " (Bloqueado por preferencia: noPricingChanges. Convertido en tarea para discusión.)",
-        });
-      }
-    }
+  const adsReadiness =
+    input.scan?.adsReadiness?.apt === true ? "ok" :
+    input.scan?.adsReadiness?.apt === false ? "no" : "partial";
 
-    if (cfg.preferences?.noPopups) {
-      const text = `${patched.title} ${patched.description}`.toLowerCase();
-      if (text.includes("popup") || text.includes("pop-up") || text.includes("modal")) {
-        return enforceBasicGuardrails({
-          ...patched,
-          risk: "medium",
-          requiresApproval: true,
-          nextAction: "CREATE_TASK",
-          description:
-            patched.description +
-            " (Preferencia: noPopups. Se requiere aprobación explícita.)",
-        });
-      }
-    }
+  const headline =
+    status !== "ready"
+      ? "Completa el flujo para generar un plan serio."
+      : adsReadiness === "ok"
+        ? "Tu base está lista para campañas, pero primero ejecutemos quick wins."
+        : adsReadiness === "no"
+          ? "No está listo para Ads aún: arreglamos tracking/landing primero."
+          : "Listo para optimizar: priorizamos conversión y fundamentos.";
 
-    return enforceBasicGuardrails(patched);
-  });
+  // Week slicing: simple strategy
+  const top = consensus.topActions;
+  const week1 = top.slice(0, 4);
+  const week2 = top.slice(4, 8);
+  const week3 = top.slice(8, 12);
 
-  // Sort: low risk + low effort first (MVP). Later: use economic impact parsing.
-  return fixed
-    .sort((a, b) => (riskScore(a.risk) + effortScore(a.effort)) - (riskScore(b.risk) + effortScore(b.effort)))
-    .slice(0, 12);
+  return {
+    projectId: input.projectId,
+    generatedAt: Date.now(),
+    summary: {
+      status,
+      score,
+      adsReadiness,
+      headline,
+    },
+    weeks: [
+      { week: 1, goals: ["Corregir fundamentos y quick wins"], actions: week1 },
+      { week: 2, goals: ["Optimización de oferta y landing/UX"], actions: week2 },
+      { week: 3, goals: ["Preparar tests y escalamiento controlado"], actions: week3 },
+      { week: 4, goals: ["Consolidar aprendizaje y siguiente ciclo"], actions: [] },
+    ],
+    committee: {
+      opinions,
+      consensus,
+    },
+  };
 }

@@ -30,7 +30,6 @@ export async function POST(req: Request) {
   tasks[taskIdx] = {
     ...tasks[taskIdx],
     status: "validated",
-    deliveredAt: new Date().toISOString(),
     validation,
   };
   store.tasksByProject.set(projectId, tasks);

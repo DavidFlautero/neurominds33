@@ -27,7 +27,7 @@ export async function PATCH(req: Request) {
   const idx = approvals.findIndex(a => a.id === approvalId);
   if (idx === -1) return NextResponse.json({ error: "Approval not found." }, { status: 404 });
 
-  approvals[idx] = { ...approvals[idx], status: action === "APPROVE" ? "APPROVED" : "REJECTED" };
+  approvals[idx] = { ...approvals[idx], status: action === "APPROVE" ? "approved" : "rejected" };
   store.approvalsByProject.set(projectId, approvals);
 
   return NextResponse.json({ approval: approvals[idx] });

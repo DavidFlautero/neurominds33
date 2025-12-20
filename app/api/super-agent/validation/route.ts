@@ -29,9 +29,7 @@ export async function POST(req: Request) {
   store.lastScanByProject.set(projectId, after);
   tasks[taskIdx] = {
     ...tasks[taskIdx],
-    status: "validated",
-    validation,
-  };
+    status: "validated",};
   store.tasksByProject.set(projectId, tasks);
 
   return NextResponse.json({ task: tasks[taskIdx], before, after, validation });

@@ -1,7 +1,15 @@
 import type { Guardrails } from "../types";
 
 export function canExecuteAds(guardrails: Guardrails, proposedDailyBudgetUsd: number) {
-  if (proposedDailyBudgetUsd > guardrails.dailyBudgetUsd) return false;
-  if (proposedDailyBudgetUsd > guardrails.requiresApprovalAboveUsd) return false;
+  // If guardrails are missing critical thresholds, do not allow execution.
+  const dailyLimit = guardrails.dailyBudgetUsd ?? guardrails.maxDailySpendUSD;
+  const approvalLimit = guardrails.requiresApprovalAboveUsd ?? guardrails.requireApprovalAboveUSD;
+
+  if (typeof dailyLimit !== "number") return false;
+  if (typeof approvalLimit !== "number") return false;
+
+  if (proposedDailyBudgetUsd > dailyLimit) return false;
+  if (proposedDailyBudgetUsd > approvalLimit) return false;
+
   return true;
 }

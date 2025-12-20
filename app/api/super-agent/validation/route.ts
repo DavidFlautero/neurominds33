@@ -29,12 +29,12 @@ export async function POST(req: Request) {
   store.lastScanByProject.set(projectId, after);
   tasks[taskIdx] = {
     ...tasks[taskIdx],
-    state:
+    status:
       validation.status === "OK"
         ? "validated_ok"
         : validation.status === "PARTIAL"
         ? "validated_partial"
-        : "VALIDATED_FAILED",
+        : "validated_failed",
     deliveredAt: new Date().toISOString(),
     validation,
   };

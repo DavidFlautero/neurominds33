@@ -1,6 +1,6 @@
 /**
  * Shared types for Super Agent (UI + API + internal engine).
- * Keep these minimal and stable to avoid build breaks.
+ * Keep these stable to avoid build breaks.
  */
 
 export type ID = string;
@@ -29,25 +29,106 @@ export type TaskStatus =
 
 export type ApprovalStatus = "pending" | "approved" | "rejected";
 
+/**
+ * ProjectConfig is the canonical input for the agent.
+ * It's the configuration that comes from your "panel".
+ */
+export interface ProjectConfig {
+  projectId: ID;
+  siteUrl: string;
+
+  // Optional: project name / label shown in UI
+  name?: string;
+
+  // Guardrails
+  guardrails?: {
+    maxDailySpendUSD?: number;
+    maxMonthlySpendUSD?: number;
+    requireApprovalAboveUSD?: number;
+    allowAutoApplySiteChanges?: boolean;
+    allowAutoApplyAdsChanges?: boolean;
+  };
+
+  // Competitors
+  competitors?: { name: string; url: string }[];
+
+  // Integrations (placeholders for now)
+  integrations?: {
+    ga4?: {
+      enabled?: boolean;
+      propertyId?: string;
+      credentialsJson?: string;
+    };
+    searchConsole?: {
+      enabled?: boolean;
+      site?: string;
+      credentialsJson?: string;
+    };
+    clarity?: {
+      enabled?: boolean;
+      projectId?: string;
+      apiKey?: string;
+    };
+    ads?: {
+      google?: {
+        enabled?: boolean;
+        customerId?: string;
+      };
+      meta?: {
+        enabled?: boolean;
+        adAccountId?: string;
+      };
+      tiktok?: {
+        enabled?: boolean;
+        adAccountId?: string;
+      };
+    };
+  };
+
+  // Business context (from wizard)
+  context?: {
+    businessStage?: "new" | "growing" | "established";
+    goal?: "sales" | "leads" | "traffic" | "awareness";
+    experienceLevel?: "none" | "basic" | "advanced";
+    budget?: {
+      currency?: "USD" | "ARS";
+      daily?: number;
+      weekly?: number;
+      monthly?: number;
+      maxCpc?: number;
+    };
+    region?: {
+      country?: string;
+      city?: string;
+      timezone?: string;
+      language?: string;
+    };
+  };
+}
+
 export interface ScanArtifact {
   projectId: ID;
   url: string;
   fetchedAt: number; // epoch ms
-  htmlBytes?: number;
 
-  // Lightweight extracted signals (v1)
+  // lightweight extracted signals (v1)
   title?: string | null;
   h1?: string | null;
   metaDesc?: string | null;
   canonical?: string | null;
   robots?: string | null;
 
-  // Scoring v1
-  seoScore?: number; // 0..100
-  uxScore?: number;  // 0..100
-  adsReady?: boolean;
+  htmlBytes?: number;
 
-  // Optional raw payload for debugging
+  // Scoring v1 (0..100)
+  seoScore?: number;
+  uxScore?: number;
+
+  // Ads readiness v1
+  adsReady?: boolean;
+  adsReadyReasons?: string[];
+
+  // Optional raw payload for debugging (never show to public users)
   raw?: Record<string, unknown>;
 }
 
@@ -66,10 +147,9 @@ export interface Recommendation {
 
   priority: Priority;
 
-  // Actionable change request (what to do)
+  // what to change (actionable)
   action: string;
 
-  // Optional impact model (strings to keep flexible for now)
   impact?: {
     cvr?: string;
     aov?: string;
@@ -93,7 +173,7 @@ export interface Quote {
   price: number;
 
   includes: string[];
-  timeline: string; // e.g. "24-48h", "3-5 días"
+  timeline: string;
 
   risks: string[];
   expected: string[];
@@ -110,10 +190,8 @@ export interface Approval {
 
   status: ApprovalStatus;
 
-  // Human-readable explanation presented to client/user
   rationale: string;
 
-  // Guardrails / limits
   limits?: {
     maxDailySpendUSD?: number;
     maxMonthlySpendUSD?: number;
@@ -133,14 +211,36 @@ export interface Task {
   title: string;
   status: TaskStatus;
 
-  // execution details
   owner?: string; // "agent" | "human" | name
   notes?: string;
 
-  // before/after references
   before?: Record<string, unknown>;
   after?: Record<string, unknown>;
 
   createdAt: number; // epoch ms
   updatedAt: number; // epoch ms
+}
+
+export interface WeeklyPlan {
+  projectId: ID;
+  weekStart: string; // ISO date "YYYY-MM-DD"
+  summary: string;
+
+  // top actions for the week
+  actions: Array<{
+    title: string;
+    why: string;
+    risk: RiskLevel;
+    expected: string;
+    requiresApproval: boolean;
+    category: RecommendationCategory;
+  }>;
+
+  // Optional raw committee notes
+  committeeNotes?: {
+    analyst?: string;
+    creator?: string;
+    optimizer?: string;
+    auditor?: string;
+  };
 }

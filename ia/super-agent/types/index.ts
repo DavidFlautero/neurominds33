@@ -42,11 +42,21 @@ export interface ProjectConfig {
 
   // Guardrails
   guardrails?: {
+    /** Legacy keys */
     maxDailySpendUSD?: number;
     maxMonthlySpendUSD?: number;
     requireApprovalAboveUSD?: number;
     allowAutoApplySiteChanges?: boolean;
     allowAutoApplyAdsChanges?: boolean;
+
+    /** Current API keys */
+    monthlyBudgetUsd?: number;
+    dailyBudgetUsd?: number;
+    maxCACUsd?: number;
+    requiresApprovalAboveUsd?: number;
+
+    /** Allow extensions without breaking builds */
+    [key: string]: any;
   };
 
   // Competitors

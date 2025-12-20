@@ -7,16 +7,16 @@ import { normalizeRecommendations } from "./workflows/recommendations";
 export async function runFullSuperAgentScan(cfg: ProjectConfig) {
   const scan = await runScan(cfg);
   const flow = await recordCriticalFlow(cfg);
-  scan.flowRecording = flow;
+  const scanWithFlow = ({ ...scan, flowRecording: flow } as any);
 
-  const recommendations = normalizeRecommendations(await committeeRun(cfg, scan));
+const recommendations = normalizeRecommendations(await committeeRun(cfg, scanWithFlow));
 
-  return { scan, recommendations };
+  return { scan: scanWithFlow, recommendations };
 }
 
 export async function buildWeeklyPlan(cfg: ProjectConfig, scanArtifact: any): Promise<WeeklyPlan> {
   const scan = scanArtifact;
-  const recommendations = normalizeRecommendations(await committeeRun(cfg, scan));
+  const recommendations = normalizeRecommendations(await committeeRun(cfg, scanWithFlow));
 
   return {
     projectId: cfg.projectId,

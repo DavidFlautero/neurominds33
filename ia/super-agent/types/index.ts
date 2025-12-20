@@ -41,23 +41,7 @@ export interface ProjectConfig {
   name?: string;
 
   // Guardrails
-  guardrails?: {
-    /** Legacy keys */
-    maxDailySpendUSD?: number;
-    maxMonthlySpendUSD?: number;
-    requireApprovalAboveUSD?: number;
-    allowAutoApplySiteChanges?: boolean;
-    allowAutoApplyAdsChanges?: boolean;
-
-    /** Current API keys */
-    monthlyBudgetUsd?: number;
-    dailyBudgetUsd?: number;
-    maxCACUsd?: number;
-    requiresApprovalAboveUsd?: number;
-
-    /** Allow extensions without breaking builds */
-    [key: string]: any;
-  };
+  guardrails?: Guardrails;
 
   // Competitors
   competitors?: { name: string; url: string }[];
@@ -249,3 +233,25 @@ export interface WeeklyPlan {
     auditor?: string;
   };
 }
+
+/**
+ * Budget / safety constraints for automatic execution.
+ * Keep backwards-compatible keys while the system evolves.
+ */
+export type Guardrails = {
+  /** Current API keys */
+  monthlyBudgetUsd?: number;
+  dailyBudgetUsd?: number;
+  maxCACUsd?: number;
+  requiresApprovalAboveUsd?: number;
+
+  /** Legacy keys */
+  maxDailySpendUSD?: number;
+  maxMonthlySpendUSD?: number;
+  requireApprovalAboveUSD?: number;
+  allowAutoApplySiteChanges?: boolean;
+  allowAutoApplyAdsChanges?: boolean;
+
+  /** Allow extensions */
+  [key: string]: any;
+};

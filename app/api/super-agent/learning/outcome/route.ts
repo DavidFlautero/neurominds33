@@ -7,8 +7,8 @@ export const dynamic = "force-dynamic";
 const Schema = z.object({
   projectId: z.string().min(2),
   proposalId: z.string().min(2),
-  baseline: z.record(z.union([z.number(), z.string()])),
-  after: z.record(z.union([z.number(), z.string()])),
+  baseline: z.record(z.string(), z.union([z.number(), z.string()])),
+  after: z.record(z.string(), z.union([z.number(), z.string()])),
 });
 
 function computeDelta(baseline: Record<string, any>, after: Record<string, any>) {

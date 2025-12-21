@@ -7,18 +7,21 @@ import { normalizeRecommendations } from "./workflows/recommendations";
 /**
  * Full scan pipeline:
  * 1) Scan (HTML/SEO/UX/Ads readiness)
- * 2) Record critical flow (optional artifact)
+ * 2) Record critical flow
  * 3) Committee decision
- * 4) Normalize recommendations for UI/store
+ * 4) Normalize recommendations
  */
 export async function runFullSuperAgentScan(cfg: ProjectConfig) {
   const scan = await runScan(cfg);
   const flow = await recordCriticalFlow(cfg);
 
-  // Don't mutate ScanArtifact type; attach extra artifact safely.
+  // attach extra artifact safely
   const scanWithFlow = ({ ...scan, flowRecording: flow } as any);
 
-  const committee = await committeeRun(cfg, scanWithFlow);
+  const committee = await committeeRun({
+    cfg,
+    scan: scanWithFlow,
+  });
 
   const projectId =
     (cfg as any).projectId ??
@@ -35,16 +38,23 @@ export async function runFullSuperAgentScan(cfg: ProjectConfig) {
 }
 
 /**
- * Build weekly plan from scan + committee.
- * For now, committeeRun already returns plan in some implementations.
- * This function keeps a stable API surface for your dashboard.
+ * Build weekly plan from committee output
  */
-export async function buildWeeklyPlan(cfg: ProjectConfig, scanArtifact: any): Promise<WeeklyPlan> {
-  const committee = await committeeRun(cfg, scanArtifact);
-  return (committee as any)?.plan ?? {
-    weekOf: Date.now(),
-    headline: "Plan semanal (v1)",
-    actions: [],
-    notes: {},
-  };
+export async function buildWeeklyPlan(
+  cfg: ProjectConfig,
+  scanArtifact: any
+): Promise<WeeklyPlan> {
+  const committee = await committeeRun({
+    cfg,
+    scan: scanArtifact,
+  });
+
+  return (
+    (committee as any)?.plan ?? {
+      weekOf: Date.now(),
+      headline: "Plan semanal (v1)",
+      actions: [],
+      notes: {},
+    }
+  );
 }

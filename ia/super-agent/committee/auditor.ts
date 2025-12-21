@@ -48,3 +48,8 @@ export async function auditorReview(
     notes,
   };
 }
+
+/**
+ * Backward-compatible export (legacy name expected by committee/index.ts)
+ */
+export const auditorSynthesizePlan = auditorReview;

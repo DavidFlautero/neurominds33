@@ -1,7 +1,3 @@
-/**
- * Shared types for Super Agent (UI + API + internal engine).
- * Keep these stable to avoid build breaks.
- */
 
 export type ID = string;
 
@@ -30,6 +26,31 @@ export type TaskStatus =
 export type ApprovalStatus = "pending" | "approved" | "rejected";
 
 /**
+ * Guardrails = límites y políticas de seguridad del agente.
+ * Se alimenta desde el panel (wizard/settings).
+ */
+export type Guardrails = {
+  currency?: "USD" | "ARS";
+
+  maxDailySpendUSD?: number;
+  maxMonthlySpendUSD?: number;
+
+  /** "Si el gasto supera X, pedir aprobación" */
+  requireApprovalAboveUSD?: number;
+
+  /** límites de CPA/CAC */
+  maxCPAUsd?: number;
+  maxCACUsd?: number;
+
+  /** Flags de automatización */
+  allowAutoApplySiteChanges?: boolean;
+  allowAutoApplyAdsChanges?: boolean;
+
+  /** Allow extensions */
+  [key: string]: any;
+};
+
+/**
  * ProjectConfig is the canonical input for the agent.
  * It's the configuration that comes from your "panel".
  */
@@ -37,17 +58,23 @@ export interface ProjectConfig {
   projectId: ID;
   siteUrl: string;
 
-  // Optional: project name / label shown in UI
+  /** Optional: label shown in UI */
   name?: string;
 
-  // Guardrails
   guardrails?: Guardrails;
 
-  // Competitors
   competitors?: { name: string; url: string }[];
 
-  // Integrations (placeholders for now)
-  integrations?: any;
+  /**
+   * Integrations (shape is stable; actual credentials are stored in DB/panel).
+   * Keep "any" OUT. Define keys explicitly to avoid type drift.
+   */
+  integrations?: {
+    ga4?: {
+      enabled?: boolean;
+      propertyId?: string;
+      credentialsJson?: string;
+    };
     searchConsole?: {
       enabled?: boolean;
       site?: string;
@@ -74,7 +101,10 @@ export interface ProjectConfig {
     };
   };
 
-  // Business context (from wizard)
+  /**
+   * Business context (from wizard)
+   * Closed-options only.
+   */
   context?: {
     businessStage?: "new" | "growing" | "established";
     goal?: "sales" | "leads" | "traffic" | "awareness";
@@ -93,12 +123,26 @@ export interface ProjectConfig {
       language?: string;
     };
   };
+
+  /** allow extensions, without breaking older code paths */
+  [key: string]: any;
 }
 
+/**
+ * ScanArtifact = resultado del Scan real (HTML/SEO/UX/Ads readiness).
+ * IMPORTANT: fetchedAt must be epoch ms (number).
+ */
 export interface ScanArtifact {
+  scanId: ID;
+
   projectId: ID;
   url: string;
-  fetchedAt: number; // epoch ms
+
+  /** epoch ms */
+  fetchedAt: number;
+
+  /** Alias legacy: some code uses createdAt */
+  createdAt?: number;
 
   // lightweight extracted signals (v1)
   title?: string | null;
@@ -119,6 +163,19 @@ export interface ScanArtifact {
 
   // Optional raw payload for debugging (never show to public users)
   raw?: Record<string, unknown>;
+
+  // Optional: visuals for UI (if you later store screenshots)
+  screenshots?: {
+    desktop?: string;
+    mobile?: string;
+  };
+
+  // Optional: flow recording artifact (Playwright later)
+  flowRecording?: {
+    kind?: "critical_flow";
+    url?: string;
+    steps?: Array<{ t: string; data?: any }>;
+  };
 }
 
 export interface Recommendation {
@@ -136,7 +193,7 @@ export interface Recommendation {
 
   priority: Priority;
 
-  // what to change (actionable)
+  /** actionable what to change */
   action: string;
 
   impact?: {
@@ -198,76 +255,56 @@ export interface Task {
   recommendationId?: ID;
 
   title: string;
+  description?: string;
+
   status: TaskStatus;
 
-  owner?: string; // "agent" | "human" | name
-  notes?: string;
-
-  before?: Record<string, unknown>;
-  after?: Record<string, unknown>;
-
   createdAt: number; // epoch ms
-  updatedAt: number; // epoch ms
-}
+  updatedAt?: number; // epoch ms
 
-export interface WeeklyPlan {
-  projectId: ID;
-  weekStart: string; // ISO date "YYYY-MM-DD"
-  summary: string;
-
-  // top actions for the week
-  actions: Array<{
-    title: string;
-    why: string;
-    risk: RiskLevel;
-    expected: string;
-    requiresApproval: boolean;
-    category: RecommendationCategory;
-  }>;
-
-  // Optional raw committee notes
-  committeeNotes?: {
-    analyst?: string;
-    creator?: string;
-    optimizer?: string;
-    auditor?: string;
-  };
+  /** For validation */
+  before?: Record<string, any>;
+  after?: Record<string, any>;
 }
 
 /**
- * Budget / safety constraints for automatic execution.
- * Keep backwards-compatible keys while the system evolves.
+ * Weekly plan types.
+ * Keep minimal, UI-friendly.
  */
-export type Guardrails = {
-  /** Current API keys */
-  monthlyBudgetUsd?: number;
-  dailyBudgetUsd?: number;
-  maxCACUsd?: number;
-  requiresApprovalAboveUsd?: number;
+export type PlanAction = {
+  id: ID;
+  title: string;
+  rationale?: string;
 
-  /** Legacy keys */
-  maxDailySpendUSD?: number;
-  maxMonthlySpendUSD?: number;
-  requireApprovalAboveUSD?: number;
-  allowAutoApplySiteChanges?: boolean;
-  allowAutoApplyAdsChanges?: boolean;
+  category?: RecommendationCategory;
+  priority?: Priority;
 
-  /** Allow extensions */
-  [key: string]: any;
+  advantage?: string;
+  risk?: string;
+  expected?: string;
+
+  /** what to do, step-by-step */
+  steps?: string[];
+
+  /** requires explicit approval? */
+  needsApproval?: boolean;
+
+  /** suggested owner */
+  owner?: "client" | "agency" | "agent";
+
+  /** optional KPI target */
+  kpi?: { name: string; target?: string };
+};
+
+export type WeeklyPlan = {
+  weekOf: number; // epoch ms
+  headline: string;
+  actions: PlanAction[];
+  notes?: Record<string, string>;
 };
 
 /**
- * User / Project preferences learned over time
- * (Human-in-the-loop memory)
- */
-/**
- * User / Project preferences learned over time
- * (Human-in-the-loop memory)
- */
-
-/**
- * User / Project preferences learned over time
- * (Human-in-the-loop memory)
+ * Human-in-the-loop memory: preferences learned over time.
  */
 export type Preferences = {
   riskTolerance?: "low" | "medium" | "high";

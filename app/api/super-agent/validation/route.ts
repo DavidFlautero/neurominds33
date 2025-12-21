@@ -1,36 +1,32 @@
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
-export const fetchCache = "force-no-store";
-
 import { NextResponse } from "next/server";
-import { TaskDeliverSchema } from "../_schemas";
-import { store } from "../_store";
+import { normalizeProjectConfig } from "@/lib/super-agent/normalizeConfig";
 import { reScan } from "@/ia/super-agent/validation/reScan";
 import { compareBeforeAfter } from "@/ia/super-agent/validation/compare";
 
+/**
+ * Validation route
+ * Body accepts:
+ * - { cfg, before }  OR
+ * - { projectId, siteUrl, integrations..., before }
+ */
 export async function POST(req: Request) {
-  const body = await req.json();
-  const { projectId, taskId, cfg } = TaskDeliverSchema.parse(body);
+  const body = await req.json().catch(() => ({}));
 
-  const tasks = store.tasksByProject.get(projectId) ?? [];
-  const taskIdx = tasks.findIndex(t => t.id === taskId);
-  if (taskIdx === -1) return NextResponse.json({ error: "Task not found." }, { status: 404 });
+  const rawCfg = body?.cfg ?? body ?? {};
+  const before = body?.before ?? body?.baseline ?? body?.scanBefore ?? null;
 
-  const before = store.lastScanByProject.get(projectId);
-  if (!before) return NextResponse.json({ error: "No baseline scan found." }, { status: 400 });
+  const cfg = normalizeProjectConfig(rawCfg);
 
-  // re-scan
+  // Re-scan (after)
   const after = await reScan(cfg);
 
-  // compare
+  // Compare
   const validation = compareBeforeAfter(before, after);
 
-  // update store
-  store.lastScanByProject.set(projectId, after);
-  tasks[taskIdx] = {
-    ...tasks[taskIdx],
-    status: "validated",};
-  store.tasksByProject.set(projectId, tasks);
-
-  return NextResponse.json({ task: tasks[taskIdx], before, after, validation });
+  return NextResponse.json({
+    ok: true,
+    projectId: cfg.projectId,
+    validation,
+    after,
+  });
 }

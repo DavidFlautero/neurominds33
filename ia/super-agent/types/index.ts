@@ -297,6 +297,9 @@ export type PlanAction = {
 };
 
 export type WeeklyPlan = {
+  // owning project
+  projectId?: ID;
+
   weekOf: number; // epoch ms
   headline: string;
   actions: PlanAction[];

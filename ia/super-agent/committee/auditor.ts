@@ -1,55 +1,58 @@
-import type { ProjectConfig, Recommendation, WeeklyPlan } from "../types";
+import type { ProjectConfig, Recommendation, WeeklyPlan, ScanArtifact } from "../types";
 
 /**
- * Auditor: arma un WeeklyPlan compatible con el type actual.
- * - WeeklyPlan: { projectId?, weekOf, headline, actions, notes? }
- * - Evita campos legacy: weekStart, summary, committeeNotes, etc.
+ * auditorSynthesizePlan (v1)
+ * Convierte consenso en:
+ * - WeeklyPlan estable para UI
+ * - Recomendaciones finales (normalizadas)
+ * - Notas de comité
  */
-export async function auditorReview(
-  cfg: ProjectConfig,
-  consensus: {
-    recommendations: Recommendation[];
-    actions: any[];
-    notes?: {
-      analyst?: string;
-      creator?: string;
-      optimizer?: string;
-      auditor?: string;
-    };
-    headline?: string;
-  }
-): Promise<{ plan: WeeklyPlan; recommendations: Recommendation[]; notes: Record<string, string> }> {
-  const weekOf = Date.now();
+export async function auditorSynthesizePlan(args: {
+  cfg: ProjectConfig;
+  scan: ScanArtifact;
+  consensus: any;
+}): Promise<{
+  plan: WeeklyPlan;
+  recommendations: Recommendation[];
+  notes: Record<string, string>;
+}> {
+  const { cfg, scan, consensus } = args;
+
+  const recs: Recommendation[] = (consensus?.recommendations ?? consensus?.recs ?? []).filter(Boolean);
+
+  // Si consenso trae acciones explícitas, úsalas. Si no, derivamos acciones desde recomendaciones.
+  const actions =
+    (consensus?.actions ?? []).length > 0
+      ? consensus.actions
+      : recs.slice(0, 10).map((r) => ({
+          id: r.id,
+          title: r.title,
+          description: r.detail,
+          category: r.category,
+          priority: r.priority,
+          owner: "agent",
+          status: "pending",
+        }));
 
   const headline =
-    consensus.headline ??
-    "Plan semanal (v1) — Acciones priorizadas + riesgos/ventajas";
-
-  // Normalizamos notas del comité a Record<string,string> para UI
-  const notes: Record<string, string> = {
-    analyst: consensus.notes?.analyst ?? "",
-    creator: consensus.notes?.creator ?? "",
-    optimizer: consensus.notes?.optimizer ?? "",
-    auditor: consensus.notes?.auditor ?? "",
-  };
+    consensus?.headline ??
+    `Plan semanal v1: ${cfg?.name ? cfg.name : cfg.projectId} (adsReady=${String(scan?.adsReady ?? "?" )})`;
 
   const plan: WeeklyPlan = {
     projectId: cfg.projectId,
-    weekOf,
+    weekOf: Date.now(),
     headline,
-    // Si tu consensus.actions no es PlanAction[] aún, no lo forces: castea.
-    actions: (consensus.actions ?? []) as any,
-    notes,
+    actions,
+    notes: {
+      ...(consensus?.notes ?? {}),
+      auditor: String(consensus?.auditorNote ?? ""),
+    },
   };
 
-  return {
-    plan,
-    recommendations: consensus.recommendations ?? [],
-    notes,
+  const notes: Record<string, string> = {
+    ...(consensus?.notes ?? {}),
+    auditor: String(consensus?.auditorNote ?? ""),
   };
+
+  return { plan, recommendations: recs, notes };
 }
-
-/**
- * Backward-compatible export (legacy name expected by committee/index.ts)
- */
-export const auditorSynthesizePlan = auditorReview;

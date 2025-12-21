@@ -1,4 +1,4 @@
-import type { ProjectConfig, Recommendation, WeeklyPlan, ScanArtifact } from "../types";
+import type { ProjectConfig, Recommendation, ScanArtifact, WeeklyPlan } from "../types";
 import { auditorSynthesizePlan } from "./auditor";
 import { runConsensus } from "./consensus";
 import { buildCommitteePrompts } from "./prompts";
@@ -7,59 +7,59 @@ import { roleCreator } from "./roles/creator";
 import { roleOptimizer } from "./roles/optimizer";
 
 /**
- * committeeRun
- * - Generates role opinions (Analyst/Creator/Optimizer)
- * - Runs a lightweight consensus
- * - Auditor produces a WeeklyPlan + normalized recommendations
+ * committeeRun (v1)
+ * - Genera opiniones por rol (Analyst/Creator/Optimizer)
+ * - Ejecuta un consenso liviano
+ * - Auditor sintetiza un WeeklyPlan + recomendaciones normalizadas
  *
- * This is v1 "free + robust" committee: local logic + LLM hooks can be added later.
+ * Nota: mantenemos tipado "seguro" pero tolerante (algunos roles pueden devolver any).
  */
-export async function committeeRun(args: {
-  cfg: ProjectConfig;
-  scan: ScanArtifact;
-  context?: Record<string, unknown>;
-}): Promise<{
+export async function committeeRun(
+  cfg: ProjectConfig,
+  scan: ScanArtifact
+): Promise<{
   plan: WeeklyPlan;
   recommendations: Recommendation[];
-  notes: { analyst: string; creator: string; optimizer: string; auditor: string };
+  notes: Record<string, string>;
 }> {
-  const { cfg, scan, context } = args;
+  const prompts = buildCommitteePrompts(cfg, scan);
 
-  const prompts = buildCommitteePrompts({ cfg, scan, context });
+  // Roles (tolerantes)
+  const analystDraft: any = await roleAnalyst(prompts);
+  const creatorDraft: any = await roleCreator(prompts);
+  const optimizerDraft: any = await roleOptimizer(prompts);
 
-  // Role drafts (these functions may be deterministic today; later you swap in LLM calls)
-  const analystDraft = await roleAnalyst(prompts);
-  const creatorDraft = await roleCreator(prompts);
-  const optimizerDraft = await roleOptimizer(prompts);
+  const roleNotes: Record<string, string> = {
+    analyst: String(analystDraft?.note ?? ""),
+    creator: String(creatorDraft?.note ?? ""),
+    optimizer: String(optimizerDraft?.note ?? ""),
+  };
 
-  // Consensus -> proposed actions list (titles + why + risk + expected + requiresApproval)
-  const consensus = runConsensus({
-    analyst: analystDraft,
-    creator: creatorDraft,
-    optimizer: optimizerDraft,
+  // Recomendaciones propuestas por roles (si no hay, cae a [])
+  const roleRecommendations: Recommendation[] = [
+    ...(analystDraft?.recommendations ?? []),
+    ...(creatorDraft?.recommendations ?? []),
+    ...(optimizerDraft?.recommendations ?? []),
+  ].filter(Boolean);
+
+  // Consenso (acciones + ajustes)
+  const consensus: any = await runConsensus({
     cfg,
+    scan,
+    recommendations: roleRecommendations,
+    notes: roleNotes,
   });
 
-  // Auditor final plan + recommendations
-  const { plan, recommendations, auditorNote } = auditorSynthesizePlan({
+  // Auditor: plan final + recomendaciones finales
+  const audited = await auditorSynthesizePlan({
     cfg,
     scan,
     consensus,
-    roleNotes: {
-      analyst: analystDraft.note,
-      creator: creatorDraft.note,
-      optimizer: optimizerDraft.note,
-    },
   });
 
   return {
-    plan,
-    recommendations,
-    notes: {
-      analyst: analystDraft.note,
-      creator: creatorDraft.note,
-      optimizer: optimizerDraft.note,
-      auditor: auditorNote,
-    },
+    plan: audited.plan,
+    recommendations: audited.recommendations,
+    notes: audited.notes,
   };
 }

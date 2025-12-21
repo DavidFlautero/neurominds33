@@ -12,7 +12,7 @@ import { log } from "../utils/logger";
  */
 export async function runScan(cfg: ProjectConfig): Promise<ScanArtifact> {
   const scanId = randomUUID();
-  const createdAt = new Date().toISOString();
+  const fetchedAt = new Date().toISOString();
 
   log("info", "Starting scan", { scanId, url: cfg.siteUrl });
 
@@ -52,7 +52,8 @@ export async function runScan(cfg: ProjectConfig): Promise<ScanArtifact> {
     scanId,
     projectId: cfg.projectId,
     url: cfg.siteUrl,
-    createdAt,
+    fetchedAt,
+    createdAt: fetchedAt,
     screenshots: {
       desktopFull: desktopUrl,
       mobileFull: mobileUrl,

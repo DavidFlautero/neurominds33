@@ -255,3 +255,24 @@ export type Guardrails = {
   /** Allow extensions */
   [key: string]: any;
 };
+
+/**
+ * User / Project preferences learned over time
+ * (Human-in-the-loop memory)
+ */
+/**
+ * User / Project preferences learned over time
+ * (Human-in-the-loop memory)
+ */
+
+/**
+ * User / Project preferences learned over time
+ * (Human-in-the-loop memory)
+ */
+export type Preferences = {
+  riskTolerance?: "low" | "medium" | "high";
+  budgetSensitivity?: "tight" | "normal" | "aggressive";
+  autonomyLevel?: "manual" | "assisted" | "auto";
+  channelsAllowed?: Array<"google_ads" | "meta_ads" | "tiktok_ads" | "seo">;
+  notes?: string;
+};

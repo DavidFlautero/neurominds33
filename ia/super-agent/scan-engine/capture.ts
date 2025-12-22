@@ -12,7 +12,9 @@ import { log } from "../utils/logger";
  */
 export async function runScan(cfg: ProjectConfig): Promise<ScanArtifact> {
   const scanId = randomUUID();
-  const fetchedAt = new Date().toISOString();
+
+  // ScanArtifact espera number (timestamp)
+  const fetchedAt = Date.now();
 
   log("info", "Starting scan", { scanId, url: cfg.siteUrl });
 
@@ -34,20 +36,18 @@ export async function runScan(cfg: ProjectConfig): Promise<ScanArtifact> {
   void mobilePng; // TODO upload
   const mobileUrl = `/scans/${scanId}/mobile.png`;
 
+  // Se calcula, pero NO se retorna si ScanArtifact no lo soporta aún
   const dom = await extractDom(page);
-  const heuristics = await runHeuristics({ dom });
+  void dom;
 
-  // MVP sections: improved later with real section detection
-  const sections = [
-    { key: "header", label: "Header", url: desktopUrl },
-    { key: "hero", label: "Hero", url: desktopUrl },
-    { key: "aboveFold", label: "Above the fold", url: desktopUrl },
-  ];
+  const heuristics = await runHeuristics({ dom });
+  void heuristics;
 
   await browser.close();
 
   log("info", "Scan completed", { scanId });
 
+  // ✅ Retornar ÚNICAMENTE propiedades conocidas por ScanArtifact
   return {
     scanId,
     projectId: cfg.projectId,
@@ -55,12 +55,8 @@ export async function runScan(cfg: ProjectConfig): Promise<ScanArtifact> {
     fetchedAt,
     createdAt: fetchedAt,
     screenshots: {
-      desktopFull: desktopUrl,
-      mobileFull: mobileUrl,
-      sections,
+      desktop: desktopUrl,
+      mobile: mobileUrl,
     },
-    dom,
-    heuristics,
-    metrics: {},
-  };
+  } as ScanArtifact;
 }

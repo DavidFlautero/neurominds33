@@ -8,11 +8,12 @@ import { roleOptimizer } from "./roles/optimizer";
 
 /**
  * committeeRun (v1)
- * - Genera opiniones por rol (Analyst/Creator/Optimizer)
- * - Ejecuta un consenso liviano
- * - Auditor sintetiza un WeeklyPlan + recomendaciones normalizadas
+ * Orquesta comité multi-rol y sintetiza un plan semanal.
  *
- * Nota: mantenemos tipado "seguro" pero tolerante (algunos roles pueden devolver any).
+ * IMPORTANTE:
+ * - buildCommitteePrompts() acepta un solo argumento: { cfg, scan }
+ * - runConsensus() acepta: { cfg, analyst, creator, optimizer }
+ * - auditorSynthesizePlan() acepta SOLO: { cfg, scan, consensus }
  */
 export async function committeeRun(
   cfg: ProjectConfig,
@@ -22,44 +23,53 @@ export async function committeeRun(
   recommendations: Recommendation[];
   notes: Record<string, string>;
 }> {
-  const prompts = buildCommitteePrompts(cfg, scan);
+  const prompts = buildCommitteePrompts({ cfg, scan });
 
-  // Roles (tolerantes)
-  const analystDraft: any = await roleAnalyst(prompts);
-  const creatorDraft: any = await roleCreator(prompts);
-  const optimizerDraft: any = await roleOptimizer(prompts);
+  // Roles
+  const analyst: any = await roleAnalyst(prompts);
+  const creator: any = await roleCreator(prompts);
+  const optimizer: any = await roleOptimizer(prompts);
 
-  const roleNotes: Record<string, string> = {
-    analyst: String(analystDraft?.note ?? ""),
-    creator: String(creatorDraft?.note ?? ""),
-    optimizer: String(optimizerDraft?.note ?? ""),
+  // Notes para UI/debug
+  const notes: Record<string, string> = {
+    analyst: String(analyst?.note ?? ""),
+    creator: String(creator?.note ?? ""),
+    optimizer: String(optimizer?.note ?? ""),
   };
 
-  // Recomendaciones propuestas por roles (si no hay, cae a [])
+  // Recos aportadas por roles (si existen)
   const roleRecommendations: Recommendation[] = [
-    ...(analystDraft?.recommendations ?? []),
-    ...(creatorDraft?.recommendations ?? []),
-    ...(optimizerDraft?.recommendations ?? []),
-  ].filter(Boolean);
+    ...(Array.isArray(analyst?.recommendations) ? analyst.recommendations : []),
+    ...(Array.isArray(creator?.recommendations) ? creator.recommendations : []),
+    ...(Array.isArray(optimizer?.recommendations) ? optimizer.recommendations : []),
+  ].filter(Boolean) as Recommendation[];
 
-  // Consenso (acciones + ajustes)
+  // Consenso (firma real)
   const consensus: any = await runConsensus({
     cfg,
-    scan,
-    recommendations: roleRecommendations,
-    notes: roleNotes,
+    analyst,
+    creator,
+    optimizer,
   });
 
-  // Auditor: plan final + recomendaciones finales
-  const audited = await auditorSynthesizePlan({
+  // Auditor (firma real: NO recibe recommendations/notes)
+  const audited: any = await auditorSynthesizePlan({
     cfg,
     scan,
     consensus,
   });
 
+  // Si el auditor devuelve recomendaciones, se combinan con las de roles
+  const auditorRecommendations: Recommendation[] = Array.isArray(audited?.recommendations)
+    ? audited.recommendations
+    : [];
+
   return {
-    plan: audited.plan,
-    recommendations: audited.recommendations,
-    notes: audited.notes,
+    plan: audited?.plan as WeeklyPlan,
+    recommendations: [...roleRecommendations, ...auditorRecommendations],
+    notes: {
+      ...notes,
+      auditor: String(audited?.note ?? audited?.auditorNote ?? ""),
+    },
   };
 }

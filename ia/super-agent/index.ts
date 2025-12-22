@@ -18,10 +18,8 @@ export async function runFullSuperAgentScan(cfg: ProjectConfig) {
   // attach extra artifact safely
   const scanWithFlow = ({ ...scan, flowRecording: flow } as any);
 
-  const committee = await committeeRun({
-    cfg,
-    scan: scanWithFlow,
-  });
+  // ✅ FIX: committeeRun espera (cfg, scan)
+  const committee = await committeeRun(cfg, scanWithFlow);
 
   const projectId =
     (cfg as any).projectId ??
@@ -44,10 +42,8 @@ export async function buildWeeklyPlan(
   cfg: ProjectConfig,
   scanArtifact: any
 ): Promise<WeeklyPlan> {
-  const committee = await committeeRun({
-    cfg,
-    scan: scanArtifact,
-  });
+  // ✅ FIX: committeeRun espera (cfg, scan)
+  const committee = await committeeRun(cfg, scanArtifact);
 
   return (
     (committee as any)?.plan ?? {

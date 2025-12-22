@@ -1,114 +1,80 @@
-import type { Recommendation, RecommendationCategory, RiskLevel } from "../types";
-
-function id(prefix = "rec") {
-  return `${prefix}_${Math.random().toString(16).slice(2)}_${Date.now().toString(16)}`;
-}
-
-function toRisk(v: any): RiskLevel {
-  const s = String(v ?? "").toLowerCase();
-  if (s.includes("high") || s.includes("alto")) return "high";
-  if (s.includes("medium") || s.includes("medio")) return "medium";
-  return "low";
-}
-
-function toCategory(v: any): RecommendationCategory {
-  const s = String(v ?? "").toUpperCase();
-  if (s.includes("SEO")) return "SEO";
-  if (s.includes("UX")) return "UX";
-  if (s.includes("ADS")) return "ADS";
-  if (s.includes("ANALYTICS")) return "ANALYTICS";
-  if (s.includes("COMPETITOR")) return "COMPETITOR";
-  return "CRO";
-}
-
-function toPriority(v: any, risk: RiskLevel): number {
-  // priority: 1 = alta, 2 = media, 3 = baja (como veníamos usando)
-  if (typeof v === "number" && Number.isFinite(v)) return Math.min(3, Math.max(1, v));
-  if (risk === "high") return 1;
-  if (risk === "medium") return 2;
-  return 3;
-}
+import type { Priority, Recommendation, RecommendationCategory } from "../types";
 
 /**
- * normalizeRecommendations
- * Takes committee output (or any mixed list) and returns clean Recommendation[]
- * so UI/store have stable shape.
+ * Normaliza cualquier salida (LLM / committee / heuristics) a Recommendation[]
+ * - tipado estable
+ * - priority siempre 1|2|3
+ * - strings siempre saneados
  */
-export function normalizeRecommendations(args: {
-  projectId: string;
-  input: any;
-}): Recommendation[] {
-  const { projectId, input } = args;
+function asString(v: any, fallback = ""): string {
+  if (v === null || v === undefined) return fallback;
+  if (typeof v === "string") return v.trim();
+  try {
+    return String(v).trim();
+  } catch {
+    return fallback;
+  }
+}
 
-  const list: any[] = Array.isArray(input)
-    ? input
-    : Array.isArray(input?.recommendations)
-      ? input.recommendations
-      : Array.isArray(input?.actions)
-        ? input.actions
-        : [];
+function asCategory(v: any): RecommendationCategory {
+  const s = asString(v, "").toUpperCase();
+  const allowed: RecommendationCategory[] = ["SEO", "UX", "CRO", "ADS", "COMPETITOR", "LANDING", "ANALYTICS"];
+  const hit = allowed.find((x) => x === (s as any));
+  return hit ?? "UX";
+}
+
+function asPriority(v: any): Priority {
+  const n = typeof v === "number" ? v : Number(v);
+  if (!Number.isFinite(n)) return 2;
+  if (n <= 1) return 1;
+  if (n >= 3) return 3;
+  return 2;
+}
+
+function makeId(prefix = "rec"): string {
+  return `${prefix}_${Math.random().toString(36).slice(2, 10)}_${Date.now().toString(36)}`;
+}
+
+export function normalizeRecommendations(input: { projectId: string; input: any }): Recommendation[] {
+  const projectId = String(input?.projectId ?? "local");
+  const raw = input?.input;
+
+  // Acepta múltiples shapes: { recommendations: [...] } | [...] | {items:[...]}
+  const list: any[] =
+    (raw?.recommendations && Array.isArray(raw.recommendations) ? raw.recommendations : null) ??
+    (raw?.items && Array.isArray(raw.items) ? raw.items : null) ??
+    (Array.isArray(raw) ? raw : []);
 
   const now = Date.now();
 
-  return list.map((raw) => {
-    const title =
-      raw?.title ??
-      raw?.name ??
-      raw?.action ??
-      raw?.task ??
-      "Recomendación";
+  return list
+    .map((r: any) => {
+      const category = asCategory(r?.category ?? r?.type ?? r?.area);
+      const title = asString(r?.title ?? r?.name ?? "Recomendación");
+      const detail = asString(r?.detail ?? r?.description ?? r?.why ?? "");
+      const advantage = asString(r?.advantage ?? r?.benefit ?? "Mejora esperada en performance y conversiones.");
+      const riskText = asString(r?.risk ?? r?.downside ?? "Riesgo bajo si se implementa correctamente.");
+      const expected = asString(r?.expected ?? r?.result ?? "Impacto positivo incremental.");
+      const action = asString(r?.action ?? r?.change ?? r?.do ?? "Aplicar ajuste recomendado.");
+      const priority: Priority = asPriority(r?.priority ?? r?.prio ?? r?.importance ?? 2);
 
-    const detail =
-      raw?.detail ??
-      raw?.why ??
-      raw?.description ??
-      raw?.notes ??
-      "";
+      const rec: Recommendation = {
+        id: asString(r?.id, "") || makeId("rec"),
+        projectId,
+        scanId: r?.scanId ? String(r.scanId) : undefined,
+        category,
+        title,
+        detail,
+        advantage,
+        risk: riskText,
+        expected,
+        priority,
+        action,
+        impact: r?.impact && typeof r.impact === "object" ? r.impact : undefined,
+        createdAt: typeof r?.createdAt === "number" ? r.createdAt : now,
+      };
 
-    const category = toCategory(raw?.category ?? raw?.type);
-    const risk = toRisk(raw?.risk);
-    const expected =
-      raw?.expected ??
-      raw?.impacto_esperado ??
-      raw?.resultado_esperado ??
-      "";
-
-    const advantage =
-      raw?.advantage ??
-      raw?.benefit ??
-      "Mejora performance y reduce fricción.";
-
-    const riskText =
-      raw?.riskText ??
-      raw?.riesgo ??
-      (risk === "high"
-        ? "Riesgo alto: requiere validación/rollback."
-        : risk === "medium"
-          ? "Riesgo medio: validar antes de escalar."
-          : "Riesgo bajo: cambio seguro.");
-
-    const priority = toPriority(raw?.priority, risk);
-
-    const action =
-      raw?.action ??
-      raw?.whatToChange ??
-      raw?.change ??
-      title;
-
-    const rec: Recommendation = {
-      id: raw?.id ?? id("rec"),
-      projectId,
-      category,
-      title: String(title),
-      detail: String(detail),
-      advantage: String(advantage),
-      risk: String(riskText),
-      expected: String(expected),
-      priority,
-      action: String(action),
-      createdAt: raw?.createdAt ?? now,
-    };
-
-    return rec;
-  });
+      return rec;
+    })
+    .filter((x) => !!x.title);
 }
